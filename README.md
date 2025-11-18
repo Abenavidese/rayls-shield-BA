@@ -53,8 +53,8 @@ RaylsShield adds privacy-preserving capabilities to cross-chain messaging on Ray
 
 ```bash
 # Clone the repository
-git clone https://github.com/Abenavidese/rayls-shield.git
-cd rayls-shield
+git clone https://github.com/Abenavidese/rayls-shield-BA.git
+cd rayls-shield-BA
 
 # Install backend dependencies
 cd backend
@@ -115,7 +115,7 @@ npm run demo             # Run complete E2E demo
 ## 🏗️ Project Structure
 
 ```
-rayls-shield/
+rayls-shield-BA/
 ├── backend/                         # Smart contracts and ZK circuits
 │   ├── contracts/
 │   │   ├── RaylsShield.sol         # Main privacy contract

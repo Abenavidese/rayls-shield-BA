@@ -24,8 +24,8 @@ Thank you for your interest in contributing to RaylsShield! This document provid
 
 2. **Clone your fork**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/rayls-shield.git
-   cd rayls-shield
+   git clone https://github.com/YOUR_USERNAME/rayls-shield-BA.git
+   cd rayls-shield-BA
    ```
 
 3. **Install dependencies**
