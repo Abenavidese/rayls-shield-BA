@@ -1,0 +1,3203 @@
+(globalThis.TURBOPACK || (globalThis.TURBOPACK = [])).push([typeof document === "object" ? document.currentScript : undefined,
+"[project]/rayls-shield-landing-page/node_modules/next/dist/compiled/react/cjs/react-jsx-dev-runtime.development.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+/**
+ * @license React
+ * react-jsx-dev-runtime.development.js
+ *
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */ var __TURBOPACK__imported__module__$5b$project$5d2f$rayls$2d$shield$2d$landing$2d$page$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/rayls-shield-landing-page/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
+"use strict";
+"production" !== ("TURBOPACK compile-time value", "development") && function() {
+    function getComponentNameFromType(type) {
+        if (null == type) return null;
+        if ("function" === typeof type) return type.$$typeof === REACT_CLIENT_REFERENCE ? null : type.displayName || type.name || null;
+        if ("string" === typeof type) return type;
+        switch(type){
+            case REACT_FRAGMENT_TYPE:
+                return "Fragment";
+            case REACT_PROFILER_TYPE:
+                return "Profiler";
+            case REACT_STRICT_MODE_TYPE:
+                return "StrictMode";
+            case REACT_SUSPENSE_TYPE:
+                return "Suspense";
+            case REACT_SUSPENSE_LIST_TYPE:
+                return "SuspenseList";
+            case REACT_ACTIVITY_TYPE:
+                return "Activity";
+            case REACT_VIEW_TRANSITION_TYPE:
+                return "ViewTransition";
+        }
+        if ("object" === typeof type) switch("number" === typeof type.tag && console.error("Received an unexpected object in getComponentNameFromType(). This is likely a bug in React. Please file an issue."), type.$$typeof){
+            case REACT_PORTAL_TYPE:
+                return "Portal";
+            case REACT_CONTEXT_TYPE:
+                return type.displayName || "Context";
+            case REACT_CONSUMER_TYPE:
+                return (type._context.displayName || "Context") + ".Consumer";
+            case REACT_FORWARD_REF_TYPE:
+                var innerType = type.render;
+                type = type.displayName;
+                type || (type = innerType.displayName || innerType.name || "", type = "" !== type ? "ForwardRef(" + type + ")" : "ForwardRef");
+                return type;
+            case REACT_MEMO_TYPE:
+                return innerType = type.displayName || null, null !== innerType ? innerType : getComponentNameFromType(type.type) || "Memo";
+            case REACT_LAZY_TYPE:
+                innerType = type._payload;
+                type = type._init;
+                try {
+                    return getComponentNameFromType(type(innerType));
+                } catch (x) {}
+        }
+        return null;
+    }
+    function testStringCoercion(value) {
+        return "" + value;
+    }
+    function checkKeyStringCoercion(value) {
+        try {
+            testStringCoercion(value);
+            var JSCompiler_inline_result = !1;
+        } catch (e) {
+            JSCompiler_inline_result = !0;
+        }
+        if (JSCompiler_inline_result) {
+            JSCompiler_inline_result = console;
+            var JSCompiler_temp_const = JSCompiler_inline_result.error;
+            var JSCompiler_inline_result$jscomp$0 = "function" === typeof Symbol && Symbol.toStringTag && value[Symbol.toStringTag] || value.constructor.name || "Object";
+            JSCompiler_temp_const.call(JSCompiler_inline_result, "The provided key is an unsupported type %s. This value must be coerced to a string before using it here.", JSCompiler_inline_result$jscomp$0);
+            return testStringCoercion(value);
+        }
+    }
+    function getTaskName(type) {
+        if (type === REACT_FRAGMENT_TYPE) return "<>";
+        if ("object" === typeof type && null !== type && type.$$typeof === REACT_LAZY_TYPE) return "<...>";
+        try {
+            var name = getComponentNameFromType(type);
+            return name ? "<" + name + ">" : "<...>";
+        } catch (x) {
+            return "<...>";
+        }
+    }
+    function getOwner() {
+        var dispatcher = ReactSharedInternals.A;
+        return null === dispatcher ? null : dispatcher.getOwner();
+    }
+    function UnknownOwner() {
+        return Error("react-stack-top-frame");
+    }
+    function hasValidKey(config) {
+        if (hasOwnProperty.call(config, "key")) {
+            var getter = Object.getOwnPropertyDescriptor(config, "key").get;
+            if (getter && getter.isReactWarning) return !1;
+        }
+        return void 0 !== config.key;
+    }
+    function defineKeyPropWarningGetter(props, displayName) {
+        function warnAboutAccessingKey() {
+            specialPropKeyWarningShown || (specialPropKeyWarningShown = !0, console.error("%s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://react.dev/link/special-props)", displayName));
+        }
+        warnAboutAccessingKey.isReactWarning = !0;
+        Object.defineProperty(props, "key", {
+            get: warnAboutAccessingKey,
+            configurable: !0
+        });
+    }
+    function elementRefGetterWithDeprecationWarning() {
+        var componentName = getComponentNameFromType(this.type);
+        didWarnAboutElementRef[componentName] || (didWarnAboutElementRef[componentName] = !0, console.error("Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release."));
+        componentName = this.props.ref;
+        return void 0 !== componentName ? componentName : null;
+    }
+    function ReactElement(type, key, props, owner, debugStack, debugTask) {
+        var refProp = props.ref;
+        type = {
+            $$typeof: REACT_ELEMENT_TYPE,
+            type: type,
+            key: key,
+            props: props,
+            _owner: owner
+        };
+        null !== (void 0 !== refProp ? refProp : null) ? Object.defineProperty(type, "ref", {
+            enumerable: !1,
+            get: elementRefGetterWithDeprecationWarning
+        }) : Object.defineProperty(type, "ref", {
+            enumerable: !1,
+            value: null
+        });
+        type._store = {};
+        Object.defineProperty(type._store, "validated", {
+            configurable: !1,
+            enumerable: !1,
+            writable: !0,
+            value: 0
+        });
+        Object.defineProperty(type, "_debugInfo", {
+            configurable: !1,
+            enumerable: !1,
+            writable: !0,
+            value: null
+        });
+        Object.defineProperty(type, "_debugStack", {
+            configurable: !1,
+            enumerable: !1,
+            writable: !0,
+            value: debugStack
+        });
+        Object.defineProperty(type, "_debugTask", {
+            configurable: !1,
+            enumerable: !1,
+            writable: !0,
+            value: debugTask
+        });
+        Object.freeze && (Object.freeze(type.props), Object.freeze(type));
+        return type;
+    }
+    function jsxDEVImpl(type, config, maybeKey, isStaticChildren, debugStack, debugTask) {
+        var children = config.children;
+        if (void 0 !== children) if (isStaticChildren) if (isArrayImpl(children)) {
+            for(isStaticChildren = 0; isStaticChildren < children.length; isStaticChildren++)validateChildKeys(children[isStaticChildren]);
+            Object.freeze && Object.freeze(children);
+        } else console.error("React.jsx: Static children should always be an array. You are likely explicitly calling React.jsxs or React.jsxDEV. Use the Babel transform instead.");
+        else validateChildKeys(children);
+        if (hasOwnProperty.call(config, "key")) {
+            children = getComponentNameFromType(type);
+            var keys = Object.keys(config).filter(function(k) {
+                return "key" !== k;
+            });
+            isStaticChildren = 0 < keys.length ? "{key: someKey, " + keys.join(": ..., ") + ": ...}" : "{key: someKey}";
+            didWarnAboutKeySpread[children + isStaticChildren] || (keys = 0 < keys.length ? "{" + keys.join(": ..., ") + ": ...}" : "{}", console.error('A props object containing a "key" prop is being spread into JSX:\n  let props = %s;\n  <%s {...props} />\nReact keys must be passed directly to JSX without using spread:\n  let props = %s;\n  <%s key={someKey} {...props} />', isStaticChildren, children, keys, children), didWarnAboutKeySpread[children + isStaticChildren] = !0);
+        }
+        children = null;
+        void 0 !== maybeKey && (checkKeyStringCoercion(maybeKey), children = "" + maybeKey);
+        hasValidKey(config) && (checkKeyStringCoercion(config.key), children = "" + config.key);
+        if ("key" in config) {
+            maybeKey = {};
+            for(var propName in config)"key" !== propName && (maybeKey[propName] = config[propName]);
+        } else maybeKey = config;
+        children && defineKeyPropWarningGetter(maybeKey, "function" === typeof type ? type.displayName || type.name || "Unknown" : type);
+        return ReactElement(type, children, maybeKey, getOwner(), debugStack, debugTask);
+    }
+    function validateChildKeys(node) {
+        isValidElement(node) ? node._store && (node._store.validated = 1) : "object" === typeof node && null !== node && node.$$typeof === REACT_LAZY_TYPE && ("fulfilled" === node._payload.status ? isValidElement(node._payload.value) && node._payload.value._store && (node._payload.value._store.validated = 1) : node._store && (node._store.validated = 1));
+    }
+    function isValidElement(object) {
+        return "object" === typeof object && null !== object && object.$$typeof === REACT_ELEMENT_TYPE;
+    }
+    var React = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)"), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, hasOwnProperty = Object.prototype.hasOwnProperty, isArrayImpl = Array.isArray, createTask = console.createTask ? console.createTask : function() {
+        return null;
+    };
+    React = {
+        react_stack_bottom_frame: function(callStackForError) {
+            return callStackForError();
+        }
+    };
+    var specialPropKeyWarningShown;
+    var didWarnAboutElementRef = {};
+    var unknownOwnerDebugStack = React.react_stack_bottom_frame.bind(React, UnknownOwner)();
+    var unknownOwnerDebugTask = createTask(getTaskName(UnknownOwner));
+    var didWarnAboutKeySpread = {};
+    exports.Fragment = REACT_FRAGMENT_TYPE;
+    exports.jsxDEV = function(type, config, maybeKey, isStaticChildren) {
+        var trackActualOwner = 1e4 > ReactSharedInternals.recentlyCreatedOwnerStacks++;
+        if (trackActualOwner) {
+            var previousStackTraceLimit = Error.stackTraceLimit;
+            Error.stackTraceLimit = 10;
+            var debugStackDEV = Error("react-stack-top-frame");
+            Error.stackTraceLimit = previousStackTraceLimit;
+        } else debugStackDEV = unknownOwnerDebugStack;
+        return jsxDEVImpl(type, config, maybeKey, isStaticChildren, debugStackDEV, trackActualOwner ? createTask(getTaskName(type)) : unknownOwnerDebugTask);
+    };
+}();
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+var __TURBOPACK__imported__module__$5b$project$5d2f$rayls$2d$shield$2d$landing$2d$page$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/rayls-shield-landing-page/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
+'use strict';
+if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+;
+else {
+    module.exports = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/compiled/react/cjs/react-jsx-dev-runtime.development.js [app-client] (ecmascript)");
+}
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/querystring.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+0 && (module.exports = {
+    assign: null,
+    searchParamsToUrlQuery: null,
+    urlQueryToSearchParams: null
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    assign: function() {
+        return assign;
+    },
+    searchParamsToUrlQuery: function() {
+        return searchParamsToUrlQuery;
+    },
+    urlQueryToSearchParams: function() {
+        return urlQueryToSearchParams;
+    }
+});
+function searchParamsToUrlQuery(searchParams) {
+    const query = {};
+    for (const [key, value] of searchParams.entries()){
+        const existing = query[key];
+        if (typeof existing === 'undefined') {
+            query[key] = value;
+        } else if (Array.isArray(existing)) {
+            existing.push(value);
+        } else {
+            query[key] = [
+                existing,
+                value
+            ];
+        }
+    }
+    return query;
+}
+function stringifyUrlQueryParam(param) {
+    if (typeof param === 'string') {
+        return param;
+    }
+    if (typeof param === 'number' && !isNaN(param) || typeof param === 'boolean') {
+        return String(param);
+    } else {
+        return '';
+    }
+}
+function urlQueryToSearchParams(query) {
+    const searchParams = new URLSearchParams();
+    for (const [key, value] of Object.entries(query)){
+        if (Array.isArray(value)) {
+            for (const item of value){
+                searchParams.append(key, stringifyUrlQueryParam(item));
+            }
+        } else {
+            searchParams.set(key, stringifyUrlQueryParam(value));
+        }
+    }
+    return searchParams;
+}
+function assign(target, ...searchParamsList) {
+    for (const searchParams of searchParamsList){
+        for (const key of searchParams.keys()){
+            target.delete(key);
+        }
+        for (const [key, value] of searchParams.entries()){
+            target.append(key, value);
+        }
+    }
+    return target;
+} //# sourceMappingURL=querystring.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/format-url.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+// Format function modified from nodejs
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+var __TURBOPACK__imported__module__$5b$project$5d2f$rayls$2d$shield$2d$landing$2d$page$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/rayls-shield-landing-page/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+0 && (module.exports = {
+    formatUrl: null,
+    formatWithValidation: null,
+    urlObjectKeys: null
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    formatUrl: function() {
+        return formatUrl;
+    },
+    formatWithValidation: function() {
+        return formatWithValidation;
+    },
+    urlObjectKeys: function() {
+        return urlObjectKeys;
+    }
+});
+const _interop_require_wildcard = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/@swc/helpers/cjs/_interop_require_wildcard.cjs [app-client] (ecmascript)");
+const _querystring = /*#__PURE__*/ _interop_require_wildcard._(__turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/querystring.js [app-client] (ecmascript)"));
+const slashedProtocols = /https?|ftp|gopher|file/;
+function formatUrl(urlObj) {
+    let { auth, hostname } = urlObj;
+    let protocol = urlObj.protocol || '';
+    let pathname = urlObj.pathname || '';
+    let hash = urlObj.hash || '';
+    let query = urlObj.query || '';
+    let host = false;
+    auth = auth ? encodeURIComponent(auth).replace(/%3A/i, ':') + '@' : '';
+    if (urlObj.host) {
+        host = auth + urlObj.host;
+    } else if (hostname) {
+        host = auth + (~hostname.indexOf(':') ? `[${hostname}]` : hostname);
+        if (urlObj.port) {
+            host += ':' + urlObj.port;
+        }
+    }
+    if (query && typeof query === 'object') {
+        query = String(_querystring.urlQueryToSearchParams(query));
+    }
+    let search = urlObj.search || query && `?${query}` || '';
+    if (protocol && !protocol.endsWith(':')) protocol += ':';
+    if (urlObj.slashes || (!protocol || slashedProtocols.test(protocol)) && host !== false) {
+        host = '//' + (host || '');
+        if (pathname && pathname[0] !== '/') pathname = '/' + pathname;
+    } else if (!host) {
+        host = '';
+    }
+    if (hash && hash[0] !== '#') hash = '#' + hash;
+    if (search && search[0] !== '?') search = '?' + search;
+    pathname = pathname.replace(/[?#]/g, encodeURIComponent);
+    search = search.replace('#', '%23');
+    return `${protocol}${host}${pathname}${search}${hash}`;
+}
+const urlObjectKeys = [
+    'auth',
+    'hash',
+    'host',
+    'hostname',
+    'href',
+    'path',
+    'pathname',
+    'port',
+    'protocol',
+    'query',
+    'search',
+    'slashes'
+];
+function formatWithValidation(url) {
+    if ("TURBOPACK compile-time truthy", 1) {
+        if (url !== null && typeof url === 'object') {
+            Object.keys(url).forEach((key)=>{
+                if (!urlObjectKeys.includes(key)) {
+                    console.warn(`Unknown key passed via urlObject into url.format: ${key}`);
+                }
+            });
+        }
+    }
+    return formatUrl(url);
+} //# sourceMappingURL=format-url.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/omit.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "omit", {
+    enumerable: true,
+    get: function() {
+        return omit;
+    }
+});
+function omit(object, keys) {
+    const omitted = {};
+    Object.keys(object).forEach((key)=>{
+        if (!keys.includes(key)) {
+            omitted[key] = object[key];
+        }
+    });
+    return omitted;
+} //# sourceMappingURL=omit.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/utils.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+var __TURBOPACK__imported__module__$5b$project$5d2f$rayls$2d$shield$2d$landing$2d$page$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/rayls-shield-landing-page/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+0 && (module.exports = {
+    DecodeError: null,
+    MiddlewareNotFoundError: null,
+    MissingStaticPage: null,
+    NormalizeError: null,
+    PageNotFoundError: null,
+    SP: null,
+    ST: null,
+    WEB_VITALS: null,
+    execOnce: null,
+    getDisplayName: null,
+    getLocationOrigin: null,
+    getURL: null,
+    isAbsoluteUrl: null,
+    isResSent: null,
+    loadGetInitialProps: null,
+    normalizeRepeatedSlashes: null,
+    stringifyError: null
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    DecodeError: function() {
+        return DecodeError;
+    },
+    MiddlewareNotFoundError: function() {
+        return MiddlewareNotFoundError;
+    },
+    MissingStaticPage: function() {
+        return MissingStaticPage;
+    },
+    NormalizeError: function() {
+        return NormalizeError;
+    },
+    PageNotFoundError: function() {
+        return PageNotFoundError;
+    },
+    SP: function() {
+        return SP;
+    },
+    ST: function() {
+        return ST;
+    },
+    WEB_VITALS: function() {
+        return WEB_VITALS;
+    },
+    execOnce: function() {
+        return execOnce;
+    },
+    getDisplayName: function() {
+        return getDisplayName;
+    },
+    getLocationOrigin: function() {
+        return getLocationOrigin;
+    },
+    getURL: function() {
+        return getURL;
+    },
+    isAbsoluteUrl: function() {
+        return isAbsoluteUrl;
+    },
+    isResSent: function() {
+        return isResSent;
+    },
+    loadGetInitialProps: function() {
+        return loadGetInitialProps;
+    },
+    normalizeRepeatedSlashes: function() {
+        return normalizeRepeatedSlashes;
+    },
+    stringifyError: function() {
+        return stringifyError;
+    }
+});
+const WEB_VITALS = [
+    'CLS',
+    'FCP',
+    'FID',
+    'INP',
+    'LCP',
+    'TTFB'
+];
+function execOnce(fn) {
+    let used = false;
+    let result;
+    return (...args)=>{
+        if (!used) {
+            used = true;
+            result = fn(...args);
+        }
+        return result;
+    };
+}
+// Scheme: https://tools.ietf.org/html/rfc3986#section-3.1
+// Absolute URL: https://tools.ietf.org/html/rfc3986#section-4.3
+const ABSOLUTE_URL_REGEX = /^[a-zA-Z][a-zA-Z\d+\-.]*?:/;
+const isAbsoluteUrl = (url)=>ABSOLUTE_URL_REGEX.test(url);
+function getLocationOrigin() {
+    const { protocol, hostname, port } = window.location;
+    return `${protocol}//${hostname}${port ? ':' + port : ''}`;
+}
+function getURL() {
+    const { href } = window.location;
+    const origin = getLocationOrigin();
+    return href.substring(origin.length);
+}
+function getDisplayName(Component) {
+    return typeof Component === 'string' ? Component : Component.displayName || Component.name || 'Unknown';
+}
+function isResSent(res) {
+    return res.finished || res.headersSent;
+}
+function normalizeRepeatedSlashes(url) {
+    const urlParts = url.split('?');
+    const urlNoQuery = urlParts[0];
+    return urlNoQuery // first we replace any non-encoded backslashes with forward
+    // then normalize repeated forward slashes
+    .replace(/\\/g, '/').replace(/\/\/+/g, '/') + (urlParts[1] ? `?${urlParts.slice(1).join('?')}` : '');
+}
+async function loadGetInitialProps(App, ctx) {
+    if ("TURBOPACK compile-time truthy", 1) {
+        if (App.prototype?.getInitialProps) {
+            const message = `"${getDisplayName(App)}.getInitialProps()" is defined as an instance method - visit https://nextjs.org/docs/messages/get-initial-props-as-an-instance-method for more information.`;
+            throw Object.defineProperty(new Error(message), "__NEXT_ERROR_CODE", {
+                value: "E394",
+                enumerable: false,
+                configurable: true
+            });
+        }
+    }
+    // when called from _app `ctx` is nested in `ctx`
+    const res = ctx.res || ctx.ctx && ctx.ctx.res;
+    if (!App.getInitialProps) {
+        if (ctx.ctx && ctx.Component) {
+            // @ts-ignore pageProps default
+            return {
+                pageProps: await loadGetInitialProps(ctx.Component, ctx.ctx)
+            };
+        }
+        return {};
+    }
+    const props = await App.getInitialProps(ctx);
+    if (res && isResSent(res)) {
+        return props;
+    }
+    if (!props) {
+        const message = `"${getDisplayName(App)}.getInitialProps()" should resolve to an object. But found "${props}" instead.`;
+        throw Object.defineProperty(new Error(message), "__NEXT_ERROR_CODE", {
+            value: "E394",
+            enumerable: false,
+            configurable: true
+        });
+    }
+    if ("TURBOPACK compile-time truthy", 1) {
+        if (Object.keys(props).length === 0 && !ctx.ctx) {
+            console.warn(`${getDisplayName(App)} returned an empty object from \`getInitialProps\`. This de-optimizes and prevents automatic static optimization. https://nextjs.org/docs/messages/empty-object-getInitialProps`);
+        }
+    }
+    return props;
+}
+const SP = typeof performance !== 'undefined';
+const ST = SP && [
+    'mark',
+    'measure',
+    'getEntriesByName'
+].every((method)=>typeof performance[method] === 'function');
+class DecodeError extends Error {
+}
+class NormalizeError extends Error {
+}
+class PageNotFoundError extends Error {
+    constructor(page){
+        super();
+        this.code = 'ENOENT';
+        this.name = 'PageNotFoundError';
+        this.message = `Cannot find module for page: ${page}`;
+    }
+}
+class MissingStaticPage extends Error {
+    constructor(page, message){
+        super();
+        this.message = `Failed to load static file for page: ${page} ${message}`;
+    }
+}
+class MiddlewareNotFoundError extends Error {
+    constructor(){
+        super();
+        this.code = 'ENOENT';
+        this.message = `Cannot find the middleware module`;
+    }
+}
+function stringifyError(error) {
+    return JSON.stringify({
+        message: error.message,
+        stack: error.stack
+    });
+} //# sourceMappingURL=utils.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/is-local-url.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "isLocalURL", {
+    enumerable: true,
+    get: function() {
+        return isLocalURL;
+    }
+});
+const _utils = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/utils.js [app-client] (ecmascript)");
+const _hasbasepath = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/client/has-base-path.js [app-client] (ecmascript)");
+function isLocalURL(url) {
+    // prevent a hydration mismatch on href for url with anchor refs
+    if (!(0, _utils.isAbsoluteUrl)(url)) return true;
+    try {
+        // absolute urls can be local if they are on the same origin
+        const locationOrigin = (0, _utils.getLocationOrigin)();
+        const resolved = new URL(url, locationOrigin);
+        return resolved.origin === locationOrigin && (0, _hasbasepath.hasBasePath)(resolved.pathname);
+    } catch (_) {
+        return false;
+    }
+} //# sourceMappingURL=is-local-url.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+0 && (module.exports = {
+    getSortedRouteObjects: null,
+    getSortedRoutes: null
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    getSortedRouteObjects: function() {
+        return getSortedRouteObjects;
+    },
+    getSortedRoutes: function() {
+        return getSortedRoutes;
+    }
+});
+class UrlNode {
+    insert(urlPath) {
+        this._insert(urlPath.split('/').filter(Boolean), [], false);
+    }
+    smoosh() {
+        return this._smoosh();
+    }
+    _smoosh(prefix = '/') {
+        const childrenPaths = [
+            ...this.children.keys()
+        ].sort();
+        if (this.slugName !== null) {
+            childrenPaths.splice(childrenPaths.indexOf('[]'), 1);
+        }
+        if (this.restSlugName !== null) {
+            childrenPaths.splice(childrenPaths.indexOf('[...]'), 1);
+        }
+        if (this.optionalRestSlugName !== null) {
+            childrenPaths.splice(childrenPaths.indexOf('[[...]]'), 1);
+        }
+        const routes = childrenPaths.map((c)=>this.children.get(c)._smoosh(`${prefix}${c}/`)).reduce((prev, curr)=>[
+                ...prev,
+                ...curr
+            ], []);
+        if (this.slugName !== null) {
+            routes.push(...this.children.get('[]')._smoosh(`${prefix}[${this.slugName}]/`));
+        }
+        if (!this.placeholder) {
+            const r = prefix === '/' ? '/' : prefix.slice(0, -1);
+            if (this.optionalRestSlugName != null) {
+                throw Object.defineProperty(new Error(`You cannot define a route with the same specificity as a optional catch-all route ("${r}" and "${r}[[...${this.optionalRestSlugName}]]").`), "__NEXT_ERROR_CODE", {
+                    value: "E458",
+                    enumerable: false,
+                    configurable: true
+                });
+            }
+            routes.unshift(r);
+        }
+        if (this.restSlugName !== null) {
+            routes.push(...this.children.get('[...]')._smoosh(`${prefix}[...${this.restSlugName}]/`));
+        }
+        if (this.optionalRestSlugName !== null) {
+            routes.push(...this.children.get('[[...]]')._smoosh(`${prefix}[[...${this.optionalRestSlugName}]]/`));
+        }
+        return routes;
+    }
+    _insert(urlPaths, slugNames, isCatchAll) {
+        if (urlPaths.length === 0) {
+            this.placeholder = false;
+            return;
+        }
+        if (isCatchAll) {
+            throw Object.defineProperty(new Error(`Catch-all must be the last part of the URL.`), "__NEXT_ERROR_CODE", {
+                value: "E392",
+                enumerable: false,
+                configurable: true
+            });
+        }
+        // The next segment in the urlPaths list
+        let nextSegment = urlPaths[0];
+        // Check if the segment matches `[something]`
+        if (nextSegment.startsWith('[') && nextSegment.endsWith(']')) {
+            // Strip `[` and `]`, leaving only `something`
+            let segmentName = nextSegment.slice(1, -1);
+            let isOptional = false;
+            if (segmentName.startsWith('[') && segmentName.endsWith(']')) {
+                // Strip optional `[` and `]`, leaving only `something`
+                segmentName = segmentName.slice(1, -1);
+                isOptional = true;
+            }
+            if (segmentName.startsWith('…')) {
+                throw Object.defineProperty(new Error(`Detected a three-dot character ('…') at ('${segmentName}'). Did you mean ('...')?`), "__NEXT_ERROR_CODE", {
+                    value: "E147",
+                    enumerable: false,
+                    configurable: true
+                });
+            }
+            if (segmentName.startsWith('...')) {
+                // Strip `...`, leaving only `something`
+                segmentName = segmentName.substring(3);
+                isCatchAll = true;
+            }
+            if (segmentName.startsWith('[') || segmentName.endsWith(']')) {
+                throw Object.defineProperty(new Error(`Segment names may not start or end with extra brackets ('${segmentName}').`), "__NEXT_ERROR_CODE", {
+                    value: "E421",
+                    enumerable: false,
+                    configurable: true
+                });
+            }
+            if (segmentName.startsWith('.')) {
+                throw Object.defineProperty(new Error(`Segment names may not start with erroneous periods ('${segmentName}').`), "__NEXT_ERROR_CODE", {
+                    value: "E288",
+                    enumerable: false,
+                    configurable: true
+                });
+            }
+            function handleSlug(previousSlug, nextSlug) {
+                if (previousSlug !== null) {
+                    // If the specific segment already has a slug but the slug is not `something`
+                    // This prevents collisions like:
+                    // pages/[post]/index.js
+                    // pages/[id]/index.js
+                    // Because currently multiple dynamic params on the same segment level are not supported
+                    if (previousSlug !== nextSlug) {
+                        // TODO: This error seems to be confusing for users, needs an error link, the description can be based on above comment.
+                        throw Object.defineProperty(new Error(`You cannot use different slug names for the same dynamic path ('${previousSlug}' !== '${nextSlug}').`), "__NEXT_ERROR_CODE", {
+                            value: "E337",
+                            enumerable: false,
+                            configurable: true
+                        });
+                    }
+                }
+                slugNames.forEach((slug)=>{
+                    if (slug === nextSlug) {
+                        throw Object.defineProperty(new Error(`You cannot have the same slug name "${nextSlug}" repeat within a single dynamic path`), "__NEXT_ERROR_CODE", {
+                            value: "E247",
+                            enumerable: false,
+                            configurable: true
+                        });
+                    }
+                    if (slug.replace(/\W/g, '') === nextSegment.replace(/\W/g, '')) {
+                        throw Object.defineProperty(new Error(`You cannot have the slug names "${slug}" and "${nextSlug}" differ only by non-word symbols within a single dynamic path`), "__NEXT_ERROR_CODE", {
+                            value: "E499",
+                            enumerable: false,
+                            configurable: true
+                        });
+                    }
+                });
+                slugNames.push(nextSlug);
+            }
+            if (isCatchAll) {
+                if (isOptional) {
+                    if (this.restSlugName != null) {
+                        throw Object.defineProperty(new Error(`You cannot use both an required and optional catch-all route at the same level ("[...${this.restSlugName}]" and "${urlPaths[0]}" ).`), "__NEXT_ERROR_CODE", {
+                            value: "E299",
+                            enumerable: false,
+                            configurable: true
+                        });
+                    }
+                    handleSlug(this.optionalRestSlugName, segmentName);
+                    // slugName is kept as it can only be one particular slugName
+                    this.optionalRestSlugName = segmentName;
+                    // nextSegment is overwritten to [[...]] so that it can later be sorted specifically
+                    nextSegment = '[[...]]';
+                } else {
+                    if (this.optionalRestSlugName != null) {
+                        throw Object.defineProperty(new Error(`You cannot use both an optional and required catch-all route at the same level ("[[...${this.optionalRestSlugName}]]" and "${urlPaths[0]}").`), "__NEXT_ERROR_CODE", {
+                            value: "E300",
+                            enumerable: false,
+                            configurable: true
+                        });
+                    }
+                    handleSlug(this.restSlugName, segmentName);
+                    // slugName is kept as it can only be one particular slugName
+                    this.restSlugName = segmentName;
+                    // nextSegment is overwritten to [...] so that it can later be sorted specifically
+                    nextSegment = '[...]';
+                }
+            } else {
+                if (isOptional) {
+                    throw Object.defineProperty(new Error(`Optional route parameters are not yet supported ("${urlPaths[0]}").`), "__NEXT_ERROR_CODE", {
+                        value: "E435",
+                        enumerable: false,
+                        configurable: true
+                    });
+                }
+                handleSlug(this.slugName, segmentName);
+                // slugName is kept as it can only be one particular slugName
+                this.slugName = segmentName;
+                // nextSegment is overwritten to [] so that it can later be sorted specifically
+                nextSegment = '[]';
+            }
+        }
+        // If this UrlNode doesn't have the nextSegment yet we create a new child UrlNode
+        if (!this.children.has(nextSegment)) {
+            this.children.set(nextSegment, new UrlNode());
+        }
+        this.children.get(nextSegment)._insert(urlPaths.slice(1), slugNames, isCatchAll);
+    }
+    constructor(){
+        this.placeholder = true;
+        this.children = new Map();
+        this.slugName = null;
+        this.restSlugName = null;
+        this.optionalRestSlugName = null;
+    }
+}
+function getSortedRoutes(normalizedPages) {
+    // First the UrlNode is created, and every UrlNode can have only 1 dynamic segment
+    // Eg you can't have pages/[post]/abc.js and pages/[hello]/something-else.js
+    // Only 1 dynamic segment per nesting level
+    // So in the case that is test/integration/dynamic-routing it'll be this:
+    // pages/[post]/comments.js
+    // pages/blog/[post]/comment/[id].js
+    // Both are fine because `pages/[post]` and `pages/blog` are on the same level
+    // So in this case `UrlNode` created here has `this.slugName === 'post'`
+    // And since your PR passed through `slugName` as an array basically it'd including it in too many possibilities
+    // Instead what has to be passed through is the upwards path's dynamic names
+    const root = new UrlNode();
+    // Here the `root` gets injected multiple paths, and insert will break them up into sublevels
+    normalizedPages.forEach((pagePath)=>root.insert(pagePath));
+    // Smoosh will then sort those sublevels up to the point where you get the correct route definition priority
+    return root.smoosh();
+}
+function getSortedRouteObjects(objects, getter) {
+    // We're assuming here that all the pathnames are unique, that way we can
+    // sort the list and use the index as the key.
+    const indexes = {};
+    const pathnames = [];
+    for(let i = 0; i < objects.length; i++){
+        const pathname = getter(objects[i]);
+        indexes[pathname] = i;
+        pathnames[i] = pathname;
+    }
+    // Sort the pathnames.
+    const sorted = getSortedRoutes(pathnames);
+    // Map the sorted pathnames back to the original objects using the new sorted
+    // index.
+    return sorted.map((pathname)=>objects[indexes[pathname]]);
+} //# sourceMappingURL=sorted-routes.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/is-dynamic.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "isDynamicRoute", {
+    enumerable: true,
+    get: function() {
+        return isDynamicRoute;
+    }
+});
+const _interceptionroutes = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/interception-routes.js [app-client] (ecmascript)");
+// Identify /.*[param].*/ in route string
+const TEST_ROUTE = /\/[^/]*\[[^/]+\][^/]*(?=\/|$)/;
+// Identify /[param]/ in route string
+const TEST_STRICT_ROUTE = /\/\[[^/]+\](?=\/|$)/;
+function isDynamicRoute(route, strict = true) {
+    if ((0, _interceptionroutes.isInterceptionRouteAppPath)(route)) {
+        route = (0, _interceptionroutes.extractInterceptionRouteInformation)(route).interceptedRoute;
+    }
+    if (strict) {
+        return TEST_STRICT_ROUTE.test(route);
+    }
+    return TEST_ROUTE.test(route);
+} //# sourceMappingURL=is-dynamic.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/index.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+0 && (module.exports = {
+    getSortedRouteObjects: null,
+    getSortedRoutes: null,
+    isDynamicRoute: null
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    getSortedRouteObjects: function() {
+        return _sortedroutes.getSortedRouteObjects;
+    },
+    getSortedRoutes: function() {
+        return _sortedroutes.getSortedRoutes;
+    },
+    isDynamicRoute: function() {
+        return _isdynamic.isDynamicRoute;
+    }
+});
+const _sortedroutes = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js [app-client] (ecmascript)");
+const _isdynamic = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/is-dynamic.js [app-client] (ecmascript)"); //# sourceMappingURL=index.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/compiled/path-to-regexp/index.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+
+(()=>{
+    "use strict";
+    if (typeof __nccwpck_require__ !== "undefined") __nccwpck_require__.ab = ("TURBOPACK compile-time value", "/ROOT/rayls-shield-landing-page/node_modules/next/dist/compiled/path-to-regexp") + "/";
+    var e = {};
+    (()=>{
+        var n = e;
+        Object.defineProperty(n, "__esModule", {
+            value: true
+        });
+        n.pathToRegexp = n.tokensToRegexp = n.regexpToFunction = n.match = n.tokensToFunction = n.compile = n.parse = void 0;
+        function lexer(e) {
+            var n = [];
+            var r = 0;
+            while(r < e.length){
+                var t = e[r];
+                if (t === "*" || t === "+" || t === "?") {
+                    n.push({
+                        type: "MODIFIER",
+                        index: r,
+                        value: e[r++]
+                    });
+                    continue;
+                }
+                if (t === "\\") {
+                    n.push({
+                        type: "ESCAPED_CHAR",
+                        index: r++,
+                        value: e[r++]
+                    });
+                    continue;
+                }
+                if (t === "{") {
+                    n.push({
+                        type: "OPEN",
+                        index: r,
+                        value: e[r++]
+                    });
+                    continue;
+                }
+                if (t === "}") {
+                    n.push({
+                        type: "CLOSE",
+                        index: r,
+                        value: e[r++]
+                    });
+                    continue;
+                }
+                if (t === ":") {
+                    var a = "";
+                    var i = r + 1;
+                    while(i < e.length){
+                        var o = e.charCodeAt(i);
+                        if (o >= 48 && o <= 57 || o >= 65 && o <= 90 || o >= 97 && o <= 122 || o === 95) {
+                            a += e[i++];
+                            continue;
+                        }
+                        break;
+                    }
+                    if (!a) throw new TypeError("Missing parameter name at ".concat(r));
+                    n.push({
+                        type: "NAME",
+                        index: r,
+                        value: a
+                    });
+                    r = i;
+                    continue;
+                }
+                if (t === "(") {
+                    var c = 1;
+                    var f = "";
+                    var i = r + 1;
+                    if (e[i] === "?") {
+                        throw new TypeError('Pattern cannot start with "?" at '.concat(i));
+                    }
+                    while(i < e.length){
+                        if (e[i] === "\\") {
+                            f += e[i++] + e[i++];
+                            continue;
+                        }
+                        if (e[i] === ")") {
+                            c--;
+                            if (c === 0) {
+                                i++;
+                                break;
+                            }
+                        } else if (e[i] === "(") {
+                            c++;
+                            if (e[i + 1] !== "?") {
+                                throw new TypeError("Capturing groups are not allowed at ".concat(i));
+                            }
+                        }
+                        f += e[i++];
+                    }
+                    if (c) throw new TypeError("Unbalanced pattern at ".concat(r));
+                    if (!f) throw new TypeError("Missing pattern at ".concat(r));
+                    n.push({
+                        type: "PATTERN",
+                        index: r,
+                        value: f
+                    });
+                    r = i;
+                    continue;
+                }
+                n.push({
+                    type: "CHAR",
+                    index: r,
+                    value: e[r++]
+                });
+            }
+            n.push({
+                type: "END",
+                index: r,
+                value: ""
+            });
+            return n;
+        }
+        function parse(e, n) {
+            if (n === void 0) {
+                n = {};
+            }
+            var r = lexer(e);
+            var t = n.prefixes, a = t === void 0 ? "./" : t, i = n.delimiter, o = i === void 0 ? "/#?" : i;
+            var c = [];
+            var f = 0;
+            var u = 0;
+            var p = "";
+            var tryConsume = function(e) {
+                if (u < r.length && r[u].type === e) return r[u++].value;
+            };
+            var mustConsume = function(e) {
+                var n = tryConsume(e);
+                if (n !== undefined) return n;
+                var t = r[u], a = t.type, i = t.index;
+                throw new TypeError("Unexpected ".concat(a, " at ").concat(i, ", expected ").concat(e));
+            };
+            var consumeText = function() {
+                var e = "";
+                var n;
+                while(n = tryConsume("CHAR") || tryConsume("ESCAPED_CHAR")){
+                    e += n;
+                }
+                return e;
+            };
+            var isSafe = function(e) {
+                for(var n = 0, r = o; n < r.length; n++){
+                    var t = r[n];
+                    if (e.indexOf(t) > -1) return true;
+                }
+                return false;
+            };
+            var safePattern = function(e) {
+                var n = c[c.length - 1];
+                var r = e || (n && typeof n === "string" ? n : "");
+                if (n && !r) {
+                    throw new TypeError('Must have text between two parameters, missing text after "'.concat(n.name, '"'));
+                }
+                if (!r || isSafe(r)) return "[^".concat(escapeString(o), "]+?");
+                return "(?:(?!".concat(escapeString(r), ")[^").concat(escapeString(o), "])+?");
+            };
+            while(u < r.length){
+                var v = tryConsume("CHAR");
+                var s = tryConsume("NAME");
+                var d = tryConsume("PATTERN");
+                if (s || d) {
+                    var g = v || "";
+                    if (a.indexOf(g) === -1) {
+                        p += g;
+                        g = "";
+                    }
+                    if (p) {
+                        c.push(p);
+                        p = "";
+                    }
+                    c.push({
+                        name: s || f++,
+                        prefix: g,
+                        suffix: "",
+                        pattern: d || safePattern(g),
+                        modifier: tryConsume("MODIFIER") || ""
+                    });
+                    continue;
+                }
+                var x = v || tryConsume("ESCAPED_CHAR");
+                if (x) {
+                    p += x;
+                    continue;
+                }
+                if (p) {
+                    c.push(p);
+                    p = "";
+                }
+                var h = tryConsume("OPEN");
+                if (h) {
+                    var g = consumeText();
+                    var l = tryConsume("NAME") || "";
+                    var m = tryConsume("PATTERN") || "";
+                    var T = consumeText();
+                    mustConsume("CLOSE");
+                    c.push({
+                        name: l || (m ? f++ : ""),
+                        pattern: l && !m ? safePattern(g) : m,
+                        prefix: g,
+                        suffix: T,
+                        modifier: tryConsume("MODIFIER") || ""
+                    });
+                    continue;
+                }
+                mustConsume("END");
+            }
+            return c;
+        }
+        n.parse = parse;
+        function compile(e, n) {
+            return tokensToFunction(parse(e, n), n);
+        }
+        n.compile = compile;
+        function tokensToFunction(e, n) {
+            if (n === void 0) {
+                n = {};
+            }
+            var r = flags(n);
+            var t = n.encode, a = t === void 0 ? function(e) {
+                return e;
+            } : t, i = n.validate, o = i === void 0 ? true : i;
+            var c = e.map(function(e) {
+                if (typeof e === "object") {
+                    return new RegExp("^(?:".concat(e.pattern, ")$"), r);
+                }
+            });
+            return function(n) {
+                var r = "";
+                for(var t = 0; t < e.length; t++){
+                    var i = e[t];
+                    if (typeof i === "string") {
+                        r += i;
+                        continue;
+                    }
+                    var f = n ? n[i.name] : undefined;
+                    var u = i.modifier === "?" || i.modifier === "*";
+                    var p = i.modifier === "*" || i.modifier === "+";
+                    if (Array.isArray(f)) {
+                        if (!p) {
+                            throw new TypeError('Expected "'.concat(i.name, '" to not repeat, but got an array'));
+                        }
+                        if (f.length === 0) {
+                            if (u) continue;
+                            throw new TypeError('Expected "'.concat(i.name, '" to not be empty'));
+                        }
+                        for(var v = 0; v < f.length; v++){
+                            var s = a(f[v], i);
+                            if (o && !c[t].test(s)) {
+                                throw new TypeError('Expected all "'.concat(i.name, '" to match "').concat(i.pattern, '", but got "').concat(s, '"'));
+                            }
+                            r += i.prefix + s + i.suffix;
+                        }
+                        continue;
+                    }
+                    if (typeof f === "string" || typeof f === "number") {
+                        var s = a(String(f), i);
+                        if (o && !c[t].test(s)) {
+                            throw new TypeError('Expected "'.concat(i.name, '" to match "').concat(i.pattern, '", but got "').concat(s, '"'));
+                        }
+                        r += i.prefix + s + i.suffix;
+                        continue;
+                    }
+                    if (u) continue;
+                    var d = p ? "an array" : "a string";
+                    throw new TypeError('Expected "'.concat(i.name, '" to be ').concat(d));
+                }
+                return r;
+            };
+        }
+        n.tokensToFunction = tokensToFunction;
+        function match(e, n) {
+            var r = [];
+            var t = pathToRegexp(e, r, n);
+            return regexpToFunction(t, r, n);
+        }
+        n.match = match;
+        function regexpToFunction(e, n, r) {
+            if (r === void 0) {
+                r = {};
+            }
+            var t = r.decode, a = t === void 0 ? function(e) {
+                return e;
+            } : t;
+            return function(r) {
+                var t = e.exec(r);
+                if (!t) return false;
+                var i = t[0], o = t.index;
+                var c = Object.create(null);
+                var _loop_1 = function(e) {
+                    if (t[e] === undefined) return "continue";
+                    var r = n[e - 1];
+                    if (r.modifier === "*" || r.modifier === "+") {
+                        c[r.name] = t[e].split(r.prefix + r.suffix).map(function(e) {
+                            return a(e, r);
+                        });
+                    } else {
+                        c[r.name] = a(t[e], r);
+                    }
+                };
+                for(var f = 1; f < t.length; f++){
+                    _loop_1(f);
+                }
+                return {
+                    path: i,
+                    index: o,
+                    params: c
+                };
+            };
+        }
+        n.regexpToFunction = regexpToFunction;
+        function escapeString(e) {
+            return e.replace(/([.+*?=^!:${}()[\]|/\\])/g, "\\$1");
+        }
+        function flags(e) {
+            return e && e.sensitive ? "" : "i";
+        }
+        function regexpToRegexp(e, n) {
+            if (!n) return e;
+            var r = /\((?:\?<(.*?)>)?(?!\?)/g;
+            var t = 0;
+            var a = r.exec(e.source);
+            while(a){
+                n.push({
+                    name: a[1] || t++,
+                    prefix: "",
+                    suffix: "",
+                    modifier: "",
+                    pattern: ""
+                });
+                a = r.exec(e.source);
+            }
+            return e;
+        }
+        function arrayToRegexp(e, n, r) {
+            var t = e.map(function(e) {
+                return pathToRegexp(e, n, r).source;
+            });
+            return new RegExp("(?:".concat(t.join("|"), ")"), flags(r));
+        }
+        function stringToRegexp(e, n, r) {
+            return tokensToRegexp(parse(e, r), n, r);
+        }
+        function tokensToRegexp(e, n, r) {
+            if (r === void 0) {
+                r = {};
+            }
+            var t = r.strict, a = t === void 0 ? false : t, i = r.start, o = i === void 0 ? true : i, c = r.end, f = c === void 0 ? true : c, u = r.encode, p = u === void 0 ? function(e) {
+                return e;
+            } : u, v = r.delimiter, s = v === void 0 ? "/#?" : v, d = r.endsWith, g = d === void 0 ? "" : d;
+            var x = "[".concat(escapeString(g), "]|$");
+            var h = "[".concat(escapeString(s), "]");
+            var l = o ? "^" : "";
+            for(var m = 0, T = e; m < T.length; m++){
+                var E = T[m];
+                if (typeof E === "string") {
+                    l += escapeString(p(E));
+                } else {
+                    var w = escapeString(p(E.prefix));
+                    var y = escapeString(p(E.suffix));
+                    if (E.pattern) {
+                        if (n) n.push(E);
+                        if (w || y) {
+                            if (E.modifier === "+" || E.modifier === "*") {
+                                var R = E.modifier === "*" ? "?" : "";
+                                l += "(?:".concat(w, "((?:").concat(E.pattern, ")(?:").concat(y).concat(w, "(?:").concat(E.pattern, "))*)").concat(y, ")").concat(R);
+                            } else {
+                                l += "(?:".concat(w, "(").concat(E.pattern, ")").concat(y, ")").concat(E.modifier);
+                            }
+                        } else {
+                            if (E.modifier === "+" || E.modifier === "*") {
+                                throw new TypeError('Can not repeat "'.concat(E.name, '" without a prefix and suffix'));
+                            }
+                            l += "(".concat(E.pattern, ")").concat(E.modifier);
+                        }
+                    } else {
+                        l += "(?:".concat(w).concat(y, ")").concat(E.modifier);
+                    }
+                }
+            }
+            if (f) {
+                if (!a) l += "".concat(h, "?");
+                l += !r.endsWith ? "$" : "(?=".concat(x, ")");
+            } else {
+                var A = e[e.length - 1];
+                var _ = typeof A === "string" ? h.indexOf(A[A.length - 1]) > -1 : A === undefined;
+                if (!a) {
+                    l += "(?:".concat(h, "(?=").concat(x, "))?");
+                }
+                if (!_) {
+                    l += "(?=".concat(h, "|").concat(x, ")");
+                }
+            }
+            return new RegExp(l, flags(r));
+        }
+        n.tokensToRegexp = tokensToRegexp;
+        function pathToRegexp(e, n, r) {
+            if (e instanceof RegExp) return regexpToRegexp(e, n);
+            if (Array.isArray(e)) return arrayToRegexp(e, n, r);
+            return stringToRegexp(e, n, r);
+        }
+        n.pathToRegexp = pathToRegexp;
+    })();
+    module.exports = e;
+})();
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/lib/route-pattern-normalizer.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+0 && (module.exports = {
+    PARAM_SEPARATOR: null,
+    hasAdjacentParameterIssues: null,
+    normalizeAdjacentParameters: null,
+    normalizeTokensForRegexp: null,
+    stripNormalizedSeparators: null,
+    stripParameterSeparators: null
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    PARAM_SEPARATOR: function() {
+        return PARAM_SEPARATOR;
+    },
+    hasAdjacentParameterIssues: function() {
+        return hasAdjacentParameterIssues;
+    },
+    normalizeAdjacentParameters: function() {
+        return normalizeAdjacentParameters;
+    },
+    normalizeTokensForRegexp: function() {
+        return normalizeTokensForRegexp;
+    },
+    stripNormalizedSeparators: function() {
+        return stripNormalizedSeparators;
+    },
+    stripParameterSeparators: function() {
+        return stripParameterSeparators;
+    }
+});
+const PARAM_SEPARATOR = '_NEXTSEP_';
+function hasAdjacentParameterIssues(route) {
+    if (typeof route !== 'string') return false;
+    // Check for interception route markers followed immediately by parameters
+    // Pattern: /(.):param, /(..):param, /(...):param, /(.)(.):param etc.
+    // These patterns cause "Must have text between two parameters" errors
+    if (/\/\(\.{1,3}\):[^/\s]+/.test(route)) {
+        return true;
+    }
+    // Check for basic adjacent parameters without separators
+    // Pattern: :param1:param2 (but not :param* or other URL patterns)
+    if (/:[a-zA-Z_][a-zA-Z0-9_]*:[a-zA-Z_][a-zA-Z0-9_]*/.test(route)) {
+        return true;
+    }
+    return false;
+}
+function normalizeAdjacentParameters(route) {
+    let normalized = route;
+    // Handle interception route patterns: (.):param -> (.)_NEXTSEP_:param
+    normalized = normalized.replace(/(\([^)]*\)):([^/\s]+)/g, `$1${PARAM_SEPARATOR}:$2`);
+    // Handle other adjacent parameter patterns: :param1:param2 -> :param1_NEXTSEP_:param2
+    normalized = normalized.replace(/:([^:/\s)]+)(?=:)/g, `:$1${PARAM_SEPARATOR}`);
+    return normalized;
+}
+function normalizeTokensForRegexp(tokens) {
+    return tokens.map((token)=>{
+        // Token union type: Token = string | TokenObject
+        // Literal path segments are strings, parameters/wildcards are objects
+        if (typeof token === 'object' && token !== null && // Not all token objects have 'modifier' property (e.g., simple text tokens)
+        'modifier' in token && // Only repeating modifiers (* or +) cause the validation error
+        // Other modifiers like '?' (optional) are fine
+        (token.modifier === '*' || token.modifier === '+') && // Token objects can have different shapes depending on route pattern
+        'prefix' in token && 'suffix' in token && // Both prefix and suffix must be empty strings
+        // This is what causes the validation error in path-to-regexp
+        token.prefix === '' && token.suffix === '') {
+            // Add minimal prefix to satisfy path-to-regexp validation
+            // We use '/' as it's the most common path delimiter and won't break route matching
+            // The prefix gets used in regex generation but doesn't affect parameter extraction
+            return {
+                ...token,
+                prefix: '/'
+            };
+        }
+        return token;
+    });
+}
+function stripNormalizedSeparators(pathname) {
+    // Remove separator after interception route markers
+    // Pattern: (.)_NEXTSEP_ -> (.), (..)_NEXTSEP_ -> (..), etc.
+    // The separator appears after the closing paren of interception markers
+    return pathname.replace(new RegExp(`\\)${PARAM_SEPARATOR}`, 'g'), ')');
+}
+function stripParameterSeparators(params) {
+    const cleaned = {};
+    for (const [key, value] of Object.entries(params)){
+        if (typeof value === 'string') {
+            // Remove the separator if it appears at the start of parameter values
+            cleaned[key] = value.replace(new RegExp(`^${PARAM_SEPARATOR}`), '');
+        } else if (Array.isArray(value)) {
+            // Handle array parameters (from repeated route segments)
+            cleaned[key] = value.map((item)=>typeof item === 'string' ? item.replace(new RegExp(`^${PARAM_SEPARATOR}`), '') : item);
+        } else {
+            cleaned[key] = value;
+        }
+    }
+    return cleaned;
+} //# sourceMappingURL=route-pattern-normalizer.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/route-match-utils.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+/**
+ * Client-safe utilities for route matching that don't import server-side
+ * utilities to avoid bundling issues with Turbopack
+ */ Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+0 && (module.exports = {
+    safeCompile: null,
+    safePathToRegexp: null,
+    safeRegexpToFunction: null,
+    safeRouteMatcher: null
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    safeCompile: function() {
+        return safeCompile;
+    },
+    safePathToRegexp: function() {
+        return safePathToRegexp;
+    },
+    safeRegexpToFunction: function() {
+        return safeRegexpToFunction;
+    },
+    safeRouteMatcher: function() {
+        return safeRouteMatcher;
+    }
+});
+const _pathtoregexp = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/compiled/path-to-regexp/index.js [app-client] (ecmascript)");
+const _routepatternnormalizer = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/lib/route-pattern-normalizer.js [app-client] (ecmascript)");
+function safePathToRegexp(route, keys, options) {
+    if (typeof route !== 'string') {
+        return (0, _pathtoregexp.pathToRegexp)(route, keys, options);
+    }
+    // Check if normalization is needed and cache the result
+    const needsNormalization = (0, _routepatternnormalizer.hasAdjacentParameterIssues)(route);
+    const routeToUse = needsNormalization ? (0, _routepatternnormalizer.normalizeAdjacentParameters)(route) : route;
+    try {
+        return (0, _pathtoregexp.pathToRegexp)(routeToUse, keys, options);
+    } catch (error) {
+        // Only try normalization if we haven't already normalized
+        if (!needsNormalization) {
+            try {
+                const normalizedRoute = (0, _routepatternnormalizer.normalizeAdjacentParameters)(route);
+                return (0, _pathtoregexp.pathToRegexp)(normalizedRoute, keys, options);
+            } catch (retryError) {
+                // If that doesn't work, fall back to original error
+                throw error;
+            }
+        }
+        throw error;
+    }
+}
+function safeCompile(route, options) {
+    // Check if normalization is needed and cache the result
+    const needsNormalization = (0, _routepatternnormalizer.hasAdjacentParameterIssues)(route);
+    const routeToUse = needsNormalization ? (0, _routepatternnormalizer.normalizeAdjacentParameters)(route) : route;
+    try {
+        const compiler = (0, _pathtoregexp.compile)(routeToUse, options);
+        // If we normalized the route, wrap the compiler to strip separators from output
+        // The normalization inserts _NEXTSEP_ as a literal string in the pattern to satisfy
+        // path-to-regexp validation, but we don't want it in the final compiled URL
+        if (needsNormalization) {
+            return (params)=>{
+                return (0, _routepatternnormalizer.stripNormalizedSeparators)(compiler(params));
+            };
+        }
+        return compiler;
+    } catch (error) {
+        // Only try normalization if we haven't already normalized
+        if (!needsNormalization) {
+            try {
+                const normalizedRoute = (0, _routepatternnormalizer.normalizeAdjacentParameters)(route);
+                const compiler = (0, _pathtoregexp.compile)(normalizedRoute, options);
+                // Wrap the compiler to strip separators from output
+                return (params)=>{
+                    return (0, _routepatternnormalizer.stripNormalizedSeparators)(compiler(params));
+                };
+            } catch (retryError) {
+                // If that doesn't work, fall back to original error
+                throw error;
+            }
+        }
+        throw error;
+    }
+}
+function safeRegexpToFunction(regexp, keys) {
+    const originalMatcher = (0, _pathtoregexp.regexpToFunction)(regexp, keys || []);
+    return (pathname)=>{
+        const result = originalMatcher(pathname);
+        if (!result) return false;
+        // Clean parameters before returning
+        return {
+            ...result,
+            params: (0, _routepatternnormalizer.stripParameterSeparators)(result.params)
+        };
+    };
+}
+function safeRouteMatcher(matcherFn) {
+    return (pathname)=>{
+        const result = matcherFn(pathname);
+        if (!result) return false;
+        // Clean parameters before returning
+        return (0, _routepatternnormalizer.stripParameterSeparators)(result);
+    };
+} //# sourceMappingURL=route-match-utils.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/route-matcher.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "getRouteMatcher", {
+    enumerable: true,
+    get: function() {
+        return getRouteMatcher;
+    }
+});
+const _utils = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/utils.js [app-client] (ecmascript)");
+const _routematchutils = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/route-match-utils.js [app-client] (ecmascript)");
+function getRouteMatcher({ re, groups }) {
+    const rawMatcher = (pathname)=>{
+        const routeMatch = re.exec(pathname);
+        if (!routeMatch) return false;
+        const decode = (param)=>{
+            try {
+                return decodeURIComponent(param);
+            } catch  {
+                throw Object.defineProperty(new _utils.DecodeError('failed to decode param'), "__NEXT_ERROR_CODE", {
+                    value: "E528",
+                    enumerable: false,
+                    configurable: true
+                });
+            }
+        };
+        const params = {};
+        for (const [key, group] of Object.entries(groups)){
+            const match = routeMatch[group.pos];
+            if (match !== undefined) {
+                if (group.repeat) {
+                    params[key] = match.split('/').map((entry)=>decode(entry));
+                } else {
+                    params[key] = decode(match);
+                }
+            }
+        }
+        return params;
+    };
+    // Wrap with safe matcher to handle parameter cleaning
+    return (0, _routematchutils.safeRouteMatcher)(rawMatcher);
+} //# sourceMappingURL=route-matcher.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/escape-regexp.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+// regexp is based on https://github.com/sindresorhus/escape-string-regexp
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "escapeStringRegexp", {
+    enumerable: true,
+    get: function() {
+        return escapeStringRegexp;
+    }
+});
+const reHasRegExp = /[|\\{}()[\]^$+*?.-]/;
+const reReplaceRegExp = /[|\\{}()[\]^$+*?.-]/g;
+function escapeStringRegexp(str) {
+    // see also: https://github.com/lodash/lodash/blob/2da024c3b4f9947a48517639de7560457cd4ec6c/escapeRegExp.js#L23
+    if (reHasRegExp.test(str)) {
+        return str.replace(reReplaceRegExp, '\\$&');
+    }
+    return str;
+} //# sourceMappingURL=escape-regexp.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/parse-loader-tree.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "parseLoaderTree", {
+    enumerable: true,
+    get: function() {
+        return parseLoaderTree;
+    }
+});
+const _segment = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/segment.js [app-client] (ecmascript)");
+function parseLoaderTree(tree) {
+    const [segment, parallelRoutes, modules] = tree;
+    const { layout, template } = modules;
+    let { page } = modules;
+    // a __DEFAULT__ segment means that this route didn't match any of the
+    // segments in the route, so we should use the default page
+    page = segment === _segment.DEFAULT_SEGMENT_KEY ? modules.defaultPage : page;
+    const conventionPath = layout?.[1] || template?.[1] || page?.[1];
+    return {
+        page,
+        segment,
+        modules,
+        /* it can be either layout / template / page */ conventionPath,
+        parallelRoutes
+    };
+} //# sourceMappingURL=parse-loader-tree.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/get-segment-param.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+0 && (module.exports = {
+    getParamProperties: null,
+    getSegmentParam: null,
+    isCatchAll: null
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    getParamProperties: function() {
+        return getParamProperties;
+    },
+    getSegmentParam: function() {
+        return getSegmentParam;
+    },
+    isCatchAll: function() {
+        return isCatchAll;
+    }
+});
+const _interceptionroutes = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/interception-routes.js [app-client] (ecmascript)");
+function getSegmentParam(segment) {
+    const interceptionMarker = _interceptionroutes.INTERCEPTION_ROUTE_MARKERS.find((marker)=>segment.startsWith(marker));
+    // if an interception marker is part of the path segment, we need to jump ahead
+    // to the relevant portion for param parsing
+    if (interceptionMarker) {
+        segment = segment.slice(interceptionMarker.length);
+    }
+    if (segment.startsWith('[[...') && segment.endsWith(']]')) {
+        return {
+            // TODO-APP: Optional catchall does not currently work with parallel routes,
+            // so for now aren't handling a potential interception marker.
+            type: 'optional-catchall',
+            param: segment.slice(5, -2)
+        };
+    }
+    if (segment.startsWith('[...') && segment.endsWith(']')) {
+        return {
+            type: interceptionMarker ? `catchall-intercepted-${interceptionMarker}` : 'catchall',
+            param: segment.slice(4, -1)
+        };
+    }
+    if (segment.startsWith('[') && segment.endsWith(']')) {
+        return {
+            type: interceptionMarker ? `dynamic-intercepted-${interceptionMarker}` : 'dynamic',
+            param: segment.slice(1, -1)
+        };
+    }
+    return null;
+}
+function isCatchAll(type) {
+    return type === 'catchall' || type === 'catchall-intercepted-(..)(..)' || type === 'catchall-intercepted-(.)' || type === 'catchall-intercepted-(..)' || type === 'catchall-intercepted-(...)' || type === 'optional-catchall';
+}
+function getParamProperties(paramType) {
+    let repeat = false;
+    let optional = false;
+    switch(paramType){
+        case 'catchall':
+        case 'catchall-intercepted-(..)(..)':
+        case 'catchall-intercepted-(.)':
+        case 'catchall-intercepted-(..)':
+        case 'catchall-intercepted-(...)':
+            repeat = true;
+            break;
+        case 'optional-catchall':
+            repeat = true;
+            optional = true;
+            break;
+        case 'dynamic':
+        case 'dynamic-intercepted-(..)(..)':
+        case 'dynamic-intercepted-(.)':
+        case 'dynamic-intercepted-(..)':
+        case 'dynamic-intercepted-(...)':
+            break;
+        default:
+            paramType;
+    }
+    return {
+        repeat,
+        optional
+    };
+} //# sourceMappingURL=get-segment-param.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/get-dynamic-param.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+0 && (module.exports = {
+    PARAMETER_PATTERN: null,
+    getDynamicParam: null,
+    interpolateParallelRouteParams: null,
+    parseMatchedParameter: null,
+    parseParameter: null
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    PARAMETER_PATTERN: function() {
+        return PARAMETER_PATTERN;
+    },
+    getDynamicParam: function() {
+        return getDynamicParam;
+    },
+    interpolateParallelRouteParams: function() {
+        return interpolateParallelRouteParams;
+    },
+    parseMatchedParameter: function() {
+        return parseMatchedParameter;
+    },
+    parseParameter: function() {
+        return parseParameter;
+    }
+});
+const _invarianterror = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/invariant-error.js [app-client] (ecmascript)");
+const _parseloadertree = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/parse-loader-tree.js [app-client] (ecmascript)");
+const _getsegmentparam = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/get-segment-param.js [app-client] (ecmascript)");
+/**
+ * Gets the value of a param from the params object. This correctly handles the
+ * case where the param is a fallback route param and encodes the resulting
+ * value.
+ *
+ * @param interpolatedParams - The params object.
+ * @param segmentKey - The key of the segment.
+ * @param fallbackRouteParams - The fallback route params.
+ * @returns The value of the param.
+ */ function getParamValue(interpolatedParams, segmentKey, fallbackRouteParams) {
+    let value = interpolatedParams[segmentKey];
+    if (fallbackRouteParams?.has(segmentKey)) {
+        // We know that the fallback route params has the segment key because we
+        // checked that above.
+        const [searchValue] = fallbackRouteParams.get(segmentKey);
+        value = searchValue;
+    } else if (Array.isArray(value)) {
+        value = value.map((i)=>encodeURIComponent(i));
+    } else if (typeof value === 'string') {
+        value = encodeURIComponent(value);
+    }
+    return value;
+}
+function interpolateParallelRouteParams(loaderTree, params, pagePath, fallbackRouteParams) {
+    const interpolated = structuredClone(params);
+    // Stack-based traversal with depth tracking
+    const stack = [
+        {
+            tree: loaderTree,
+            depth: 0
+        }
+    ];
+    // Derive value from pagePath based on depth and parameter type
+    const pathSegments = pagePath.split('/').slice(1) // Remove first empty string
+    ;
+    while(stack.length > 0){
+        const { tree, depth } = stack.pop();
+        const { segment, parallelRoutes } = (0, _parseloadertree.parseLoaderTree)(tree);
+        // Check if current segment contains a parameter
+        const segmentParam = (0, _getsegmentparam.getSegmentParam)(segment);
+        if (segmentParam && !interpolated.hasOwnProperty(segmentParam.param) && // If the param is in the fallback route params, we don't need to
+        // interpolate it because it's already marked as being unknown.
+        !fallbackRouteParams?.has(segmentParam.param)) {
+            switch(segmentParam.type){
+                case 'catchall':
+                case 'optional-catchall':
+                case 'catchall-intercepted-(..)(..)':
+                case 'catchall-intercepted-(.)':
+                case 'catchall-intercepted-(..)':
+                case 'catchall-intercepted-(...)':
+                    // For catchall parameters, take all remaining segments from this depth
+                    const remainingSegments = pathSegments.slice(depth);
+                    // Process each segment to handle any dynamic params
+                    const processedSegments = remainingSegments.flatMap((pathSegment)=>{
+                        const param = (0, _getsegmentparam.getSegmentParam)(pathSegment);
+                        // If the segment matches a param, return the param value otherwise,
+                        // it's a static segment, so just return that. We don't use the
+                        // `getParamValue` function here because we don't want the values to
+                        // be encoded, that's handled on get by the `getDynamicParam`
+                        // function.
+                        return param ? interpolated[param.param] : pathSegment;
+                    }).filter((s)=>s !== undefined);
+                    if (processedSegments.length > 0) {
+                        interpolated[segmentParam.param] = processedSegments;
+                    }
+                    break;
+                case 'dynamic':
+                case 'dynamic-intercepted-(..)(..)':
+                case 'dynamic-intercepted-(.)':
+                case 'dynamic-intercepted-(..)':
+                case 'dynamic-intercepted-(...)':
+                    // For regular dynamic parameters, take the segment at this depth
+                    if (depth < pathSegments.length) {
+                        const pathSegment = pathSegments[depth];
+                        const param = (0, _getsegmentparam.getSegmentParam)(pathSegment);
+                        interpolated[segmentParam.param] = param ? interpolated[param.param] : pathSegment;
+                    }
+                    break;
+                default:
+                    segmentParam.type;
+            }
+        }
+        // Calculate next depth - increment if this is not a route group and not empty
+        let nextDepth = depth;
+        const isRouteGroup = segment.startsWith('(') && segment.endsWith(')');
+        if (!isRouteGroup && segment !== '') {
+            nextDepth++;
+        }
+        // Add all parallel routes to the stack for processing
+        for (const route of Object.values(parallelRoutes)){
+            stack.push({
+                tree: route,
+                depth: nextDepth
+            });
+        }
+    }
+    return interpolated;
+}
+function getDynamicParam(interpolatedParams, segmentKey, dynamicParamType, fallbackRouteParams) {
+    let value = getParamValue(interpolatedParams, segmentKey, fallbackRouteParams);
+    // handle the case where an optional catchall does not have a value,
+    // e.g. `/dashboard/[[...slug]]` when requesting `/dashboard`
+    if (!value || value.length === 0) {
+        if (dynamicParamType === 'oc') {
+            return {
+                param: segmentKey,
+                value: null,
+                type: dynamicParamType,
+                treeSegment: [
+                    segmentKey,
+                    '',
+                    dynamicParamType
+                ]
+            };
+        }
+        throw Object.defineProperty(new _invarianterror.InvariantError(`Missing value for segment key: "${segmentKey}" with dynamic param type: ${dynamicParamType}`), "__NEXT_ERROR_CODE", {
+            value: "E864",
+            enumerable: false,
+            configurable: true
+        });
+    }
+    return {
+        param: segmentKey,
+        // The value that is passed to user code.
+        value,
+        // The value that is rendered in the router tree.
+        treeSegment: [
+            segmentKey,
+            Array.isArray(value) ? value.join('/') : value,
+            dynamicParamType
+        ],
+        type: dynamicParamType
+    };
+}
+const PARAMETER_PATTERN = /^([^[]*)\[((?:\[[^\]]*\])|[^\]]+)\](.*)$/;
+function parseParameter(param) {
+    const match = param.match(PARAMETER_PATTERN);
+    if (!match) {
+        return parseMatchedParameter(param);
+    }
+    return parseMatchedParameter(match[2]);
+}
+function parseMatchedParameter(param) {
+    const optional = param.startsWith('[') && param.endsWith(']');
+    if (optional) {
+        param = param.slice(1, -1);
+    }
+    const repeat = param.startsWith('...');
+    if (repeat) {
+        param = param.slice(3);
+    }
+    return {
+        key: param,
+        repeat,
+        optional
+    };
+} //# sourceMappingURL=get-dynamic-param.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/route-regex.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+0 && (module.exports = {
+    getNamedMiddlewareRegex: null,
+    getNamedRouteRegex: null,
+    getRouteRegex: null
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    getNamedMiddlewareRegex: function() {
+        return getNamedMiddlewareRegex;
+    },
+    getNamedRouteRegex: function() {
+        return getNamedRouteRegex;
+    },
+    getRouteRegex: function() {
+        return getRouteRegex;
+    }
+});
+const _constants = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/lib/constants.js [app-client] (ecmascript)");
+const _interceptionroutes = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/interception-routes.js [app-client] (ecmascript)");
+const _escaperegexp = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/escape-regexp.js [app-client] (ecmascript)");
+const _removetrailingslash = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/remove-trailing-slash.js [app-client] (ecmascript)");
+const _getdynamicparam = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/get-dynamic-param.js [app-client] (ecmascript)");
+function getParametrizedRoute(route, includeSuffix, includePrefix) {
+    const groups = {};
+    let groupIndex = 1;
+    const segments = [];
+    for (const segment of (0, _removetrailingslash.removeTrailingSlash)(route).slice(1).split('/')){
+        const markerMatch = _interceptionroutes.INTERCEPTION_ROUTE_MARKERS.find((m)=>segment.startsWith(m));
+        const paramMatches = segment.match(_getdynamicparam.PARAMETER_PATTERN) // Check for parameters
+        ;
+        if (markerMatch && paramMatches && paramMatches[2]) {
+            const { key, optional, repeat } = (0, _getdynamicparam.parseMatchedParameter)(paramMatches[2]);
+            groups[key] = {
+                pos: groupIndex++,
+                repeat,
+                optional
+            };
+            segments.push(`/${(0, _escaperegexp.escapeStringRegexp)(markerMatch)}([^/]+?)`);
+        } else if (paramMatches && paramMatches[2]) {
+            const { key, repeat, optional } = (0, _getdynamicparam.parseMatchedParameter)(paramMatches[2]);
+            groups[key] = {
+                pos: groupIndex++,
+                repeat,
+                optional
+            };
+            if (includePrefix && paramMatches[1]) {
+                segments.push(`/${(0, _escaperegexp.escapeStringRegexp)(paramMatches[1])}`);
+            }
+            let s = repeat ? optional ? '(?:/(.+?))?' : '/(.+?)' : '/([^/]+?)';
+            // Remove the leading slash if includePrefix already added it.
+            if (includePrefix && paramMatches[1]) {
+                s = s.substring(1);
+            }
+            segments.push(s);
+        } else {
+            segments.push(`/${(0, _escaperegexp.escapeStringRegexp)(segment)}`);
+        }
+        // If there's a suffix, add it to the segments if it's enabled.
+        if (includeSuffix && paramMatches && paramMatches[3]) {
+            segments.push((0, _escaperegexp.escapeStringRegexp)(paramMatches[3]));
+        }
+    }
+    return {
+        parameterizedRoute: segments.join(''),
+        groups
+    };
+}
+function getRouteRegex(normalizedRoute, { includeSuffix = false, includePrefix = false, excludeOptionalTrailingSlash = false } = {}) {
+    const { parameterizedRoute, groups } = getParametrizedRoute(normalizedRoute, includeSuffix, includePrefix);
+    let re = parameterizedRoute;
+    if (!excludeOptionalTrailingSlash) {
+        re += '(?:/)?';
+    }
+    return {
+        re: new RegExp(`^${re}$`),
+        groups: groups
+    };
+}
+/**
+ * Builds a function to generate a minimal routeKey using only a-z and minimal
+ * number of characters.
+ */ function buildGetSafeRouteKey() {
+    let i = 0;
+    return ()=>{
+        let routeKey = '';
+        let j = ++i;
+        while(j > 0){
+            routeKey += String.fromCharCode(97 + (j - 1) % 26);
+            j = Math.floor((j - 1) / 26);
+        }
+        return routeKey;
+    };
+}
+function getSafeKeyFromSegment({ interceptionMarker, getSafeRouteKey, segment, routeKeys, keyPrefix, backreferenceDuplicateKeys }) {
+    const { key, optional, repeat } = (0, _getdynamicparam.parseMatchedParameter)(segment);
+    // replace any non-word characters since they can break
+    // the named regex
+    let cleanedKey = key.replace(/\W/g, '');
+    if (keyPrefix) {
+        cleanedKey = `${keyPrefix}${cleanedKey}`;
+    }
+    let invalidKey = false;
+    // check if the key is still invalid and fallback to using a known
+    // safe key
+    if (cleanedKey.length === 0 || cleanedKey.length > 30) {
+        invalidKey = true;
+    }
+    if (!isNaN(parseInt(cleanedKey.slice(0, 1)))) {
+        invalidKey = true;
+    }
+    if (invalidKey) {
+        cleanedKey = getSafeRouteKey();
+    }
+    const duplicateKey = cleanedKey in routeKeys;
+    if (keyPrefix) {
+        routeKeys[cleanedKey] = `${keyPrefix}${key}`;
+    } else {
+        routeKeys[cleanedKey] = key;
+    }
+    // if the segment has an interception marker, make sure that's part of the regex pattern
+    // this is to ensure that the route with the interception marker doesn't incorrectly match
+    // the non-intercepted route (ie /app/(.)[username] should not match /app/[username])
+    const interceptionPrefix = interceptionMarker ? (0, _escaperegexp.escapeStringRegexp)(interceptionMarker) : '';
+    let pattern;
+    if (duplicateKey && backreferenceDuplicateKeys) {
+        // Use a backreference to the key to ensure that the key is the same value
+        // in each of the placeholders.
+        pattern = `\\k<${cleanedKey}>`;
+    } else if (repeat) {
+        pattern = `(?<${cleanedKey}>.+?)`;
+    } else {
+        pattern = `(?<${cleanedKey}>[^/]+?)`;
+    }
+    return {
+        key,
+        pattern: optional ? `(?:/${interceptionPrefix}${pattern})?` : `/${interceptionPrefix}${pattern}`,
+        cleanedKey: cleanedKey,
+        optional,
+        repeat
+    };
+}
+function getNamedParametrizedRoute(route, prefixRouteKeys, includeSuffix, includePrefix, backreferenceDuplicateKeys, reference = {
+    names: {},
+    intercepted: {}
+}) {
+    const getSafeRouteKey = buildGetSafeRouteKey();
+    const routeKeys = {};
+    const segments = [];
+    const inverseParts = [];
+    // Ensure we don't mutate the original reference object.
+    reference = structuredClone(reference);
+    for (const segment of (0, _removetrailingslash.removeTrailingSlash)(route).slice(1).split('/')){
+        const hasInterceptionMarker = _interceptionroutes.INTERCEPTION_ROUTE_MARKERS.some((m)=>segment.startsWith(m));
+        const paramMatches = segment.match(_getdynamicparam.PARAMETER_PATTERN) // Check for parameters
+        ;
+        const interceptionMarker = hasInterceptionMarker ? paramMatches?.[1] : undefined;
+        let keyPrefix;
+        if (interceptionMarker && paramMatches?.[2]) {
+            keyPrefix = prefixRouteKeys ? _constants.NEXT_INTERCEPTION_MARKER_PREFIX : undefined;
+            reference.intercepted[paramMatches[2]] = interceptionMarker;
+        } else if (paramMatches?.[2] && reference.intercepted[paramMatches[2]]) {
+            keyPrefix = prefixRouteKeys ? _constants.NEXT_INTERCEPTION_MARKER_PREFIX : undefined;
+        } else {
+            keyPrefix = prefixRouteKeys ? _constants.NEXT_QUERY_PARAM_PREFIX : undefined;
+        }
+        if (interceptionMarker && paramMatches && paramMatches[2]) {
+            // If there's an interception marker, add it to the segments.
+            const { key, pattern, cleanedKey, repeat, optional } = getSafeKeyFromSegment({
+                getSafeRouteKey,
+                interceptionMarker,
+                segment: paramMatches[2],
+                routeKeys,
+                keyPrefix,
+                backreferenceDuplicateKeys
+            });
+            segments.push(pattern);
+            inverseParts.push(`/${paramMatches[1]}:${reference.names[key] ?? cleanedKey}${repeat ? optional ? '*' : '+' : ''}`);
+            reference.names[key] ??= cleanedKey;
+        } else if (paramMatches && paramMatches[2]) {
+            // If there's a prefix, add it to the segments if it's enabled.
+            if (includePrefix && paramMatches[1]) {
+                segments.push(`/${(0, _escaperegexp.escapeStringRegexp)(paramMatches[1])}`);
+                inverseParts.push(`/${paramMatches[1]}`);
+            }
+            const { key, pattern, cleanedKey, repeat, optional } = getSafeKeyFromSegment({
+                getSafeRouteKey,
+                segment: paramMatches[2],
+                routeKeys,
+                keyPrefix,
+                backreferenceDuplicateKeys
+            });
+            // Remove the leading slash if includePrefix already added it.
+            let s = pattern;
+            if (includePrefix && paramMatches[1]) {
+                s = s.substring(1);
+            }
+            segments.push(s);
+            inverseParts.push(`/:${reference.names[key] ?? cleanedKey}${repeat ? optional ? '*' : '+' : ''}`);
+            reference.names[key] ??= cleanedKey;
+        } else {
+            segments.push(`/${(0, _escaperegexp.escapeStringRegexp)(segment)}`);
+            inverseParts.push(`/${segment}`);
+        }
+        // If there's a suffix, add it to the segments if it's enabled.
+        if (includeSuffix && paramMatches && paramMatches[3]) {
+            segments.push((0, _escaperegexp.escapeStringRegexp)(paramMatches[3]));
+            inverseParts.push(paramMatches[3]);
+        }
+    }
+    return {
+        namedParameterizedRoute: segments.join(''),
+        routeKeys,
+        pathToRegexpPattern: inverseParts.join(''),
+        reference
+    };
+}
+function getNamedRouteRegex(normalizedRoute, options) {
+    const result = getNamedParametrizedRoute(normalizedRoute, options.prefixRouteKeys, options.includeSuffix ?? false, options.includePrefix ?? false, options.backreferenceDuplicateKeys ?? false, options.reference);
+    let namedRegex = result.namedParameterizedRoute;
+    if (!options.excludeOptionalTrailingSlash) {
+        namedRegex += '(?:/)?';
+    }
+    return {
+        ...getRouteRegex(normalizedRoute, options),
+        namedRegex: `^${namedRegex}$`,
+        routeKeys: result.routeKeys,
+        pathToRegexpPattern: result.pathToRegexpPattern,
+        reference: result.reference
+    };
+}
+function getNamedMiddlewareRegex(normalizedRoute, options) {
+    const { parameterizedRoute } = getParametrizedRoute(normalizedRoute, false, false);
+    const { catchAll = true } = options;
+    if (parameterizedRoute === '/') {
+        let catchAllRegex = catchAll ? '.*' : '';
+        return {
+            namedRegex: `^/${catchAllRegex}$`
+        };
+    }
+    const { namedParameterizedRoute } = getNamedParametrizedRoute(normalizedRoute, false, false, false, false, undefined);
+    let catchAllGroupedRegex = catchAll ? '(?:(/.*)?)' : '';
+    return {
+        namedRegex: `^${namedParameterizedRoute}${catchAllGroupedRegex}$`
+    };
+} //# sourceMappingURL=route-regex.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/interpolate-as.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "interpolateAs", {
+    enumerable: true,
+    get: function() {
+        return interpolateAs;
+    }
+});
+const _routematcher = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/route-matcher.js [app-client] (ecmascript)");
+const _routeregex = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/route-regex.js [app-client] (ecmascript)");
+function interpolateAs(route, asPathname, query) {
+    let interpolatedRoute = '';
+    const dynamicRegex = (0, _routeregex.getRouteRegex)(route);
+    const dynamicGroups = dynamicRegex.groups;
+    const dynamicMatches = (asPathname !== route ? (0, _routematcher.getRouteMatcher)(dynamicRegex)(asPathname) : '') || // Fall back to reading the values from the href
+    // TODO: should this take priority; also need to change in the router.
+    query;
+    interpolatedRoute = route;
+    const params = Object.keys(dynamicGroups);
+    if (!params.every((param)=>{
+        let value = dynamicMatches[param] || '';
+        const { repeat, optional } = dynamicGroups[param];
+        // support single-level catch-all
+        // TODO: more robust handling for user-error (passing `/`)
+        let replaced = `[${repeat ? '...' : ''}${param}]`;
+        if (optional) {
+            replaced = `${!value ? '/' : ''}[${replaced}]`;
+        }
+        if (repeat && !Array.isArray(value)) value = [
+            value
+        ];
+        return (optional || param in dynamicMatches) && // Interpolate group into data URL if present
+        (interpolatedRoute = interpolatedRoute.replace(replaced, repeat ? value.map(// path delimiter escaped since they are being inserted
+        // into the URL and we expect URL encoded segments
+        // when parsing dynamic route params
+        (segment)=>encodeURIComponent(segment)).join('/') : encodeURIComponent(value)) || '/');
+    })) {
+        interpolatedRoute = '' // did not satisfy all requirements
+        ;
+    // n.b. We ignore this error because we handle warning for this case in
+    // development in the `<Link>` component directly.
+    }
+    return {
+        params,
+        result: interpolatedRoute
+    };
+} //# sourceMappingURL=interpolate-as.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/client/resolve-href.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "resolveHref", {
+    enumerable: true,
+    get: function() {
+        return resolveHref;
+    }
+});
+const _querystring = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/querystring.js [app-client] (ecmascript)");
+const _formaturl = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/format-url.js [app-client] (ecmascript)");
+const _omit = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/omit.js [app-client] (ecmascript)");
+const _utils = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/utils.js [app-client] (ecmascript)");
+const _normalizetrailingslash = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/client/normalize-trailing-slash.js [app-client] (ecmascript)");
+const _islocalurl = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/is-local-url.js [app-client] (ecmascript)");
+const _utils1 = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/index.js [app-client] (ecmascript)");
+const _interpolateas = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/interpolate-as.js [app-client] (ecmascript)");
+const _routeregex = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/route-regex.js [app-client] (ecmascript)");
+const _routematcher = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/route-matcher.js [app-client] (ecmascript)");
+function resolveHref(router, href, resolveAs) {
+    // we use a dummy base url for relative urls
+    let base;
+    let urlAsString = typeof href === 'string' ? href : (0, _formaturl.formatWithValidation)(href);
+    // repeated slashes and backslashes in the URL are considered
+    // invalid and will never match a Next.js page/file
+    // https://www.rfc-editor.org/rfc/rfc3986.html#section-3.1
+    const urlProtoMatch = urlAsString.match(/^[a-z][a-z0-9+.-]*:\/\//i);
+    const urlAsStringNoProto = urlProtoMatch ? urlAsString.slice(urlProtoMatch[0].length) : urlAsString;
+    const urlParts = urlAsStringNoProto.split('?', 1);
+    if ((urlParts[0] || '').match(/(\/\/|\\)/)) {
+        console.error(`Invalid href '${urlAsString}' passed to next/router in page: '${router.pathname}'. Repeated forward-slashes (//) or backslashes \\ are not valid in the href.`);
+        const normalizedUrl = (0, _utils.normalizeRepeatedSlashes)(urlAsStringNoProto);
+        urlAsString = (urlProtoMatch ? urlProtoMatch[0] : '') + normalizedUrl;
+    }
+    // Return because it cannot be routed by the Next.js router
+    if (!(0, _islocalurl.isLocalURL)(urlAsString)) {
+        return resolveAs ? [
+            urlAsString
+        ] : urlAsString;
+    }
+    try {
+        let baseBase = urlAsString.startsWith('#') ? router.asPath : router.pathname;
+        // If the provided href is only a query string, it is safer to use the asPath
+        // considering rewrites.
+        if (urlAsString.startsWith('?')) {
+            baseBase = router.asPath;
+            // However, if is a dynamic route, we need to use the pathname to preserve the
+            // query interpolation and rewrites (router.pathname will look like "/[slug]").
+            if ((0, _utils1.isDynamicRoute)(router.pathname)) {
+                baseBase = router.pathname;
+                const routeRegex = (0, _routeregex.getRouteRegex)(router.pathname);
+                const match = (0, _routematcher.getRouteMatcher)(routeRegex)(router.asPath);
+                // For dynamic routes, if asPath doesn't match the pathname regex, it is a rewritten path.
+                // In this case, should use asPath to preserve the current URL.
+                if (!match) {
+                    baseBase = router.asPath;
+                }
+            // Note: There is an edge case where the pathname is dynamic, and also a rewrite path to the same segment.
+            // E.g. in "/[slug]" path, rewrite "/foo" -> "/bar"
+            // In this case, it will be treated as a non-rewritten path and possibly interpolate the query string.
+            // E.g., "/any?slug=foo" will become the content of "/foo", not rewritten as "/bar"
+            // This is currently a trade-off of not resolving rewrite paths on every Router/Link call,
+            // but using a lighter route regex pattern check.
+            }
+        }
+        base = new URL(baseBase, 'http://n');
+    } catch (_) {
+        // fallback to / for invalid asPath values e.g. //
+        base = new URL('/', 'http://n');
+    }
+    try {
+        const finalUrl = new URL(urlAsString, base);
+        finalUrl.pathname = (0, _normalizetrailingslash.normalizePathTrailingSlash)(finalUrl.pathname);
+        let interpolatedAs = '';
+        if ((0, _utils1.isDynamicRoute)(finalUrl.pathname) && finalUrl.searchParams && resolveAs) {
+            const query = (0, _querystring.searchParamsToUrlQuery)(finalUrl.searchParams);
+            const { result, params } = (0, _interpolateas.interpolateAs)(finalUrl.pathname, finalUrl.pathname, query);
+            if (result) {
+                interpolatedAs = (0, _formaturl.formatWithValidation)({
+                    pathname: result,
+                    hash: finalUrl.hash,
+                    query: (0, _omit.omit)(query, params)
+                });
+            }
+        }
+        // if the origin didn't change, it means we received a relative href
+        const resolvedHref = finalUrl.origin === base.origin ? finalUrl.href.slice(finalUrl.origin.length) : finalUrl.href;
+        return resolveAs ? [
+            resolvedHref,
+            interpolatedAs || resolvedHref
+        ] : resolvedHref;
+    } catch (_) {
+        return resolveAs ? [
+            urlAsString
+        ] : urlAsString;
+    }
+}
+if ((typeof exports.default === 'function' || typeof exports.default === 'object' && exports.default !== null) && typeof exports.default.__esModule === 'undefined') {
+    Object.defineProperty(exports.default, '__esModule', {
+        value: true
+    });
+    Object.assign(exports.default, exports);
+    module.exports = exports.default;
+} //# sourceMappingURL=resolve-href.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/client/add-locale.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+var __TURBOPACK__imported__module__$5b$project$5d2f$rayls$2d$shield$2d$landing$2d$page$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/rayls-shield-landing-page/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "addLocale", {
+    enumerable: true,
+    get: function() {
+        return addLocale;
+    }
+});
+const _normalizetrailingslash = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/client/normalize-trailing-slash.js [app-client] (ecmascript)");
+const addLocale = (path, ...args)=>{
+    if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+    ;
+    return path;
+};
+if ((typeof exports.default === 'function' || typeof exports.default === 'object' && exports.default !== null) && typeof exports.default.__esModule === 'undefined') {
+    Object.defineProperty(exports.default, '__esModule', {
+        value: true
+    });
+    Object.assign(exports.default, exports);
+    module.exports = exports.default;
+} //# sourceMappingURL=add-locale.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router-context.shared-runtime.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+var __TURBOPACK__imported__module__$5b$project$5d2f$rayls$2d$shield$2d$landing$2d$page$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/rayls-shield-landing-page/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "RouterContext", {
+    enumerable: true,
+    get: function() {
+        return RouterContext;
+    }
+});
+const _interop_require_default = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/@swc/helpers/cjs/_interop_require_default.cjs [app-client] (ecmascript)");
+const _react = /*#__PURE__*/ _interop_require_default._(__turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)"));
+const RouterContext = _react.default.createContext(null);
+if ("TURBOPACK compile-time truthy", 1) {
+    RouterContext.displayName = 'RouterContext';
+} //# sourceMappingURL=router-context.shared-runtime.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/client/request-idle-callback.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+0 && (module.exports = {
+    cancelIdleCallback: null,
+    requestIdleCallback: null
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    cancelIdleCallback: function() {
+        return cancelIdleCallback;
+    },
+    requestIdleCallback: function() {
+        return requestIdleCallback;
+    }
+});
+const requestIdleCallback = typeof self !== 'undefined' && self.requestIdleCallback && self.requestIdleCallback.bind(window) || function(cb) {
+    let start = Date.now();
+    return self.setTimeout(function() {
+        cb({
+            didTimeout: false,
+            timeRemaining: function() {
+                return Math.max(0, 50 - (Date.now() - start));
+            }
+        });
+    }, 1);
+};
+const cancelIdleCallback = typeof self !== 'undefined' && self.cancelIdleCallback && self.cancelIdleCallback.bind(window) || function(id) {
+    return clearTimeout(id);
+};
+if ((typeof exports.default === 'function' || typeof exports.default === 'object' && exports.default !== null) && typeof exports.default.__esModule === 'undefined') {
+    Object.defineProperty(exports.default, '__esModule', {
+        value: true
+    });
+    Object.assign(exports.default, exports);
+    module.exports = exports.default;
+} //# sourceMappingURL=request-idle-callback.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/client/use-intersection.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "useIntersection", {
+    enumerable: true,
+    get: function() {
+        return useIntersection;
+    }
+});
+const _react = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+const _requestidlecallback = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/client/request-idle-callback.js [app-client] (ecmascript)");
+const hasIntersectionObserver = typeof IntersectionObserver === 'function';
+const observers = new Map();
+const idList = [];
+function createObserver(options) {
+    const id = {
+        root: options.root || null,
+        margin: options.rootMargin || ''
+    };
+    const existing = idList.find((obj)=>obj.root === id.root && obj.margin === id.margin);
+    let instance;
+    if (existing) {
+        instance = observers.get(existing);
+        if (instance) {
+            return instance;
+        }
+    }
+    const elements = new Map();
+    const observer = new IntersectionObserver((entries)=>{
+        entries.forEach((entry)=>{
+            const callback = elements.get(entry.target);
+            const isVisible = entry.isIntersecting || entry.intersectionRatio > 0;
+            if (callback && isVisible) {
+                callback(isVisible);
+            }
+        });
+    }, options);
+    instance = {
+        id,
+        observer,
+        elements
+    };
+    idList.push(id);
+    observers.set(id, instance);
+    return instance;
+}
+function observe(element, callback, options) {
+    const { id, observer, elements } = createObserver(options);
+    elements.set(element, callback);
+    observer.observe(element);
+    return function unobserve() {
+        elements.delete(element);
+        observer.unobserve(element);
+        // Destroy observer when there's nothing left to watch:
+        if (elements.size === 0) {
+            observer.disconnect();
+            observers.delete(id);
+            const index = idList.findIndex((obj)=>obj.root === id.root && obj.margin === id.margin);
+            if (index > -1) {
+                idList.splice(index, 1);
+            }
+        }
+    };
+}
+function useIntersection({ rootRef, rootMargin, disabled }) {
+    const isDisabled = disabled || !hasIntersectionObserver;
+    const [visible, setVisible] = (0, _react.useState)(false);
+    const elementRef = (0, _react.useRef)(null);
+    const setElement = (0, _react.useCallback)((element)=>{
+        elementRef.current = element;
+    }, []);
+    (0, _react.useEffect)(()=>{
+        if (hasIntersectionObserver) {
+            if (isDisabled || visible) return;
+            const element = elementRef.current;
+            if (element && element.tagName) {
+                const unobserve = observe(element, (isVisible)=>isVisible && setVisible(isVisible), {
+                    root: rootRef?.current,
+                    rootMargin
+                });
+                return unobserve;
+            }
+        } else {
+            if (!visible) {
+                const idleCallback = (0, _requestidlecallback.requestIdleCallback)(()=>setVisible(true));
+                return ()=>(0, _requestidlecallback.cancelIdleCallback)(idleCallback);
+            }
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+        isDisabled,
+        rootMargin,
+        rootRef,
+        visible,
+        elementRef.current
+    ]);
+    const resetVisible = (0, _react.useCallback)(()=>{
+        setVisible(false);
+    }, []);
+    return [
+        setElement,
+        visible,
+        resetVisible
+    ];
+}
+if ((typeof exports.default === 'function' || typeof exports.default === 'object' && exports.default !== null) && typeof exports.default.__esModule === 'undefined') {
+    Object.defineProperty(exports.default, '__esModule', {
+        value: true
+    });
+    Object.assign(exports.default, exports);
+    module.exports = exports.default;
+} //# sourceMappingURL=use-intersection.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/client/get-domain-locale.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+var __TURBOPACK__imported__module__$5b$project$5d2f$rayls$2d$shield$2d$landing$2d$page$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/rayls-shield-landing-page/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "getDomainLocale", {
+    enumerable: true,
+    get: function() {
+        return getDomainLocale;
+    }
+});
+const _normalizetrailingslash = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/client/normalize-trailing-slash.js [app-client] (ecmascript)");
+const basePath = ("TURBOPACK compile-time value", "") || '';
+function getDomainLocale(path, locale, locales, domainLocales) {
+    if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+    ;
+    else {
+        return false;
+    }
+}
+if ((typeof exports.default === 'function' || typeof exports.default === 'object' && exports.default !== null) && typeof exports.default.__esModule === 'undefined') {
+    Object.defineProperty(exports.default, '__esModule', {
+        value: true
+    });
+    Object.assign(exports.default, exports);
+    module.exports = exports.default;
+} //# sourceMappingURL=get-domain-locale.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/client/use-merged-ref.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "useMergedRef", {
+    enumerable: true,
+    get: function() {
+        return useMergedRef;
+    }
+});
+const _react = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+function useMergedRef(refA, refB) {
+    const cleanupA = (0, _react.useRef)(null);
+    const cleanupB = (0, _react.useRef)(null);
+    // NOTE: In theory, we could skip the wrapping if only one of the refs is non-null.
+    // (this happens often if the user doesn't pass a ref to Link/Form/Image)
+    // But this can cause us to leak a cleanup-ref into user code (previously via `<Link legacyBehavior>`),
+    // and the user might pass that ref into ref-merging library that doesn't support cleanup refs
+    // (because it hasn't been updated for React 19)
+    // which can then cause things to blow up, because a cleanup-returning ref gets called with `null`.
+    // So in practice, it's safer to be defensive and always wrap the ref, even on React 19.
+    return (0, _react.useCallback)((current)=>{
+        if (current === null) {
+            const cleanupFnA = cleanupA.current;
+            if (cleanupFnA) {
+                cleanupA.current = null;
+                cleanupFnA();
+            }
+            const cleanupFnB = cleanupB.current;
+            if (cleanupFnB) {
+                cleanupB.current = null;
+                cleanupFnB();
+            }
+        } else {
+            if (refA) {
+                cleanupA.current = applyRef(refA, current);
+            }
+            if (refB) {
+                cleanupB.current = applyRef(refB, current);
+            }
+        }
+    }, [
+        refA,
+        refB
+    ]);
+}
+function applyRef(refA, current) {
+    if (typeof refA === 'function') {
+        const cleanup = refA(current);
+        if (typeof cleanup === 'function') {
+            return cleanup;
+        } else {
+            return ()=>refA(null);
+        }
+    } else {
+        refA.current = current;
+        return ()=>{
+            refA.current = null;
+        };
+    }
+}
+if ((typeof exports.default === 'function' || typeof exports.default === 'object' && exports.default !== null) && typeof exports.default.__esModule === 'undefined') {
+    Object.defineProperty(exports.default, '__esModule', {
+        value: true
+    });
+    Object.assign(exports.default, exports);
+    module.exports = exports.default;
+} //# sourceMappingURL=use-merged-ref.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/utils/error-once.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+var __TURBOPACK__imported__module__$5b$project$5d2f$rayls$2d$shield$2d$landing$2d$page$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/rayls-shield-landing-page/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "errorOnce", {
+    enumerable: true,
+    get: function() {
+        return errorOnce;
+    }
+});
+let errorOnce = (_)=>{};
+if ("TURBOPACK compile-time truthy", 1) {
+    const errors = new Set();
+    errorOnce = (msg)=>{
+        if (!errors.has(msg)) {
+            console.error(msg);
+        }
+        errors.add(msg);
+    };
+} //# sourceMappingURL=error-once.js.map
+}),
+"[project]/rayls-shield-landing-page/node_modules/next/dist/client/link.js [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"use strict";
+
+var __TURBOPACK__imported__module__$5b$project$5d2f$rayls$2d$shield$2d$landing$2d$page$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/rayls-shield-landing-page/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
+'use client';
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+0 && (module.exports = {
+    default: null,
+    useLinkStatus: null
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    default: function() {
+        return _default;
+    },
+    useLinkStatus: function() {
+        return useLinkStatus;
+    }
+});
+const _interop_require_wildcard = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/@swc/helpers/cjs/_interop_require_wildcard.cjs [app-client] (ecmascript)");
+const _jsxruntime = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/compiled/react/jsx-runtime.js [app-client] (ecmascript)");
+const _react = /*#__PURE__*/ _interop_require_wildcard._(__turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)"));
+const _resolvehref = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/client/resolve-href.js [app-client] (ecmascript)");
+const _islocalurl = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/is-local-url.js [app-client] (ecmascript)");
+const _formaturl = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router/utils/format-url.js [app-client] (ecmascript)");
+const _utils = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/utils.js [app-client] (ecmascript)");
+const _addlocale = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/client/add-locale.js [app-client] (ecmascript)");
+const _routercontextsharedruntime = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/router-context.shared-runtime.js [app-client] (ecmascript)");
+const _useintersection = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/client/use-intersection.js [app-client] (ecmascript)");
+const _getdomainlocale = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/client/get-domain-locale.js [app-client] (ecmascript)");
+const _addbasepath = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/client/add-base-path.js [app-client] (ecmascript)");
+const _usemergedref = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/client/use-merged-ref.js [app-client] (ecmascript)");
+const _erroronce = __turbopack_context__.r("[project]/rayls-shield-landing-page/node_modules/next/dist/shared/lib/utils/error-once.js [app-client] (ecmascript)");
+const prefetched = new Set();
+function prefetch(router, href, as, options) {
+    if (typeof window === 'undefined') {
+        return;
+    }
+    if (!(0, _islocalurl.isLocalURL)(href)) {
+        return;
+    }
+    // We should only dedupe requests when experimental.optimisticClientCache is
+    // disabled.
+    if (!options.bypassPrefetchedCheck) {
+        const locale = typeof options.locale !== 'undefined' ? options.locale : 'locale' in router ? router.locale : undefined;
+        const prefetchedKey = href + '%' + as + '%' + locale;
+        // If we've already fetched the key, then don't prefetch it again!
+        if (prefetched.has(prefetchedKey)) {
+            return;
+        }
+        // Mark this URL as prefetched.
+        prefetched.add(prefetchedKey);
+    }
+    // Prefetch the JSON page if asked (only in the client)
+    // We need to handle a prefetch error here since we may be
+    // loading with priority which can reject but we don't
+    // want to force navigation since this is only a prefetch
+    router.prefetch(href, as, options).catch((err)=>{
+        if (("TURBOPACK compile-time value", "development") !== 'production') {
+            // rethrow to show invalid URL errors
+            throw err;
+        }
+    });
+}
+function isModifiedEvent(event) {
+    const eventTarget = event.currentTarget;
+    const target = eventTarget.getAttribute('target');
+    return target && target !== '_self' || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || // triggers resource download
+    event.nativeEvent && event.nativeEvent.which === 2;
+}
+function linkClicked(e, router, href, as, replace, shallow, scroll, locale, onNavigate) {
+    const { nodeName } = e.currentTarget;
+    // anchors inside an svg have a lowercase nodeName
+    const isAnchorNodeName = nodeName.toUpperCase() === 'A';
+    if (isAnchorNodeName && isModifiedEvent(e) || e.currentTarget.hasAttribute('download')) {
+        // ignore click for browser’s default behavior
+        return;
+    }
+    if (!(0, _islocalurl.isLocalURL)(href)) {
+        if (replace) {
+            // browser default behavior does not replace the history state
+            // so we need to do it manually
+            e.preventDefault();
+            location.replace(href);
+        }
+        // ignore click for browser’s default behavior
+        return;
+    }
+    e.preventDefault();
+    const navigate = ()=>{
+        if (onNavigate) {
+            let isDefaultPrevented = false;
+            onNavigate({
+                preventDefault: ()=>{
+                    isDefaultPrevented = true;
+                }
+            });
+            if (isDefaultPrevented) {
+                return;
+            }
+        }
+        // If the router is an NextRouter instance it will have `beforePopState`
+        const routerScroll = scroll ?? true;
+        if ('beforePopState' in router) {
+            router[replace ? 'replace' : 'push'](href, as, {
+                shallow,
+                locale,
+                scroll: routerScroll
+            });
+        } else {
+            router[replace ? 'replace' : 'push'](as || href, {
+                scroll: routerScroll
+            });
+        }
+    };
+    navigate();
+}
+function formatStringOrUrl(urlObjOrString) {
+    if (typeof urlObjOrString === 'string') {
+        return urlObjOrString;
+    }
+    return (0, _formaturl.formatUrl)(urlObjOrString);
+}
+/**
+ * A React component that extends the HTML `<a>` element to provide [prefetching](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#2-prefetching)
+ * and client-side navigation between routes.
+ *
+ * It is the primary way to navigate between routes in Next.js.
+ *
+ * Read more: [Next.js docs: `<Link>`](https://nextjs.org/docs/app/api-reference/components/link)
+ */ const Link = /*#__PURE__*/ _react.default.forwardRef(function LinkComponent(props, forwardedRef) {
+    let children;
+    const { href: hrefProp, as: asProp, children: childrenProp, prefetch: prefetchProp = null, passHref, replace, shallow, scroll, locale, onClick, onNavigate, onMouseEnter: onMouseEnterProp, onTouchStart: onTouchStartProp, legacyBehavior = false, ...restProps } = props;
+    children = childrenProp;
+    if (legacyBehavior && (typeof children === 'string' || typeof children === 'number')) {
+        children = /*#__PURE__*/ (0, _jsxruntime.jsx)("a", {
+            children: children
+        });
+    }
+    const router = _react.default.useContext(_routercontextsharedruntime.RouterContext);
+    const prefetchEnabled = prefetchProp !== false;
+    if ("TURBOPACK compile-time truthy", 1) {
+        function createPropError(args) {
+            return Object.defineProperty(new Error(`Failed prop type: The prop \`${args.key}\` expects a ${args.expected} in \`<Link>\`, but got \`${args.actual}\` instead.` + (typeof window !== 'undefined' ? "\nOpen your browser's console to view the Component stack trace." : '')), "__NEXT_ERROR_CODE", {
+                value: "E319",
+                enumerable: false,
+                configurable: true
+            });
+        }
+        // TypeScript trick for type-guarding:
+        const requiredPropsGuard = {
+            href: true
+        };
+        const requiredProps = Object.keys(requiredPropsGuard);
+        requiredProps.forEach((key)=>{
+            if (key === 'href') {
+                if (props[key] == null || typeof props[key] !== 'string' && typeof props[key] !== 'object') {
+                    throw createPropError({
+                        key,
+                        expected: '`string` or `object`',
+                        actual: props[key] === null ? 'null' : typeof props[key]
+                    });
+                }
+            } else {
+                // TypeScript trick for type-guarding:
+                const _ = key;
+            }
+        });
+        // TypeScript trick for type-guarding:
+        const optionalPropsGuard = {
+            as: true,
+            replace: true,
+            scroll: true,
+            shallow: true,
+            passHref: true,
+            prefetch: true,
+            locale: true,
+            onClick: true,
+            onMouseEnter: true,
+            onTouchStart: true,
+            legacyBehavior: true,
+            onNavigate: true
+        };
+        const optionalProps = Object.keys(optionalPropsGuard);
+        optionalProps.forEach((key)=>{
+            const valType = typeof props[key];
+            if (key === 'as') {
+                if (props[key] && valType !== 'string' && valType !== 'object') {
+                    throw createPropError({
+                        key,
+                        expected: '`string` or `object`',
+                        actual: valType
+                    });
+                }
+            } else if (key === 'locale') {
+                if (props[key] && valType !== 'string') {
+                    throw createPropError({
+                        key,
+                        expected: '`string`',
+                        actual: valType
+                    });
+                }
+            } else if (key === 'onClick' || key === 'onMouseEnter' || key === 'onTouchStart' || key === 'onNavigate') {
+                if (props[key] && valType !== 'function') {
+                    throw createPropError({
+                        key,
+                        expected: '`function`',
+                        actual: valType
+                    });
+                }
+            } else if (key === 'replace' || key === 'scroll' || key === 'shallow' || key === 'passHref' || key === 'legacyBehavior') {
+                if (props[key] != null && valType !== 'boolean') {
+                    throw createPropError({
+                        key,
+                        expected: '`boolean`',
+                        actual: valType
+                    });
+                }
+            } else if (key === 'prefetch') {
+                if (props[key] != null && valType !== 'boolean' && props[key] !== 'auto') {
+                    throw createPropError({
+                        key,
+                        expected: '`boolean | "auto"`',
+                        actual: valType
+                    });
+                }
+            } else {
+                // TypeScript trick for type-guarding:
+                const _ = key;
+            }
+        });
+    }
+    const { href, as } = _react.default.useMemo({
+        "Link.LinkComponent.useMemo": ()=>{
+            if (!router) {
+                const resolvedHref = formatStringOrUrl(hrefProp);
+                return {
+                    href: resolvedHref,
+                    as: asProp ? formatStringOrUrl(asProp) : resolvedHref
+                };
+            }
+            const [resolvedHref, resolvedAs] = (0, _resolvehref.resolveHref)(router, hrefProp, true);
+            return {
+                href: resolvedHref,
+                as: asProp ? (0, _resolvehref.resolveHref)(router, asProp) : resolvedAs || resolvedHref
+            };
+        }
+    }["Link.LinkComponent.useMemo"], [
+        router,
+        hrefProp,
+        asProp
+    ]);
+    const previousHref = _react.default.useRef(href);
+    const previousAs = _react.default.useRef(as);
+    // This will return the first child, if multiple are provided it will throw an error
+    let child;
+    if (legacyBehavior) {
+        if ("TURBOPACK compile-time truthy", 1) {
+            if (onClick) {
+                console.warn(`"onClick" was passed to <Link> with \`href\` of \`${hrefProp}\` but "legacyBehavior" was set. The legacy behavior requires onClick be set on the child of next/link`);
+            }
+            if (onMouseEnterProp) {
+                console.warn(`"onMouseEnter" was passed to <Link> with \`href\` of \`${hrefProp}\` but "legacyBehavior" was set. The legacy behavior requires onMouseEnter be set on the child of next/link`);
+            }
+            try {
+                child = _react.default.Children.only(children);
+            } catch (err) {
+                if (!children) {
+                    throw Object.defineProperty(new Error(`No children were passed to <Link> with \`href\` of \`${hrefProp}\` but one child is required https://nextjs.org/docs/messages/link-no-children`), "__NEXT_ERROR_CODE", {
+                        value: "E320",
+                        enumerable: false,
+                        configurable: true
+                    });
+                }
+                throw Object.defineProperty(new Error(`Multiple children were passed to <Link> with \`href\` of \`${hrefProp}\` but only one child is supported https://nextjs.org/docs/messages/link-multiple-children` + (typeof window !== 'undefined' ? " \nOpen your browser's console to view the Component stack trace." : '')), "__NEXT_ERROR_CODE", {
+                    value: "E266",
+                    enumerable: false,
+                    configurable: true
+                });
+            }
+        } else //TURBOPACK unreachable
+        ;
+    } else {
+        if ("TURBOPACK compile-time truthy", 1) {
+            if (children?.type === 'a') {
+                throw Object.defineProperty(new Error('Invalid <Link> with <a> child. Please remove <a> or use <Link legacyBehavior>.\nLearn more: https://nextjs.org/docs/messages/invalid-new-link-with-extra-anchor'), "__NEXT_ERROR_CODE", {
+                    value: "E209",
+                    enumerable: false,
+                    configurable: true
+                });
+            }
+        }
+    }
+    const childRef = legacyBehavior ? child && typeof child === 'object' && child.ref : forwardedRef;
+    const [setIntersectionRef, isVisible, resetVisible] = (0, _useintersection.useIntersection)({
+        rootMargin: '200px'
+    });
+    const setIntersectionWithResetRef = _react.default.useCallback({
+        "Link.LinkComponent.useCallback[setIntersectionWithResetRef]": (el)=>{
+            // Before the link getting observed, check if visible state need to be reset
+            if (previousAs.current !== as || previousHref.current !== href) {
+                resetVisible();
+                previousAs.current = as;
+                previousHref.current = href;
+            }
+            setIntersectionRef(el);
+        }
+    }["Link.LinkComponent.useCallback[setIntersectionWithResetRef]"], [
+        as,
+        href,
+        resetVisible,
+        setIntersectionRef
+    ]);
+    const setRef = (0, _usemergedref.useMergedRef)(setIntersectionWithResetRef, childRef);
+    // Prefetch the URL if we haven't already and it's visible.
+    _react.default.useEffect({
+        "Link.LinkComponent.useEffect": ()=>{
+            // in dev, we only prefetch on hover to avoid wasting resources as the prefetch will trigger compiling the page.
+            if ("TURBOPACK compile-time truthy", 1) {
+                return;
+            }
+            //TURBOPACK unreachable
+            ;
+        }
+    }["Link.LinkComponent.useEffect"], [
+        as,
+        href,
+        isVisible,
+        locale,
+        prefetchEnabled,
+        router?.locale,
+        router
+    ]);
+    const childProps = {
+        ref: setRef,
+        onClick (e) {
+            if ("TURBOPACK compile-time truthy", 1) {
+                if (!e) {
+                    throw Object.defineProperty(new Error(`Component rendered inside next/link has to pass click event to "onClick" prop.`), "__NEXT_ERROR_CODE", {
+                        value: "E312",
+                        enumerable: false,
+                        configurable: true
+                    });
+                }
+            }
+            if (!legacyBehavior && typeof onClick === 'function') {
+                onClick(e);
+            }
+            if (legacyBehavior && child.props && typeof child.props.onClick === 'function') {
+                child.props.onClick(e);
+            }
+            if (!router) {
+                return;
+            }
+            if (e.defaultPrevented) {
+                return;
+            }
+            linkClicked(e, router, href, as, replace, shallow, scroll, locale, onNavigate);
+        },
+        onMouseEnter (e) {
+            if (!legacyBehavior && typeof onMouseEnterProp === 'function') {
+                onMouseEnterProp(e);
+            }
+            if (legacyBehavior && child.props && typeof child.props.onMouseEnter === 'function') {
+                child.props.onMouseEnter(e);
+            }
+            if (!router) {
+                return;
+            }
+            prefetch(router, href, as, {
+                locale,
+                priority: true,
+                // @see {https://github.com/vercel/next.js/discussions/40268?sort=top#discussioncomment-3572642}
+                bypassPrefetchedCheck: true
+            });
+        },
+        onTouchStart: ("TURBOPACK compile-time falsy", 0) ? "TURBOPACK unreachable" : function onTouchStart(e) {
+            if (!legacyBehavior && typeof onTouchStartProp === 'function') {
+                onTouchStartProp(e);
+            }
+            if (legacyBehavior && child.props && typeof child.props.onTouchStart === 'function') {
+                child.props.onTouchStart(e);
+            }
+            if (!router) {
+                return;
+            }
+            prefetch(router, href, as, {
+                locale,
+                priority: true,
+                // @see {https://github.com/vercel/next.js/discussions/40268?sort=top#discussioncomment-3572642}
+                bypassPrefetchedCheck: true
+            });
+        }
+    };
+    // If the url is absolute, we can bypass the logic to prepend the domain and locale.
+    if ((0, _utils.isAbsoluteUrl)(as)) {
+        childProps.href = as;
+    } else if (!legacyBehavior || passHref || child.type === 'a' && !('href' in child.props)) {
+        const curLocale = typeof locale !== 'undefined' ? locale : router?.locale;
+        // we only render domain locales if we are currently on a domain locale
+        // so that locale links are still visitable in development/preview envs
+        const localeDomain = router?.isLocaleDomain && (0, _getdomainlocale.getDomainLocale)(as, curLocale, router?.locales, router?.domainLocales);
+        childProps.href = localeDomain || (0, _addbasepath.addBasePath)((0, _addlocale.addLocale)(as, curLocale, router?.defaultLocale));
+    }
+    if (legacyBehavior) {
+        if ("TURBOPACK compile-time truthy", 1) {
+            (0, _erroronce.errorOnce)('`legacyBehavior` is deprecated and will be removed in a future ' + 'release. A codemod is available to upgrade your components:\n\n' + 'npx @next/codemod@latest new-link .\n\n' + 'Learn more: https://nextjs.org/docs/app/building-your-application/upgrading/codemods#remove-a-tags-from-link-components');
+        }
+        return /*#__PURE__*/ _react.default.cloneElement(child, childProps);
+    }
+    return /*#__PURE__*/ (0, _jsxruntime.jsx)("a", {
+        ...restProps,
+        ...childProps,
+        children: children
+    });
+});
+const LinkStatusContext = /*#__PURE__*/ (0, _react.createContext)({
+    // We do not support link status in the Pages Router, so we always return false
+    pending: false
+});
+const useLinkStatus = ()=>{
+    // This behaviour is like React's useFormStatus. When the component is not under
+    // a <form> tag, it will get the default value, instead of throwing an error.
+    return (0, _react.useContext)(LinkStatusContext);
+};
+const _default = Link;
+if ((typeof exports.default === 'function' || typeof exports.default === 'object' && exports.default !== null) && typeof exports.default.__esModule === 'undefined') {
+    Object.defineProperty(exports.default, '__esModule', {
+        value: true
+    });
+    Object.assign(exports.default, exports);
+    module.exports = exports.default;
+} //# sourceMappingURL=link.js.map
+}),
+]);
+
+//# sourceMappingURL=5df0c_next_dist_f53ebd51._.js.map

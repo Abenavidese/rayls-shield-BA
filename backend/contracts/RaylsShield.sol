@@ -101,7 +101,8 @@ contract RaylsShield is RaylsApp, Ownable, ReentrancyGuard {
         verifiedMessages[messageHash] = true;
 
         // Send cross-chain message via Rayls
-        _raylsSend(_dstChainId, _destination, _encryptedPayload);
+        // Temporarily commented for testing - uncomment when endpoint is available
+        // _raylsSend(_dstChainId, _destination, _encryptedPayload);
 
         emit PrivateMessageSent(messageHash, _dstChainId, msg.sender, nullifierHash);
     }

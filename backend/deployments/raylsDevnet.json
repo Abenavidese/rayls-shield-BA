@@ -2,9 +2,9 @@
   "network": "raylsDevnet",
   "chainId": 123123,
   "contracts": {
-    "Groth16Verifier": "0xaF7B67b88128820Fae205A07aDC055ed509Bdb12",
-    "RaylsShield": "0x71E3a04c9Ecc624656334756f70dAAA1fc4F985D"
+    "Groth16Verifier": "0x8fded712132bC7d9c284c6f1F96Fd5aA61adfC89",
+    "RaylsShield": "0xAC22e6292EbDf4Ee3963FFa35293a22770AD6781"
   },
   "raylsEndpoint": "0x0000000000000000000000000000000000000000",
-  "timestamp": "2025-11-18T22:13:35.410Z"
+  "timestamp": "2025-11-19T12:04:22.690Z"
 }

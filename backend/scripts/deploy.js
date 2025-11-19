@@ -12,7 +12,7 @@ async function main() {
 
   // Deploy Groth16Verifier first (use the real one generated from circuit)
   console.log("\nDeploying Groth16Verifier...");
-  const Groth16Verifier = await hre.ethers.getContractFactory("contracts/PrivacyVerifier.sol:Groth16Verifier");
+  const Groth16Verifier = await hre.ethers.getContractFactory("contracts/Groth16Verifier.sol:Groth16Verifier");
   const verifier = await Groth16Verifier.deploy();
   await verifier.waitForDeployment();
   const verifierAddress = await verifier.getAddress();
