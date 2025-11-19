@@ -10,6 +10,7 @@ import { Wallet, Zap, CheckCircle2, Circle, ArrowLeft, AlertCircle, ExternalLink
 import { useWallet } from '@/hooks/use-wallet'
 import { useRaylsShield } from '@/hooks/use-rayls-shield'
 import { DEFAULT_NETWORK } from '@/lib/contracts/addresses'
+import { ZKProofDetails } from '@/components/zk-proof-details'
 
 export default function DappInterface() {
   const { isConnected, address, isCorrectNetwork, error: walletError, connect, switchNetwork } = useWallet()
@@ -17,7 +18,7 @@ export default function DappInterface() {
   
   const [amount, setAmount] = useState('')
   const [recipient, setRecipient] = useState('')
-  const [destinationChainId, setDestinationChainId] = useState('123123')
+  const [destinationChainId] = useState('123123')
 
   const handleConnectWallet = async () => {
     try {
@@ -253,6 +254,12 @@ export default function DappInterface() {
                         <ExternalLink className="h-3 w-3" />
                       </a>
                     )}
+
+                    {/* ZK Proof Details Visualization */}
+                    <ZKProofDetails
+                      proofData={txStatus.visualizationData}
+                      show={txStatus.status === 'generating-proof' || txStatus.status === 'signing' || txStatus.status === 'pending' || txStatus.status === 'success'}
+                    />
                   </div>
                 </div>
               </div>

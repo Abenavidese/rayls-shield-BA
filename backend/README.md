@@ -61,10 +61,11 @@ backend/
 
 ## 🌐 Deployed Contracts
 
-**Rayls Testnet (Chain ID: 123123)**
+**Rayls Devnet (Chain ID: 123123)**
 
-- **Groth16Verifier**: `0xaF7B67b88128820Fae205A07aDC055ed509Bdb12`
-- **RaylsShield**: `0x71E3a04c9Ecc624656334756f70dAAA1fc4F985D`
+- **RaylsShield**: `0x648B7FfD8a5Dd9C901B6569E7a0DC9A2eAF4c9F1`
+- **Groth16Verifier** (Privacy): `0xfD0b399898efC0186E32eb81B630d7Cf7Bb6f217`
+- **ComplianceVerifier** (AML): `0xdd51b116F202a4878E84b17327C0B1b32A6ce644`
 
 Explorer: https://devnet-explorer.rayls.com
 

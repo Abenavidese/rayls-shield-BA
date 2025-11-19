@@ -19,11 +19,33 @@ export interface SendPrivateMessageParams {
   encryptedPayload?: string;
 }
 
+export interface ProofVisualizationData {
+  privateInputs: {
+    secret: string;
+    nullifier: string;
+    recipient: string;
+    amount: number;
+  };
+  publicOutputs: {
+    nullifierHash: string;
+    commitment: string;
+    recipientHash: string;
+  };
+  complianceCheck: {
+    amlThreshold: number;
+    passed: boolean;
+    amountUnderThreshold: boolean;
+  };
+  proofGenerated: boolean;
+  locallyVerified: boolean;
+}
+
 export interface TransactionStatus {
   hash?: string;
   status: 'idle' | 'generating-proof' | 'signing' | 'pending' | 'success' | 'error';
   error?: string;
   proof?: ProofOutput;
+  visualizationData?: ProofVisualizationData;
 }
 
 export function useRaylsShield() {
@@ -91,8 +113,9 @@ export function useRaylsShield() {
 
         // Step 2.5: Verify proof locally before sending
         console.log('🔍 Verifying proof with verifier contract...');
+        let isValid = false;
         try {
-          const isValid = await verifyProof(proofOutput);
+          isValid = await verifyProof(proofOutput);
           console.log('✅ Local verification result:', isValid);
           if (!isValid) {
             throw new Error('Proof verification failed locally');
@@ -102,14 +125,38 @@ export function useRaylsShield() {
           throw new Error(`Proof verification failed: ${verifyError instanceof Error ? verifyError.message : 'Unknown error'}`);
         }
 
-        setTxStatus({ status: 'generating-proof', proof: proofOutput });
+        // Step 2.6: Prepare visualization data for frontend
+        const amlThreshold = 10000; // $10,000 USD
+        const amountInUSD = Number(params.amount) / 1e18; // Convert from wei to USD
+        const visualizationData: ProofVisualizationData = {
+          privateInputs: {
+            secret: secret.toString(),
+            nullifier: nullifier.toString(),
+            recipient: params.destinationAddress,
+            amount: amountInUSD,
+          },
+          publicOutputs: {
+            nullifierHash: proofOutput.publicSignals[0],
+            commitment: proofOutput.publicSignals[1],
+            recipientHash: proofOutput.publicSignals[2],
+          },
+          complianceCheck: {
+            amlThreshold,
+            passed: amountInUSD < amlThreshold && amountInUSD > 0,
+            amountUnderThreshold: amountInUSD < amlThreshold,
+          },
+          proofGenerated: true,
+          locallyVerified: isValid,
+        };
+
+        setTxStatus({ status: 'generating-proof', proof: proofOutput, visualizationData });
 
         // Step 3: Prepare encrypted payload (in production, encrypt the actual message)
         const encryptedPayload =
           params.encryptedPayload || '0x' + Buffer.from('encrypted_data').toString('hex');
 
         // Step 4: Send transaction
-        setTxStatus({ status: 'signing', proof: proofOutput });
+        setTxStatus({ status: 'signing', proof: proofOutput, visualizationData });
         const contract = await getContract();
 
         console.log('📤 Sending transaction with params:', {
@@ -144,6 +191,7 @@ export function useRaylsShield() {
           status: 'pending',
           hash: tx.hash,
           proof: proofOutput,
+          visualizationData,
         });
 
         // Wait for confirmation
@@ -153,6 +201,7 @@ export function useRaylsShield() {
           status: 'success',
           hash: receipt.hash,
           proof: proofOutput,
+          visualizationData,
         });
 
         setIsLoading(false);

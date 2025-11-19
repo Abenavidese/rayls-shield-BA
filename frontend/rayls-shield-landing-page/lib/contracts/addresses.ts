@@ -5,8 +5,8 @@ export const CONTRACT_ADDRESSES = {
     rpcUrl: 'https://devnet-rpc.rayls.com',
     explorerUrl: 'https://devnet-explorer.rayls.com',
     contracts: {
-      RaylsShield: '0xAC22e6292EbDf4Ee3963FFa35293a22770AD6781',
-      Groth16Verifier: '0x8fded712132bC7d9c284c6f1F96Fd5aA61adfC89',
+      RaylsShield: '0x648B7FfD8a5Dd9C901B6569E7a0DC9A2eAF4c9F1',
+      Groth16Verifier: '0xfD0b399898efC0186E32eb81B630d7Cf7Bb6f217',
     },
   },
 } as const;

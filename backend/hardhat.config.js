@@ -5,13 +5,26 @@ require("dotenv").config();
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: {
-    version: "0.8.20",
-    settings: {
-      optimizer: {
-        enabled: true,
-        runs: 200,
+    compilers: [
+      {
+        version: "0.8.20",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
       },
-    },
+      {
+        version: "0.6.11",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
+      },
+    ],
   },
 
   networks: {
@@ -46,6 +59,14 @@ module.exports = {
         input: "input.json",
         wasm: "privacy.wasm",
         zkey: "privacy.zkey",
+      },
+      {
+        name: "compliance",
+        protocol: "groth16",
+        circuit: "compliance.circom",
+        input: "input-compliance.json",
+        wasm: "compliance.wasm",
+        zkey: "compliance.zkey",
       },
     ],
   },
