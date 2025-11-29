@@ -15,6 +15,7 @@
     "ethers": "^6.15.0",
     "hardhat": "^2.27.0",
     "hardhat-circom": "^3.3.2",
+    "poseidon-solidity": "^0.0.5",
     "snarkjs": "^0.7.5"
   },
   "scripts": {

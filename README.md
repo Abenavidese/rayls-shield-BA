@@ -1,21 +1,28 @@
-# 🛡️ RaylsShield
+# 🛡️ RaylsShield Pool
 
-**Zero-Knowledge Privacy Layer for Rayls Protocol**
+**Privacy Mixer for Native USDgas on Rayls Protocol**
 
-RaylsShield adds privacy-preserving capabilities to cross-chain messaging on Rayls using ZK-SNARKs (Groth16 proofs). Send encrypted transactions across blockchains while maintaining verifiability and compliance.
+RaylsShield Pool is a single-chain privacy mixer for native USDgas using Zero-Knowledge proofs (ZK-SNARKs). Similar to Tornado Cash, it enables private deposits and withdrawals with complete anonymity while maintaining AML compliance.
 
-[![Deployed on Rayls](https://img.shields.io/badge/Deployed-Rayls%20Testnet-blue)](https://devnet-explorer.rayls.com)
-[![Tests](https://img.shields.io/badge/Tests-13%2F13%20Passing-success)]()
+[![Deployed on Rayls](https://img.shields.io/badge/Deployed-Rayls%20Devnet-blue)](https://devnet-explorer.rayls.com)
+[![Tests](https://img.shields.io/badge/Tests-Passing-success)]()
 [![Solidity](https://img.shields.io/badge/Solidity-0.8.20-orange)]()
 
 ## 🌐 Deployed Contracts
 
-**Rayls Testnet (Chain ID: 123123)**
+**Rayls Devnet (Chain ID: 123123)** - Latest: Nov 29, 2025
 
 | Contract | Address | Explorer |
 |----------|---------|----------|
-| Groth16Verifier | `0xaF7B67b88128820Fae205A07aDC055ed509Bdb12` | [View](https://devnet-explorer.rayls.com/address/0xaF7B67b88128820Fae205A07aDC055ed509Bdb12) |
-| RaylsShield | `0x71E3a04c9Ecc624656334756f70dAAA1fc4F985D` | [View](https://devnet-explorer.rayls.com/address/0x71E3a04c9Ecc624656334756f70dAAA1fc4F985D) |
+| RaylsShieldPool | `0x7DF45676cb5Cc92DF8DD71b72745065391c7C6Be` | [View](https://devnet-explorer.rayls.com/address/0x7DF45676cb5Cc92DF8DD71b72745065391c7C6Be) |
+| Privacy Verifier | `0xc853De1e8a8a3Ead0e2A4A39084B792e1e58Dd53` | [View](https://devnet-explorer.rayls.com/address/0xc853De1e8a8a3Ead0e2A4A39084B792e1e58Dd53) |
+| Compliance Verifier | `0xF1925bE98A8Cb667CD65b5FadD171011E2832bca` | [View](https://devnet-explorer.rayls.com/address/0xF1925bE98A8Cb667CD65b5FadD171011E2832bca) |
+| PoseidonT2 Library | `0x7A3C527d48390c5690Fe7d81D021d83B278b6Eae` | [View](https://devnet-explorer.rayls.com/address/0x7A3C527d48390c5690Fe7d81D021d83B278b6Eae) |
+
+**Configuration:**
+- Compliance Mode: **ENABLED** ✅
+- AML Threshold: **10,000 USDgas**
+- Fixed Denomination: **Variable** (any amount up to threshold)
 
 **Network Details:**
 - RPC: `https://devnet-rpc.rayls.com`
@@ -277,22 +284,25 @@ RaylsShield solves this by combining Zero-Knowledge Proofs with AML compliance c
 ## 🌟 Key Features
 
 ### Privacy
-- **Hidden Transaction Amounts**: Cryptographic commitments hide actual values
-- **Private Recipients**: Recipient addresses are hashed for privacy
+- **Single-Chain Mixer**: Privacy pool for native USDgas (no cross-chain complexity)
+- **Hidden Transaction Links**: Break the link between deposits and withdrawals
+- **Anonymity Set**: Privacy increases with more deposits
 - **Secret Nullifiers**: Prevent double-spending and replay attacks
-- **Cross-Chain Privacy**: Maintain confidentiality across different blockchains
+- **Recipient Locking**: Funds locked to specific address via commitment
 
 ### Compliance
-- **AML Threshold Proofs**: Prove `amount < $10,000` without revealing exact amount
+- **Full AML Protection**: Deposits and withdrawals both protected
+- **AML Threshold**: Hardcoded 10,000 USDgas limit
+- **Compliance ZK Proofs**: Prove `amount < $10,000` without revealing exact amount
+- **128-bit Circuit**: Supports large wei amounts (up to 10^38)
 - **Regulatory-Friendly**: Built for institutional use cases
-- **Verifiable On-Chain**: All proofs verified via Groth16 verifier contract
 - **Audit Trail**: Nullifier tracking provides compliance-friendly history
 
 ### Performance
-- **Sub-Second Finality**: Leverages Rayls L1's high-performance consensus
-- **Gas-Efficient**: Optimized Solidity contracts (~272k gas per transaction)
+- **Gas-Efficient**: Optimized Solidity contracts (~250k gas per withdrawal)
 - **Fast Proof Generation**: 1-2 seconds per proof
-- **Scalable**: Cross-chain messaging via Rayls Protocol
+- **No Endpoint Required**: Simple single-chain architecture
+- **Variable Denominations**: Flexible amounts up to AML threshold
 
 ---
 
@@ -303,11 +313,14 @@ RaylsShield solves this by combining Zero-Knowledge Proofs with AML compliance c
 ```bash
 # Clone the repository
 git clone https://github.com/Abenavidese/rayls-shield-BA.git
-cd rayls-shield-BA
+cd rayls-shield-BA/backend
 
 # Install backend dependencies
-cd backend
 npm install
+
+# Compile contracts and circuits
+npm run compile
+npx hardhat circom
 ```
 
 ### Run the Demo
@@ -316,35 +329,40 @@ npm install
 # Start local Hardhat node (Terminal 1)
 npm run node
 
-# Run the demo flow (Terminal 2)
-npm run demo
+# Run the Pool demo (Terminal 2)
+npx hardhat run scripts/demo-pool.js --network localhost
 ```
 
 **Demo Output:**
 ```
-🛡️  RaylsShield - Zero-Knowledge Privacy Demo
+🛡️  RaylsShield Pool - Privacy Mixer Demo
 
 ✅ Contracts Deployed
+✅ Alice deposits 5 USDgas with commitment
+✅ Bob deposits 3 USDgas with commitment
 ✅ ZK Proof Generated
-✅ Private Message Sent Cross-Chain
+✅ Alice withdraws to new address
 ✅ Privacy Preserved!
 
-💡 Alice sent $7,500 to Bob - amount hidden from everyone!
+💡 No one can link Alice's deposit to her withdrawal!
+Anonymity set size: 2 deposits
 ```
 
 ---
 
 ## 📋 Available Commands
 
+All commands run from `backend/` directory:
+
 ```bash
 # Development
 npm run compile          # Compile Solidity contracts
-npm run circom           # Compile Circom ZK circuits
+npx hardhat circom       # Compile Circom ZK circuits
 npm run clean            # Clean build artifacts
 
 # Testing
-npm test                 # Run all tests
-npm run test:integration # Run integration tests (13 tests)
+npm test                 # Run Pool integration tests
+npx hardhat test test/RaylsShieldPool.integration.test.js
 
 # ZK Proofs
 npm run generate:proof   # Generate a ZK proof
@@ -352,11 +370,14 @@ npm run generate:inputs  # Generate valid circuit inputs
 
 # Deployment
 npm run node             # Start local Hardhat node
-npm run deploy:local     # Deploy to local network
-npm run deploy:devnet    # Deploy to Rayls Devnet
+npx hardhat run scripts/deploy-pool.js --network localhost       # Local deployment
+npx hardhat run scripts/deploy-pool.js --network raylsDevnet    # Devnet deployment
+
+# Compliance
+npx hardhat run scripts/enable-compliance.js --network raylsDevnet   # Enable AML mode
 
 # Demo
-npm run demo             # Run complete E2E demo
+npx hardhat run scripts/demo-pool.js --network localhost        # Run E2E demo
 ```
 
 ---
@@ -367,33 +388,51 @@ npm run demo             # Run complete E2E demo
 rayls-shield-BA/
 ├── backend/                         # Smart contracts and ZK circuits
 │   ├── contracts/
-│   │   ├── RaylsShield.sol         # Main privacy contract
-│   │   ├── PrivacyVerifier.sol     # Groth16 verifier (auto-generated)
-│   │   └── MockRaylsEndpoint.sol   # Local testing mock
+│   │   ├── RaylsShieldPool.sol     # ⭐ Main privacy pool contract
+│   │   ├── PoseidonT2.sol          # ZK-friendly hash library
+│   │   ├── Groth16Verifier.sol     # Privacy verifier (auto-generated)
+│   │   └── ComplianceVerifier.sol  # Compliance verifier (auto-generated)
 │   │
 │   ├── circuits/
-│   │   ├── privacy.circom          # Core privacy circuit
-│   │   ├── compliance.circom       # AML compliance circuit
-│   │   ├── privacy.wasm            # Compiled witness calculator
-│   │   ├── privacy.zkey            # Proving key
-│   │   └── verification_key.json   # Verification key
+│   │   ├── privacy.circom          # Privacy circuit (3 public signals)
+│   │   ├── compliance.circom       # Compliance circuit (4 public signals)
+│   │   ├── *.wasm                  # Compiled witness calculators
+│   │   ├── *.zkey                  # Proving keys
+│   │   └── *.vkey.json             # Verification keys
 │   │
 │   ├── scripts/
-│   │   ├── generate-inputs.js      # Generate valid circuit inputs
+│   │   ├── deploy-pool.js          # ⭐ Pool deployment
+│   │   ├── demo-pool.js            # ⭐ E2E demo
+│   │   ├── enable-compliance.js    # Enable AML mode
 │   │   ├── generate-proof.js       # ZK proof generation
-│   │   ├── deploy.js               # Contract deployment
-│   │   └── demo-flow.js            # Complete demo workflow
+│   │   └── generate-inputs.js      # Circuit input generation
 │   │
 │   ├── test/
-│   │   ├── RaylsShield.test.js     # Basic unit tests
-│   │   └── RaylsShield.integration.test.js  # E2E tests (✅ 13 passing)
+│   │   └── RaylsShieldPool.integration.test.js  # ⭐ Integration tests
 │   │
-│   ├── hardhat.config.js           # Hardhat + Circom configuration
-│   ├── package.json                # Dependencies and scripts
-│   └── .env.example                # Environment variables template
+│   ├── deployments/                # Deployment records
+│   │   └── pool-raylsDevnet-latest.json
+│   │
+│   ├── POOL_QUICKSTART.md          # ⭐ Quick start guide
+│   ├── README.md                   # Backend documentation
+│   └── hardhat.config.js           # Hardhat + Circom config
 │
-├── README.md                        # Project documentation
-├── FRONTEND.md                      # Frontend integration guide
+├── frontend/rayls-shield-landing-page/  # Next.js frontend
+│   ├── app/
+│   │   ├── pool/                   # Deposit interface
+│   │   └── claim/[token]/          # Withdrawal interface
+│   ├── components/
+│   │   └── pool-interface.tsx      # Pool UI component
+│   ├── lib/
+│   │   ├── contracts/              # Contract ABIs and addresses
+│   │   ├── web3/                   # Web3 interactions
+│   │   ├── zk/                     # ZK proof generation
+│   │   └── utils/                  # Payment link encoding
+│   └── hooks/
+│       └── useRaylsShieldPool.ts   # Pool operations hook
+│
+├── README.md                        # ⭐ Main project documentation
+├── CLAUDE.md                        # Development guide
 ├── CONTRIBUTING.md                  # Contribution guidelines
 └── LICENSE                          # MIT License
 ```
@@ -402,41 +441,75 @@ rayls-shield-BA/
 
 ## 🔐 How It Works
 
-### 1. Privacy Circuit
+### 1. Deposit Phase
 
-The core privacy circuit (`circuits/privacy.circom`) uses:
-- **Poseidon Hash**: ZK-friendly hash function
-- **Commitment Scheme**: `commitment = Poseidon(secret, nullifier, amount)`
-- **Nullifier Hash**: `nullifierHash = Poseidon(nullifier)`
-- **Recipient Hash**: `recipientHash = Poseidon(recipient)`
-
-### 2. Groth16 Proofs
-
-- Industry-standard ZK-SNARK system
-- Proof generation: ~1-2 seconds
-- On-chain verification: ~272k gas
-- Proves knowledge of private inputs without revealing them
-
-### 3. Smart Contract Integration
+User deposits USDgas with a commitment:
 
 ```solidity
-function sendPrivateMessage(
-    uint256 _dstChainId,
-    address _destination,
-    bytes calldata _encryptedPayload,
-    uint256[2] calldata _pA,      // Proof point A
-    uint256[2][2] calldata _pB,   // Proof point B
-    uint256[2] calldata _pC,      // Proof point C
-    uint256[3] calldata _publicSignals  // [nullifierHash, commitment, recipientHash]
-) external payable;
+// User generates off-chain:
+secret = random()
+nullifier = random()
+commitment = Poseidon(secret, nullifier, amount)
+
+// Deposit to pool:
+pool.deposit(commitment, { value: amount })
+// Commitment stored, identity hidden
 ```
 
-### 4. Cross-Chain Privacy
+### 2. Anonymity Set Growth
 
-RaylsShield extends `RaylsApp` to leverage:
-- `_raylsSend()` for cross-chain messaging
-- `_raylsSendToResourceId()` for resourceId-based routing
-- Rayls Endpoint integration for multi-chain support
+Privacy improves as more users deposit:
+
+```
+Pool State:
+├── Alice's commitment (5 USDgas)
+├── Bob's commitment (3 USDgas)
+├── Charlie's commitment (10 USDgas)
+└── Anonymity set size: 3
+
+→ No one knows which deposit belongs to whom
+```
+
+### 3. Withdrawal with ZK Proof
+
+User proves knowledge of secret/nullifier without revealing which deposit:
+
+**Privacy Circuit** (`privacy.circom`):
+- Public: `nullifierHash, commitment, recipientHash`
+- Private: `secret, nullifier, recipient, amount`
+- Proves: `commitment = Poseidon(secret, nullifier, amount)`
+
+**Compliance Circuit** (`compliance.circom`):
+- Adds AML check: `amount < 10,000 USDgas`
+- Uses 128-bit comparisons for large wei amounts
+- 4th public signal: `amlThreshold`
+
+### 4. Smart Contract Verification
+
+```solidity
+function withdraw(
+    address recipient,
+    uint256 amount,
+    uint256[2] calldata _pA,      // ZK proof point A
+    uint256[2][2] calldata _pB,   // ZK proof point B
+    uint256[2] calldata _pC,      // ZK proof point C
+    uint256[3] calldata _publicSignals  // [nullifierHash, commitment, recipientHash]
+) external nonReentrant {
+    // 1. Verify nullifier not used
+    // 2. Verify commitment exists
+    // 3. Verify ZK proof (privacy or compliance)
+    // 4. Mark nullifier as used
+    // 5. Transfer USDgas to recipient
+}
+```
+
+### 5. Privacy Guarantees
+
+✅ **Broken Link**: No connection between Alice's deposit and withdrawal
+✅ **Anonymity Set**: Can't determine which of N deposits was withdrawn
+✅ **Recipient Privacy**: Only recipientHash revealed (not actual address)
+✅ **Replay Protection**: Nullifier prevents double-spending
+✅ **Compliance**: Amount proven < $10,000 without revealing exact value
 
 ---
 
@@ -563,9 +636,10 @@ npm run deploy:devnet
 
 ## 📚 Documentation
 
-- **[FRONTEND.md](./FRONTEND.md)** - Complete frontend integration guide with React examples
-- **[NEXT_STEPS.md](./NEXT_STEPS.md)** - Deployment guide and next steps
-- **[CLAUDE.md](./CLAUDE.md)** - Development instructions
+- **[backend/POOL_QUICKSTART.md](./backend/POOL_QUICKSTART.md)** - Quick start guide for RaylsShield Pool
+- **[backend/README.md](./backend/README.md)** - Backend documentation and deployment info
+- **[CLAUDE.md](./CLAUDE.md)** - Complete development guide and architecture details
+- **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Contribution guidelines
 
 ### Generate a ZK Proof
 

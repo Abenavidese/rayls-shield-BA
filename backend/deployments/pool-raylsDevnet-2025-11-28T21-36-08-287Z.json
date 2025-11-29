@@ -1,0 +1,32 @@
+{
+  "network": "raylsDevnet",
+  "chainId": "123123",
+  "timestamp": "2025-11-28T21:36:08.285Z",
+  "deployer": "0x15605703AE8385576FeAEF984dA72F00ffda2172",
+  "contracts": {
+    "RaylsShieldPool": {
+      "address": "0x0A6BaBCe51C7d708b8C3E73b07Abd3c372aB62E8",
+      "constructorArgs": [
+        "0x59F8582DAE021539e8C58fa2C569468E4Dc64575",
+        "0x95f1047d63Cd661B6B5C6D4eda37ebFBe70d26d3",
+        "0"
+      ],
+      "libraries": {
+        "PoseidonT2": "0x22Ae854C70807cf6677C8C9449E43f9Ac8dE81fD"
+      }
+    },
+    "PrivacyVerifier": {
+      "address": "0x59F8582DAE021539e8C58fa2C569468E4Dc64575"
+    },
+    "ComplianceVerifier": {
+      "address": "0x95f1047d63Cd661B6B5C6D4eda37ebFBe70d26d3"
+    },
+    "PoseidonT2": {
+      "address": "0x22Ae854C70807cf6677C8C9449E43f9Ac8dE81fD"
+    }
+  },
+  "configuration": {
+    "fixedDenomination": "0",
+    "complianceRequired": false
+  }
+}

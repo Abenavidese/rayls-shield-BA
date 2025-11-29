@@ -31,7 +31,8 @@ async function generateProof({
   const F = poseidon.F;
 
   // Compute public inputs
-  const commitment = poseidon([secret, nullifier, amount]);
+  // NEW: Commitment includes recipient to lock funds to specific address
+  const commitment = poseidon([secret, nullifier, amount, recipient]);
   const commitmentBigInt = F.toObject(commitment);
 
   const nullifierHash = poseidon([nullifier]);

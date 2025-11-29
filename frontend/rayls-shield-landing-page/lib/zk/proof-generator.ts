@@ -41,7 +41,8 @@ export async function generateProofInputs(params: {
   const F = poseidon.F;
 
   // Compute public inputs using Poseidon hash
-  const commitment = poseidon([params.secret, params.nullifier, params.amount]);
+  // IMPORTANT: Commitment now includes recipient (4 inputs total)
+  const commitment = poseidon([params.secret, params.nullifier, params.amount, params.recipient]);
   const commitmentBigInt = F.toObject(commitment);
 
   const nullifierHash = poseidon([params.nullifier]);
@@ -73,16 +74,16 @@ function formatProofForSolidity(proof: any, publicSignals: any[]): ProofOutput['
 }
 
 /**
- * Generate a complete ZK proof for private messaging
+ * Generate a complete ZK proof for private messaging (privacy mode)
  * Uses real Groth16 proof generation with snarkjs
  */
 export async function generateZKProof(params: ProofInputs): Promise<ProofOutput> {
-  console.log('🔐 Generating real ZK proof...');
-  
+  console.log('🔐 Generating privacy ZK proof...');
+
   try {
     // Compute public signals
     const inputs = await generateProofInputs(params);
-    
+
     // Prepare circuit inputs
     const circuitInputs = {
       nullifierHash: inputs.nullifierHash,
@@ -93,33 +94,89 @@ export async function generateZKProof(params: ProofInputs): Promise<ProofOutput>
       recipient: params.recipient.toString(),
       amount: params.amount.toString(),
     };
-    
+
     console.log('📊 Circuit inputs prepared');
-    
+
     // Generate proof using snarkjs
     const wasmPath = '/circuits/privacy.wasm';
     const zkeyPath = '/circuits/privacy.zkey';
-    
+
     console.log('⚙️ Computing witness and generating proof...');
     const { proof, publicSignals } = await snarkjs.groth16.fullProve(
       circuitInputs,
       wasmPath,
       zkeyPath
     );
-    
-    console.log('✅ Proof generated successfully!');
-    
+
+    console.log('✅ Privacy proof generated successfully!');
+
     // Format for Solidity
     const solidityProof = formatProofForSolidity(proof, publicSignals);
-    
+
     return {
       proof,
       publicSignals,
       solidityProof,
     };
   } catch (error) {
-    console.error('❌ Error generating ZK proof:', error);
-    throw new Error(`Failed to generate ZK proof: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    console.error('❌ Error generating privacy ZK proof:', error);
+    throw new Error(`Failed to generate privacy ZK proof: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+}
+
+/**
+ * Generate a compliance ZK proof (includes AML threshold check)
+ * Uses real Groth16 proof generation with snarkjs
+ */
+export async function generateComplianceProof(
+  params: ProofInputs,
+  amlThreshold: bigint
+): Promise<ProofOutput> {
+  console.log('🔐 Generating compliance ZK proof...');
+  console.log('💰 AML Threshold:', amlThreshold.toString());
+
+  try {
+    // Compute public signals
+    const inputs = await generateProofInputs(params);
+
+    // Prepare circuit inputs (compliance circuit has amlThreshold as 4th public input)
+    const circuitInputs = {
+      nullifierHash: inputs.nullifierHash,
+      commitment: inputs.commitment,
+      recipientHash: inputs.recipientHash,
+      amlThreshold: amlThreshold.toString(),
+      secret: params.secret.toString(),
+      nullifier: params.nullifier.toString(),
+      recipient: params.recipient.toString(),
+      amount: params.amount.toString(),
+    };
+
+    console.log('📊 Compliance circuit inputs prepared');
+
+    // Generate proof using compliance circuit
+    const wasmPath = '/circuits/compliance.wasm';
+    const zkeyPath = '/circuits/compliance.zkey';
+
+    console.log('⚙️ Computing witness and generating compliance proof...');
+    const { proof, publicSignals } = await snarkjs.groth16.fullProve(
+      circuitInputs,
+      wasmPath,
+      zkeyPath
+    );
+
+    console.log('✅ Compliance proof generated successfully!');
+
+    // Format for Solidity
+    const solidityProof = formatProofForSolidity(proof, publicSignals);
+
+    return {
+      proof,
+      publicSignals,
+      solidityProof,
+    };
+  } catch (error) {
+    console.error('❌ Error generating compliance ZK proof:', error);
+    throw new Error(`Failed to generate compliance ZK proof: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
 

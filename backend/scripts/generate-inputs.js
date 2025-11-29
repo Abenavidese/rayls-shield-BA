@@ -14,8 +14,9 @@ async function generateInputs() {
   const recipient = BigInt(555555555);
   const amount = BigInt(1000);
 
-  // Compute commitment: Poseidon(secret, nullifier, amount)
-  const commitment = poseidon([secret, nullifier, amount]);
+  // Compute commitment: Poseidon(secret, nullifier, amount, recipient)
+  // NEW: Includes recipient to lock funds to specific address
+  const commitment = poseidon([secret, nullifier, amount, recipient]);
   const commitmentBigInt = F.toObject(commitment);
 
   // Compute nullifier hash: Poseidon(nullifier)

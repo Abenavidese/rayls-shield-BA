@@ -45,14 +45,16 @@ template ComplianceCircuit() {
     signal computedRecipientHash;
 
     // Component declarations
-    component poseidon1 = Poseidon(3);
+    component poseidon1 = Poseidon(4);  // Changed from 3 to 4 inputs
     component poseidon2 = Poseidon(1);
     component poseidon3 = Poseidon(1);
 
-    // Compute commitment: Poseidon(secret, nullifier, amount)
+    // Compute commitment: Poseidon(secret, nullifier, amount, recipient)
+    // Recipient is now part of the commitment, locking it to a specific address
     poseidon1.inputs[0] <== secret;
     poseidon1.inputs[1] <== nullifier;
     poseidon1.inputs[2] <== amount;
+    poseidon1.inputs[3] <== recipient;  // NEW: Recipient included in commitment
     commitmentHash <== poseidon1.out;
 
     // Verify commitment matches public input
@@ -73,17 +75,19 @@ template ComplianceCircuit() {
     recipientHash === computedRecipientHash;
 
     // Constraint: amount must be non-negative (simplified range check)
-    component amountBits = Num2Bits(64);
+    // Use 128 bits to support amounts up to ~3.4 × 10^38 (max uint256 is ~1.15 × 10^77)
+    component amountBits = Num2Bits(128);
     amountBits.in <== amount;
 
     // AML Compliance: amount < amlThreshold
-    component lessThan = LessThan(64);
+    // Use 128 bits to support large thresholds in wei (e.g., 10,000 USDgas = 10^22 wei)
+    component lessThan = LessThan(128);
     lessThan.in[0] <== amount;
     lessThan.in[1] <== amlThreshold;
     lessThan.out === 1;
 
     // Additional constraint: amount > 0
-    component greaterThan = GreaterThan(64);
+    component greaterThan = GreaterThan(128);
     greaterThan.in[0] <== amount;
     greaterThan.in[1] <== 0;
     greaterThan.out === 1;

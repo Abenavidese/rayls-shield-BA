@@ -38,14 +38,16 @@ template PrivacyCircuit() {
     signal computedRecipientHash;
 
     // Component declarations
-    component poseidon1 = Poseidon(3);
+    component poseidon1 = Poseidon(4);  // Changed from 3 to 4 inputs
     component poseidon2 = Poseidon(1);
     component poseidon3 = Poseidon(1);
 
-    // Compute commitment: Poseidon(secret, nullifier, amount)
+    // Compute commitment: Poseidon(secret, nullifier, amount, recipient)
+    // Recipient is now part of the commitment, locking it to a specific address
     poseidon1.inputs[0] <== secret;
     poseidon1.inputs[1] <== nullifier;
     poseidon1.inputs[2] <== amount;
+    poseidon1.inputs[3] <== recipient;  // NEW: Recipient included in commitment
     commitmentHash <== poseidon1.out;
 
     // Verify commitment matches public input

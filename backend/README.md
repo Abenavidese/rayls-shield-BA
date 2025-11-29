@@ -61,11 +61,17 @@ backend/
 
 ## 🌐 Deployed Contracts
 
-**Rayls Devnet (Chain ID: 123123)**
+**Rayls Devnet (Chain ID: 123123)** - Latest: Nov 29, 2025
 
-- **RaylsShield**: `0x648B7FfD8a5Dd9C901B6569E7a0DC9A2eAF4c9F1`
-- **Groth16Verifier** (Privacy): `0xfD0b399898efC0186E32eb81B630d7Cf7Bb6f217`
-- **ComplianceVerifier** (AML): `0xdd51b116F202a4878E84b17327C0B1b32A6ce644`
+- **RaylsShieldPool**: `0x7DF45676cb5Cc92DF8DD71b72745065391c7C6Be`
+- **Privacy Verifier**: `0xc853De1e8a8a3Ead0e2A4A39084B792e1e58Dd53`
+- **Compliance Verifier**: `0xF1925bE98A8Cb667CD65b5FadD171011E2832bca`
+- **PoseidonT2 Library**: `0x7A3C527d48390c5690Fe7d81D021d83B278b6Eae`
+
+**Configuration:**
+- Compliance Mode: **ENABLED** ✅
+- AML Threshold: **10,000 USDgas**
+- Fixed Denomination: **Variable** (any amount up to threshold)
 
 Explorer: https://devnet-explorer.rayls.com
 

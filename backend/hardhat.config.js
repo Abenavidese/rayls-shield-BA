@@ -11,7 +11,7 @@ module.exports = {
         settings: {
           optimizer: {
             enabled: true,
-            runs: 200,
+            runs: 1, // Optimized for deployment cost
           },
         },
       },
@@ -20,7 +20,7 @@ module.exports = {
         settings: {
           optimizer: {
             enabled: true,
-            runs: 200,
+            runs: 1, // Optimized for deployment cost
           },
         },
       },
@@ -34,6 +34,11 @@ module.exports = {
       chainId: 123123,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
       gasPrice: "auto",
+      gas: "auto",
+      timeout: 120000,
+      // Increase fee cap for large contracts
+      maxFeePerGas: 2000000000000000000n, // 2 USDgas
+      maxPriorityFeePerGas: 2000000000000000000n, // 2 USDgas
     },
 
     // Local development network
