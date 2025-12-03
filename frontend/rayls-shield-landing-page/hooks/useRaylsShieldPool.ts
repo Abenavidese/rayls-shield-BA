@@ -52,8 +52,11 @@ export function useRaylsShieldPool() {
       setPoolStats(stats);
 
     } catch (err: any) {
-      setError(err.message);
-      console.error("Connect wallet error:", err);
+      const errorMessage = err.message || String(err);
+      const cleanError = errorMessage.split('\n')[0].substring(0, 200);
+      
+      setError(cleanError);
+      console.log("⚠️ Connect wallet error:", cleanError);
     } finally {
       setLoading(false);
     }
@@ -76,7 +79,8 @@ export function useRaylsShieldPool() {
       const stats = await poolContract.getPoolStats();
       setPoolStats(stats);
     } catch (err: any) {
-      console.error("Error refreshing stats:", err);
+      const errorMessage = err.message || String(err);
+      console.log("⚠️ Error refreshing stats:", errorMessage.split('\n')[0].substring(0, 100));
     }
   }, [poolContract]);
 
@@ -84,7 +88,7 @@ export function useRaylsShieldPool() {
   const deposit = useCallback(async (
     amount: bigint,
     recipient: string
-  ): Promise<{ commitment: string; secret: string; nullifier: string }> => {
+  ): Promise<{ commitment: string; secret: string; nullifier: string; txHash: string }> => {
     if (!poolContract) throw new Error("Pool contract not initialized");
 
     try {
@@ -99,14 +103,19 @@ export function useRaylsShieldPool() {
 
       // Make deposit
       const tx = await poolContract.deposit(commitment, amount);
-      await tx.wait();
+      const receipt = await tx.wait();
 
       // Refresh stats
       await refreshPoolStats();
 
-      return { commitment, secret, nullifier };
+      return { commitment, secret, nullifier, txHash: receipt?.hash || tx.hash };
     } catch (err: any) {
-      setError(err.message);
+      // Extract clean error message
+      const errorMessage = err.message || err.reason || String(err);
+      const cleanError = errorMessage.split('\n')[0].substring(0, 200);
+      
+      console.log("⚠️ Deposit error:", cleanError);
+      setError(cleanError);
       throw err;
     } finally {
       setLoading(false);
@@ -133,8 +142,21 @@ export function useRaylsShieldPool() {
 
       return tx;
     } catch (err: any) {
-      setError(err.message);
-      throw err;
+      // Extract clean error message
+      const errorMessage = err.message || err.reason || String(err);
+      const cleanError = errorMessage.split('\n')[0].substring(0, 200);
+      
+      // Only log simplified error, don't show full stack trace
+      if (errorMessage.includes("Nullifier already used")) {
+        console.log("⚠️ Payment already claimed");
+      } else if (errorMessage.includes("user rejected") || errorMessage.includes("User denied")) {
+        console.log("⚠️ User rejected transaction");
+      } else {
+        console.log("⚠️ Withdrawal error:", cleanError);
+      }
+      
+      setError(cleanError);
+      throw err; // Re-throw for component to handle
     } finally {
       setLoading(false);
     }
@@ -167,7 +189,7 @@ export function useRaylsShieldPool() {
               }
             }
           } catch (err) {
-            console.error("Error updating signer:", err);
+            console.log("⚠️ Error updating signer");
           }
         }
       }

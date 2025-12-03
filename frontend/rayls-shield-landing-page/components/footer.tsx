@@ -1,5 +1,6 @@
 import { RaylsShieldLogo } from '@/components/rayls-shield-logo'
 import { Github, FileText, Mail } from 'lucide-react'
+import Link from 'next/link'
 
 export function Footer() {
   return (
@@ -12,15 +13,15 @@ export function Footer() {
           </div>
           
           <div className="flex flex-wrap justify-center gap-8 text-sm">
-            <a href="#" className="flex items-center gap-2 text-gray-400 hover:text-[#F4FF4A] transition-colors">
+            <Link href="/docs" className="flex items-center gap-2 text-gray-400 hover:text-[#F4FF4A] transition-colors">
               <FileText className="w-4 h-4" />
               Docs
-            </a>
-            <a href="#" className="flex items-center gap-2 text-gray-400 hover:text-[#F4FF4A] transition-colors">
+            </Link>
+            <a href="https://github.com/Abenavidese/rayls-shield-BA" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-400 hover:text-[#F4FF4A] transition-colors">
               <Github className="w-4 h-4" />
               GitHub
             </a>
-            <a href="#" className="flex items-center gap-2 text-gray-400 hover:text-[#F4FF4A] transition-colors">
+            <a href="mailto:contact@raylsshield.com" className="flex items-center gap-2 text-gray-400 hover:text-[#F4FF4A] transition-colors">
               <Mail className="w-4 h-4" />
               Contact
             </a>

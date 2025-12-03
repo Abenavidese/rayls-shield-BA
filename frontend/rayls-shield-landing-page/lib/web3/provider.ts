@@ -49,10 +49,17 @@ export class Web3Provider {
       this.signer = await this.provider.getSigner();
       return accounts[0];
     } catch (error: any) {
-      if (error.code === 4001) {
-        throw new Error('User rejected the connection request');
+      console.error('Error connecting wallet:', error);
+      
+      if (error.code === 4001 || error.code === 'ACTION_REJECTED') {
+        throw new Error('Please accept the connection request in MetaMask');
       }
-      throw error;
+      
+      if (error.message) {
+        throw new Error(error.message);
+      }
+      
+      throw new Error('Failed to connect wallet. Please try again.');
     }
   }
 

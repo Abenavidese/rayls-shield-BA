@@ -63,12 +63,18 @@ export function Header() {
               >
                 About Us
               </button>
-              <button
-                onClick={() => scrollToSection('documentation')}
+              <a
+                href="/docs"
                 className="text-gray-300 hover:text-[#F4FF4A] transition-colors text-sm font-medium"
               >
-                Documentation
-              </button>
+                Docs
+              </a>
+              <a
+                href="/pool"
+                className="bg-[#C7A9FF] text-[#03051A] hover:bg-[#C7A9FF]/90 transition-colors text-sm font-bold px-4 py-2 rounded-md shadow-lg shadow-[#C7A9FF]/25"
+              >
+                Launch App
+              </a>
             </div>
           </nav>
         </div>

@@ -27,21 +27,23 @@ export function HeroSection() {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-      <Link href="/dapp">
+      <Link href="/pool">
         <Button 
           size="lg" 
-          className="bg-[#F4FF4A] text-[#03051A] hover:bg-[#F4FF4A]/90 font-bold text-xl px-12 py-7 shadow-[0_0_30px_rgba(244,255,74,0.4)] hover:shadow-[0_0_40px_rgba(244,255,74,0.6)] transition-all"
+          className="bg-[#C7A9FF] text-[#03051A] hover:bg-[#C7A9FF]/90 font-bold text-xl px-12 py-7 shadow-[0_0_30px_rgba(199,169,255,0.4)] hover:shadow-[0_0_40px_rgba(199,169,255,0.6)] transition-all"
         >
-          Launch Dapp
+          Launch App
         </Button>
       </Link>
-          <Button 
-            size="lg" 
-            variant="outline"
-            className="border-[#F4FF4A] text-[#F4FF4A] hover:bg-[#F4FF4A]/10 font-bold text-lg px-8 py-6"
-          >
-            View Documentation
-          </Button>
+      <Link href="/docs">
+        <Button 
+          size="lg" 
+          variant="outline"
+          className="border-[#F4FF4A] text-[#F4FF4A] hover:bg-[#F4FF4A]/10 font-bold text-lg px-8 py-6"
+        >
+          View Documentation
+        </Button>
+      </Link>
         </div>
       </div>
     </section>

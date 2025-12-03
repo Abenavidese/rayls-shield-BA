@@ -75,8 +75,10 @@ export function useWallet() {
       return account;
     } catch (err: any) {
       const errorMessage = err.message || 'Failed to connect wallet';
+      console.error('Wallet connection error:', errorMessage);
       setError(errorMessage);
-      throw new Error(errorMessage);
+      // Don't throw, just return undefined to indicate failure
+      return undefined;
     } finally {
       setIsLoading(false);
     }
@@ -93,8 +95,9 @@ export function useWallet() {
       setIsCorrectNetwork(currentChainId === DEFAULT_NETWORK.chainId);
     } catch (err: any) {
       const errorMessage = err.message || 'Failed to switch network';
+      console.error('Network switch error:', errorMessage);
       setError(errorMessage);
-      throw new Error(errorMessage);
+      // Don't throw, just return to indicate failure
     } finally {
       setIsLoading(false);
     }

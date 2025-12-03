@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Wallet, Zap, CheckCircle2, Circle, ArrowLeft, AlertCircle, ExternalLink, Network } from 'lucide-react'
+import { Wallet, Zap, CheckCircle2, Circle, ArrowLeft, AlertCircle, ExternalLink, Network, Home } from 'lucide-react'
 import { useWallet } from '@/hooks/use-wallet'
 import { useRaylsShield } from '@/hooks/use-rayls-shield'
 import { DEFAULT_NETWORK } from '@/lib/contracts/addresses'
@@ -21,19 +21,11 @@ export default function DappInterface() {
   const [destinationChainId] = useState('123123')
 
   const handleConnectWallet = async () => {
-    try {
-      await connect()
-    } catch (err: any) {
-      console.error('Error connecting wallet:', err)
-    }
+    await connect()
   }
 
   const handleSwitchNetwork = async () => {
-    try {
-      await switchNetwork()
-    } catch (err: any) {
-      console.error('Error switching network:', err)
-    }
+    await switchNetwork()
   }
 
   const formatAddress = (address: string) => {
@@ -103,12 +95,19 @@ export default function DappInterface() {
                 className="h-8 w-auto"
               />
             </Link>
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="gap-2">
-                <ArrowLeft className="h-4 w-4" />
-                Back to Home
-              </Button>
-            </Link>
+            <div className="flex items-center gap-4">
+              <Link href="/">
+                <Button variant="ghost" size="sm" className="gap-2">
+                  <ArrowLeft className="h-4 w-4" />
+                  Back to Home
+                </Button>
+              </Link>
+              <Link href="/pool">
+                <Button variant="outline" size="sm" className="border-[#C7A9FF] text-[#C7A9FF] hover:bg-[#C7A9FF]/10">
+                  Payment Links
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </header>
@@ -292,14 +291,14 @@ export default function DappInterface() {
 
                 {/* Contract Info */}
                 <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground">RaylsShield Contract</p>
+                  <p className="text-sm text-muted-foreground">RaylsShield Pool Contract</p>
                   <a
-                    href={`${DEFAULT_NETWORK.explorerUrl}/address/${DEFAULT_NETWORK.contracts.RaylsShield}`}
+                    href={`${DEFAULT_NETWORK.explorerUrl}/address/${DEFAULT_NETWORK.contracts.RaylsShieldPool}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-xs font-mono text-secondary hover:underline break-all flex items-start gap-1"
                   >
-                    {formatAddress(DEFAULT_NETWORK.contracts.RaylsShield)}
+                    {formatAddress(DEFAULT_NETWORK.contracts.RaylsShieldPool)}
                     <ExternalLink className="h-3 w-3 flex-shrink-0 mt-0.5" />
                   </a>
                 </div>

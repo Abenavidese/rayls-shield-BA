@@ -101,20 +101,44 @@ export async function copyToClipboard(text: string): Promise<boolean> {
 
 /**
  * Share via Web Share API (if available)
+ * Falls back to copying to clipboard
  */
 export async function sharePaymentLink(url: string, amount: string): Promise<boolean> {
   try {
     if (navigator.share) {
       await navigator.share({
         title: "RaylsShield Payment",
-        text: `You received ${amount} USDgas! Click to claim:`,
+        text: `🎁 You received ${amount} USDgas!\n\n🔒 Private payment via RaylsShield\n👉 Click to claim:`,
         url: url,
       });
       return true;
     }
     return false;
   } catch (error) {
+    // User cancelled the share or error occurred
+    if (error instanceof Error && error.name === 'AbortError') {
+      // User cancelled, this is not an error
+      return false;
+    }
     console.error("Share failed:", error);
     return false;
   }
+}
+
+/**
+ * Share to specific platform
+ */
+export function shareToTelegram(url: string, amount: string): void {
+  const text = encodeURIComponent(`🎁 You received ${amount} USDgas!\n\n🔒 Private payment via RaylsShield\n👉 Click to claim: ${url}`);
+  window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${text}`, "_blank");
+}
+
+export function shareToWhatsApp(url: string, amount: string): void {
+  const text = encodeURIComponent(`🎁 You received ${amount} USDgas!\n\n🔒 Private payment via RaylsShield\n👉 Click to claim: ${url}`);
+  window.open(`https://wa.me/?text=${text}`, "_blank");
+}
+
+export function shareToTwitter(url: string, amount: string): void {
+  const text = encodeURIComponent(`🎁 Received ${amount} USDgas via @RaylsShield - private, secure, unstoppable!`);
+  window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url)}`, "_blank");
 }
