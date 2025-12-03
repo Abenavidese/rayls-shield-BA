@@ -8,10 +8,11 @@ import { decodePaymentLink, type PaymentData } from "@/lib/utils/paymentLink";
 import { generateWithdrawalProof, generateComplianceWithdrawalProof, addressToBigInt } from "@/lib/zk/proof";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ethers } from "ethers";
-import { Check, Wallet, Gift, AlertTriangle, Loader2, Shield, ArrowLeft, Sparkles, Lock, Zap } from "lucide-react";
+import { Check, Wallet, Gift, AlertTriangle, Loader2, Shield, ArrowLeft, Sparkles, Lock, Zap, ExternalLink, Eye } from "lucide-react";
 
 export default function ClaimPage() {
   const params = useParams();
@@ -38,6 +39,17 @@ export default function ClaimPage() {
   const [showAlreadyClaimedPopup, setShowAlreadyClaimedPopup] = useState(false);
   const [showWalletErrorPopup, setShowWalletErrorPopup] = useState(false);
   const [validating, setValidating] = useState(true);
+  const [showClaimDetailsPopup, setShowClaimDetailsPopup] = useState(false);
+  const [zkProofDetails, setZkProofDetails] = useState<{
+    secret: string;
+    nullifier: string;
+    recipient: string;
+    amount: string;
+    proofType: string;
+    nullifierHash: string;
+    commitment: string;
+    recipientHash: string;
+  } | null>(null);
 
   const handleConnectWallet = async () => {
     try {
@@ -157,7 +169,7 @@ export default function ClaimPage() {
 
       // Generate appropriate ZK proof based on compliance mode
       // IMPORTANT: Must use paymentData.recipient (not account) to match the commitment
-      const { proof } = complianceRequired
+      const proofResult = complianceRequired
         ? await generateComplianceWithdrawalProof(
             {
               secret: paymentData.secret,
@@ -174,7 +186,27 @@ export default function ClaimPage() {
             amount: amount,
           });
 
+      const { proof, commitment, nullifierHash, recipientHash } = proofResult;
+
       console.log("✅ Proof generated, executing withdrawal...");
+      console.log("🔍 Extracted values:");
+      console.log("  - commitment:", commitment);
+      console.log("  - nullifierHash:", nullifierHash);
+      console.log("  - recipientHash:", recipientHash);
+
+      // Save ZK proof details for the Details popup
+      const zkDetails = {
+        secret: paymentData.secret,
+        nullifier: paymentData.nullifier,
+        recipient: paymentData.recipient,
+        amount: paymentData.amount,
+        proofType: complianceRequired ? "Compliance ZK Proof" : "Privacy ZK Proof",
+        nullifierHash: nullifierHash,
+        commitment: commitment,
+        recipientHash: recipientHash,
+      };
+      console.log("🔍 zkProofDetails object:", zkDetails);
+      setZkProofDetails(zkDetails);
 
       // Suppress ALL console outputs temporarily to avoid technical errors showing
       const originalError = console.error;
@@ -317,7 +349,7 @@ export default function ClaimPage() {
   }
 
   // Success state
-  if (claimSuccess && txHash) {
+  if (claimSuccess && txHash && zkProofDetails) {
     return (
       <>
         {/* Navigation Header */}
@@ -400,10 +432,174 @@ export default function ClaimPage() {
                     View on Explorer
                   </Button>
                 </div>
+
+                <Button
+                  onClick={() => setShowClaimDetailsPopup(true)}
+                  variant="outline"
+                  className="w-full border-[#C7A9FF]/30 hover:border-[#C7A9FF]/60 hover:bg-[#C7A9FF]/10"
+                >
+                  <Eye className="h-4 w-4 mr-2" />
+                  Details
+                </Button>
               </CardContent>
             </Card>
           </div>
         </div>
+
+        {/* Claim Details Popup */}
+        <Dialog open={showClaimDetailsPopup} onOpenChange={setShowClaimDetailsPopup}>
+          <DialogContent className="sm:max-w-2xl border-[#C7A9FF]/20 bg-gradient-to-br from-[#03051A] via-[#03051A] to-[#C7A9FF]/5 max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <div className="flex justify-center mb-4">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-[#C7A9FF]/30 blur-3xl rounded-full animate-pulse" />
+                  <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-[#C7A9FF] to-[#C7A9FF]/60 flex items-center justify-center">
+                    <Shield className="h-10 w-10 text-white" />
+                  </div>
+                </div>
+              </div>
+              <DialogTitle className="text-2xl text-center text-white">
+                Claim Details
+              </DialogTitle>
+              <DialogDescription className="text-center text-base text-gray-300">
+                Zero-Knowledge Proof used for this withdrawal
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-4 px-6 pb-6">
+              {/* Proof Type */}
+              <div className="bg-[#C7A9FF]/10 rounded-lg p-4 border border-[#C7A9FF]/30">
+                <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+                  <span className="text-[#C7A9FF]">🔐</span> Proof Type
+                </h3>
+                <div className="bg-[#03051A] rounded p-3 border border-[#C7A9FF]/20">
+                  <code className="text-[#C7A9FF] text-lg font-bold">{zkProofDetails.proofType}</code>
+                </div>
+                <p className="text-xs text-gray-400 mt-2">
+                  {zkProofDetails.proofType === "Compliance ZK Proof" 
+                    ? "✓ Compliance mode - includes AML checks" 
+                    : "✓ Privacy mode - maximum anonymity"}
+                </p>
+              </div>
+
+              {/* Private Inputs (Off-Chain) */}
+              <div className="bg-[#C7A9FF]/10 rounded-lg p-4 border border-[#C7A9FF]/30">
+                <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+                  <span className="text-[#C7A9FF]">🔒</span> Private Inputs (Off-Chain)
+                </h3>
+                <div className="space-y-3">
+                  <div>
+                    <Label className="text-gray-400 text-xs">Secret (Known only to you)</Label>
+                    <div className="bg-[#03051A] rounded p-3 border border-[#C7A9FF]/20 mt-1 overflow-hidden">
+                      <code className="text-[#C7A9FF] text-sm break-all block" style={{ wordBreak: 'break-all', overflowWrap: 'anywhere' }}>{zkProofDetails.secret}</code>
+                    </div>
+                    <p className="text-xs text-gray-400 mt-1">🔒 Never revealed on-chain</p>
+                  </div>
+
+                  <div>
+                    <Label className="text-gray-400 text-xs">Nullifier (Prevents double-spending)</Label>
+                    <div className="bg-[#03051A] rounded p-3 border border-[#C7A9FF]/20 mt-1 overflow-hidden">
+                      <code className="text-[#C7A9FF] text-sm break-all block" style={{ wordBreak: 'break-all', overflowWrap: 'anywhere' }}>{zkProofDetails.nullifier}</code>
+                    </div>
+                    <p className="text-xs text-gray-400 mt-1">🔒 Never revealed on-chain</p>
+                  </div>
+
+                  <div>
+                    <Label className="text-gray-400 text-xs">Recipient Address (Locked)</Label>
+                    <div className="bg-[#03051A] rounded p-3 border border-[#C7A9FF]/20 mt-1 overflow-hidden">
+                      <code className="text-[#C7A9FF] text-sm break-all block" style={{ wordBreak: 'break-all', overflowWrap: 'anywhere' }}>{zkProofDetails.recipient}</code>
+                    </div>
+                    <p className="text-xs text-gray-400 mt-1">🔒 Only you can claim this payment</p>
+                  </div>
+
+                  <div>
+                    <Label className="text-gray-400 text-xs">Amount</Label>
+                    <div className="bg-[#03051A] rounded p-3 border border-[#C7A9FF]/20 mt-1">
+                      <code className="text-[#C7A9FF] text-lg font-bold">{zkProofDetails.amount} USDgas</code>
+                    </div>
+                    <p className="text-xs text-gray-400 mt-1">🔒 Part of the commitment</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Public Outputs (On-Chain) */}
+              <div className="bg-[#F4FF4A]/10 rounded-lg p-4 border border-[#F4FF4A]/30">
+                <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+                  <span className="text-[#F4FF4A]">👁️</span> Public Outputs (On-Chain)
+                </h3>
+                <div className="space-y-3">
+                  <div>
+                    <Label className="text-gray-400 text-xs">Commitment</Label>
+                    <div className="bg-[#03051A] rounded p-3 border border-[#F4FF4A]/20 mt-1 overflow-hidden">
+                      <code className="text-[#F4FF4A] text-sm break-all block" style={{ wordBreak: 'break-all', overflowWrap: 'anywhere' }}>{zkProofDetails.commitment}</code>
+                    </div>
+                    <p className="text-xs text-gray-400 mt-1">✓ Visible on-chain - links to original deposit (but not to sender!)</p>
+                  </div>
+
+                  <div>
+                    <Label className="text-gray-400 text-xs">Nullifier Hash</Label>
+                    <div className="bg-[#03051A] rounded p-3 border border-[#F4FF4A]/20 mt-1 overflow-hidden">
+                      <code className="text-[#F4FF4A] text-sm break-all block" style={{ wordBreak: 'break-all', overflowWrap: 'anywhere' }}>{zkProofDetails.nullifierHash}</code>
+                    </div>
+                    <p className="text-xs text-gray-400 mt-1">✓ Visible on-chain - prevents double claims without revealing nullifier</p>
+                  </div>
+
+                  <div>
+                    <Label className="text-gray-400 text-xs">Recipient Hash</Label>
+                    <div className="bg-[#03051A] rounded p-3 border border-[#F4FF4A]/20 mt-1 overflow-hidden">
+                      <code className="text-[#F4FF4A] text-sm break-all block" style={{ wordBreak: 'break-all', overflowWrap: 'anywhere' }}>{zkProofDetails.recipientHash}</code>
+                    </div>
+                    <p className="text-xs text-gray-400 mt-1">✓ Visible on-chain - hash of recipient address</p>
+                  </div>
+
+                  <div>
+                    <Label className="text-gray-400 text-xs">Withdrawal Amount</Label>
+                    <div className="bg-[#03051A] rounded p-3 border border-[#F4FF4A]/20 mt-1">
+                      <code className="text-[#F4FF4A] text-lg font-bold">{zkProofDetails.amount} USDgas</code>
+                    </div>
+                    <p className="text-xs text-gray-400 mt-1">✓ Visible on-chain</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* How ZK Proofs Work */}
+              <div className="bg-gradient-to-r from-[#C7A9FF]/5 to-[#F4FF4A]/5 rounded-lg p-4 border border-gray-500/20">
+                <h4 className="font-semibold text-white mb-2 flex items-center gap-2">
+                  <Shield className="h-4 w-4 text-[#C7A9FF]" />
+                  How Zero-Knowledge Proofs Protect Privacy
+                </h4>
+                <ul className="text-sm text-gray-300 space-y-2">
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#C7A9FF] flex-shrink-0">•</span>
+                    <span>You prove you know the <strong>secret</strong> and <strong>nullifier</strong> WITHOUT revealing them</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#C7A9FF] flex-shrink-0">•</span>
+                    <span>The blockchain verifies the proof is valid for an existing deposit</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#C7A9FF] flex-shrink-0">•</span>
+                    <span>The nullifier hash is stored to prevent double-claiming</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#F4FF4A] flex-shrink-0">✓</span>
+                    <span>No one can link your withdrawal to the original deposit - mathematically impossible!</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Groth16 Info */}
+              <div className="bg-[#C7A9FF]/5 rounded-lg p-4 border border-[#C7A9FF]/20">
+                <h4 className="font-semibold text-white mb-2 text-sm">Technology Used:</h4>
+                <div className="space-y-1 text-xs text-gray-300">
+                  <p>🔐 <strong>Groth16</strong> - Efficient zero-knowledge SNARK protocol</p>
+                  <p>🔐 <strong>Poseidon Hash</strong> - ZK-friendly hash function for commitments</p>
+                  <p>🔐 <strong>snarkjs</strong> - Proof generation in your browser (client-side)</p>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </>
     );
   }
@@ -666,7 +862,7 @@ export default function ClaimPage() {
         )}
 
         {/* Wallet Connection - Redesigned */}
-        {!account ? (
+        {!claimSuccess && !account ? (
           <Card className="border-[#C7A9FF]/20 bg-gradient-to-br from-[#03051A] via-[#03051A] to-[#C7A9FF]/5">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
@@ -689,7 +885,7 @@ export default function ClaimPage() {
               </Button>
             </CardContent>
           </Card>
-        ) : (
+        ) : !claimSuccess ? (
           <>
             {/* Connected Wallet Info - Redesigned */}
             <Card className="border-[#C7A9FF]/20 bg-[#03051A]">
@@ -710,7 +906,7 @@ export default function ClaimPage() {
                   <div className="flex-1">
                     <p className="text-xs text-gray-400 mb-1">Your Address</p>
                     <p className="font-mono text-sm font-semibold text-white">
-                      {account.slice(0, 6)}...{account.slice(-4)}
+                      {account?.slice(0, 6)}...{account?.slice(-4)}
                     </p>
                     <div className="flex items-center gap-2 mt-1">
                       <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
@@ -814,6 +1010,91 @@ export default function ClaimPage() {
               </CardContent>
             </Card>
           </>
+        ) : null}
+
+        {/* Success State */}
+        {claimSuccess && txHash && zkProofDetails && (
+          <Card className="border-green-500/40 bg-gradient-to-br from-[#03051A] via-[#03051A] to-green-500/5">
+            <CardHeader>
+              <div className="flex justify-center mb-4">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-green-500/30 blur-3xl rounded-full animate-pulse" />
+                  <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
+                    <Check className="h-10 w-10 text-white" />
+                  </div>
+                </div>
+              </div>
+              <CardTitle className="text-2xl text-center text-white">
+                Payment Claimed Successfully!
+              </CardTitle>
+              <CardDescription className="text-center text-base">
+                {zkProofDetails.amount} USDgas has been transferred to your wallet
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Transaction Hash */}
+              <div className="space-y-3">
+                <Label className="text-white text-base">Transaction Hash</Label>
+                <div className="bg-[#05071F] rounded p-3 border border-green-500/20">
+                  <code className="text-green-400 text-sm break-all">{txHash}</code>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  onClick={() => window.open(`https://devnet-explorer.rayls.com/tx/${txHash}`, "_blank")}
+                  variant="outline"
+                  className="border-green-500/30 hover:border-green-500/60 hover:bg-green-500/10"
+                >
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  View on Explorer
+                </Button>
+                <Button
+                  onClick={() => setShowClaimDetailsPopup(true)}
+                  variant="outline"
+                  className="border-[#C7A9FF]/30 hover:border-[#C7A9FF]/60 hover:bg-[#C7A9FF]/10"
+                >
+                  <Eye className="h-4 w-4 mr-2" />
+                  Details
+                </Button>
+              </div>
+
+              {/* Success Info */}
+              <div className="bg-gradient-to-r from-green-500/10 to-green-500/5 rounded-lg p-4 border border-green-500/20">
+                <p className="font-semibold text-white mb-2 flex items-center gap-2">
+                  <Check className="h-4 w-4 text-green-400" />
+                  What just happened:
+                </p>
+                <ul className="text-sm text-gray-300 space-y-2">
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-400 flex-shrink-0">✓</span>
+                    <span>Zero-knowledge proof was verified on-chain</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-400 flex-shrink-0">✓</span>
+                    <span>Funds transferred to your wallet privately</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-400 flex-shrink-0">✓</span>
+                    <span>No link between sender and you is visible on-chain</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#C7A9FF] flex-shrink-0">🔒</span>
+                    <span>Your privacy is mathematically guaranteed</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Create New Payment */}
+              <Button
+                onClick={() => router.push("/pool")}
+                className="w-full bg-gradient-to-r from-[#F4FF4A] to-[#F4FF4A]/80 hover:from-[#F4FF4A]/90 hover:to-[#F4FF4A]/70 text-[#03051A] font-semibold"
+              >
+                Send a Private Payment
+              </Button>
+            </CardContent>
+          </Card>
         )}
 
         {/* Error Display */}
