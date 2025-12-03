@@ -39,6 +39,7 @@ export default function ClaimPage() {
   const [showAlreadyClaimedPopup, setShowAlreadyClaimedPopup] = useState(false);
   const [showWalletErrorPopup, setShowWalletErrorPopup] = useState(false);
   const [validating, setValidating] = useState(true);
+  const [alreadyClaimed, setAlreadyClaimed] = useState(false);
   const [showClaimDetailsPopup, setShowClaimDetailsPopup] = useState(false);
   const [zkProofDetails, setZkProofDetails] = useState<{
     secret: string;
@@ -226,35 +227,41 @@ export default function ClaimPage() {
       try {
         // Execute withdrawal to connected wallet (must be same as paymentData.recipient)
         const tx = await withdraw(account, amount, proof);
-        setTxHash(tx.hash);
-        setClaimSuccess(true);
-      } finally {
-        // Restore all console methods
+        
+        // Restore console before showing success
         console.error = originalError;
         console.warn = originalWarn;
         console.log = originalLog;
+        
+        setTxHash(tx.hash);
+        setClaimSuccess(true);
+      } catch (withdrawError: any) {
+        // Restore console methods first
+        console.error = originalError;
+        console.warn = originalWarn;
+        console.log = originalLog;
+        
+        // Re-throw to be caught by outer catch
+        throw withdrawError;
       }
     } catch (err: any) {
-      // Suppress technical error logs for better UX
+      // Suppress technical error logs for better UX - don't log the raw error
       const errorMessage = err.message || err.reason || String(err);
       
       // Check if error is "Nullifier already used"
       if (errorMessage.includes("Nullifier already used")) {
-        console.log("⚠️ Payment link already claimed");
+        // Silent - only show popup, no console logs
+        setAlreadyClaimed(true);
         setShowAlreadyClaimedPopup(true);
         setClaimError(null); // Clear any other errors
       } else if (errorMessage.includes("Wrong wallet")) {
-        console.log("⚠️ Wrong wallet connected");
         setClaimError("Wrong wallet connected. Please switch to the correct wallet.");
       } else if (errorMessage.includes("Wrong Network") || errorMessage.includes("wrong network")) {
-        console.log("⚠️ Wrong network");
         setClaimError("Wrong network. Please switch to the correct network in your wallet.");
       } else if (errorMessage.includes("user rejected") || errorMessage.includes("User denied")) {
-        console.log("⚠️ Transaction rejected by user");
         setClaimError("Transaction was rejected. Please try again.");
       } else {
-        // Log simplified error for debugging
-        console.log("⚠️ Claim failed:", errorMessage.split('\n')[0].substring(0, 100));
+        // Silent error - don't log technical details, just show generic message
         setClaimError("Failed to claim payment. Please check your wallet and try again.");
       }
     } finally {
@@ -854,8 +861,8 @@ export default function ClaimPage() {
           </Card>
         )}
 
-        {/* Error Display */}
-        {(error || claimError) && (
+        {/* Error Display - Don't show if Already Claimed */}
+        {(error || claimError) && !alreadyClaimed && (
           <Alert variant="destructive">
             <AlertDescription>{error || claimError}</AlertDescription>
           </Alert>
@@ -1097,8 +1104,8 @@ export default function ClaimPage() {
           </Card>
         )}
 
-        {/* Error Display */}
-        {(error || claimError) && (
+        {/* Error Display - Don't show if Already Claimed */}
+        {(error || claimError) && !alreadyClaimed && (
           <Alert variant="destructive" className="bg-red-500/10 border-red-500/30">
             <AlertDescription className="flex items-start gap-2">
               <AlertTriangle className="h-5 w-5 flex-shrink-0" />
