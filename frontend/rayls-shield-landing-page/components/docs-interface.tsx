@@ -80,27 +80,33 @@ export function DocsInterface() {
 
             {/* Table of Contents */}
             <div className="grid md:grid-cols-3 gap-4 mb-12">
-              <Card className="border-[#C7A9FF]/20 hover:border-[#C7A9FF]/50 transition-all cursor-pointer">
-                <CardHeader>
-                  <Shield className="h-8 w-8 text-[#C7A9FF] mb-2" />
-                  <CardTitle className="text-lg">Architecture</CardTitle>
-                  <CardDescription>Understand the system design</CardDescription>
-                </CardHeader>
-              </Card>
-              <Card className="border-[#C7A9FF]/20 hover:border-[#C7A9FF]/50 transition-all cursor-pointer">
-                <CardHeader>
-                  <Code className="h-8 w-8 text-[#C7A9FF] mb-2" />
-                  <CardTitle className="text-lg">Integration</CardTitle>
-                  <CardDescription>Connect to your app</CardDescription>
-                </CardHeader>
-              </Card>
-              <Card className="border-[#C7A9FF]/20 hover:border-[#C7A9FF]/50 transition-all cursor-pointer">
-                <CardHeader>
-                  <Terminal className="h-8 w-8 text-[#C7A9FF] mb-2" />
-                  <CardTitle className="text-lg">Examples</CardTitle>
-                  <CardDescription>Code samples & demos</CardDescription>
-                </CardHeader>
-              </Card>
+              <a href="#architecture" className="block">
+                <Card className="border-[#C7A9FF]/20 hover:border-[#C7A9FF]/50 transition-all cursor-pointer h-full">
+                  <CardHeader>
+                    <Shield className="h-8 w-8 text-[#C7A9FF] mb-2" />
+                    <CardTitle className="text-lg">Architecture</CardTitle>
+                    <CardDescription>Understand the system design</CardDescription>
+                  </CardHeader>
+                </Card>
+              </a>
+              <a href="#integration" className="block">
+                <Card className="border-[#C7A9FF]/20 hover:border-[#C7A9FF]/50 transition-all cursor-pointer h-full">
+                  <CardHeader>
+                    <Code className="h-8 w-8 text-[#C7A9FF] mb-2" />
+                    <CardTitle className="text-lg">Integration</CardTitle>
+                    <CardDescription>Connect to your app</CardDescription>
+                  </CardHeader>
+                </Card>
+              </a>
+              <a href="#examples" className="block">
+                <Card className="border-[#C7A9FF]/20 hover:border-[#C7A9FF]/50 transition-all cursor-pointer h-full">
+                  <CardHeader>
+                    <Terminal className="h-8 w-8 text-[#C7A9FF] mb-2" />
+                    <CardTitle className="text-lg">Examples</CardTitle>
+                    <CardDescription>Code samples & demos</CardDescription>
+                  </CardHeader>
+                </Card>
+              </a>
             </div>
 
             {/* Main Content */}
@@ -151,7 +157,7 @@ export function DocsInterface() {
               </section>
 
               {/* Section 2: How It Works */}
-              <section>
+              <section id="architecture">
                 <h2 className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-[#F4FF4A]/20 flex items-center justify-center text-[#F4FF4A] font-bold">
                     2
@@ -250,10 +256,24 @@ export function DocsInterface() {
                         <p className="text-sm text-gray-400 mb-3">
                           Core privacy pool contract handling deposits and withdrawals
                         </p>
-                        <div className="font-mono text-xs text-[#C7A9FF] break-all flex items-center gap-2">
+                        <div className="font-mono text-xs text-[#C7A9FF] break-all flex items-center gap-2 mb-3">
                           <FileCode className="h-4 w-4 flex-shrink-0" />
-                          0x7DF45676cb5Cc92DF8DD71b72745065391c7C6Be
+                          0x5715f968aa3F9ED496Ab4de478F3E9BB403BA67A
                         </div>
+                        <a 
+                          href="https://devnet-explorer.rayls.com/address/0x5715f968aa3F9ED496Ab4de478F3E9BB403BA67A" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                        >
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="w-full border-[#C7A9FF]/30 text-[#C7A9FF] hover:bg-[#C7A9FF]/10 hover:border-[#C7A9FF]/60"
+                          >
+                            <LinkIcon className="h-3 w-3 mr-2" />
+                            View on Blockscout
+                          </Button>
+                        </a>
                       </div>
 
                       {/* Privacy Verifier */}
@@ -265,10 +285,24 @@ export function DocsInterface() {
                         <p className="text-sm text-gray-400 mb-3">
                           Groth16 verifier for privacy proofs
                         </p>
-                        <div className="font-mono text-xs text-[#C7A9FF] break-all flex items-center gap-2">
+                        <div className="font-mono text-xs text-[#C7A9FF] break-all flex items-center gap-2 mb-3">
                           <FileCode className="h-4 w-4 flex-shrink-0" />
-                          0xc853De1e8a8a3Ead0e2A4A39084B792e1e58Dd53
+                          0xAA351990fC557C733a1D871B5b973C459f619E1B
                         </div>
+                        <a 
+                          href="https://devnet-explorer.rayls.com/address/0xAA351990fC557C733a1D871B5b973C459f619E1B" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                        >
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="w-full border-[#C7A9FF]/30 text-[#C7A9FF] hover:bg-[#C7A9FF]/10 hover:border-[#C7A9FF]/60"
+                          >
+                            <LinkIcon className="h-3 w-3 mr-2" />
+                            View on Blockscout
+                          </Button>
+                        </a>
                       </div>
 
                       {/* Compliance Verifier */}
@@ -280,10 +314,24 @@ export function DocsInterface() {
                         <p className="text-sm text-gray-400 mb-3">
                           Groth16 verifier for AML compliance proofs
                         </p>
-                        <div className="font-mono text-xs text-[#C7A9FF] break-all flex items-center gap-2">
+                        <div className="font-mono text-xs text-[#C7A9FF] break-all flex items-center gap-2 mb-3">
                           <FileCode className="h-4 w-4 flex-shrink-0" />
-                          0xF1925bE98A8Cb667CD65b5FadD171011E2832bca
+                          0x82F79A62A06f620DD0b7B396D0C19F0b3a5Cf8F5
                         </div>
+                        <a 
+                          href="https://devnet-explorer.rayls.com/address/0x82F79A62A06f620DD0b7B396D0C19F0b3a5Cf8F5" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                        >
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="w-full border-[#C7A9FF]/30 text-[#C7A9FF] hover:bg-[#C7A9FF]/10 hover:border-[#C7A9FF]/60"
+                          >
+                            <LinkIcon className="h-3 w-3 mr-2" />
+                            View on Blockscout
+                          </Button>
+                        </a>
                       </div>
                     </div>
 
@@ -306,7 +354,7 @@ export function DocsInterface() {
               </section>
 
               {/* Section 4: Frontend Integration */}
-              <section>
+              <section id="integration">
                 <h2 className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-[#F4FF4A]/20 flex items-center justify-center text-[#F4FF4A] font-bold">
                     4
@@ -319,7 +367,7 @@ export function DocsInterface() {
                       Integrate RaylsShield into your React/Next.js application:
                     </p>
 
-                    <div className="space-y-4">
+                    <div className="space-y-4" id="examples">
                       <div>
                         <h3 className="text-lg font-semibold text-white mb-3">1. Install Dependencies</h3>
                         <div className="bg-[#05071F] rounded-lg p-4 font-mono text-sm">

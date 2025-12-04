@@ -38,6 +38,7 @@ export default function ClaimPage() {
   const [showWelcomePopup, setShowWelcomePopup] = useState(false);
   const [showAlreadyClaimedPopup, setShowAlreadyClaimedPopup] = useState(false);
   const [showWalletErrorPopup, setShowWalletErrorPopup] = useState(false);
+  const [showTxRejectedPopup, setShowTxRejectedPopup] = useState(false);
   const [validating, setValidating] = useState(true);
   const [alreadyClaimed, setAlreadyClaimed] = useState(false);
   const [showClaimDetailsPopup, setShowClaimDetailsPopup] = useState(false);
@@ -52,6 +53,31 @@ export default function ClaimPage() {
     recipientHash: string;
   } | null>(null);
 
+  // Detect wallet rejection errors
+  useEffect(() => {
+    if (error && (
+      error.includes("rejected") || 
+      error.includes("denied") || 
+      error.includes("4001") ||
+      error.includes("ethers-user-denied")
+    )) {
+      setShowWalletErrorPopup(true);
+    }
+  }, [error]);
+
+  // Detect transaction rejection errors
+  useEffect(() => {
+    if (claimError && (
+      claimError.includes("rejected") || 
+      claimError.includes("denied") || 
+      claimError.includes("4001") ||
+      claimError.includes("ethers-user-denied") ||
+      claimError.includes("sendTransaction")
+    )) {
+      setShowTxRejectedPopup(true);
+    }
+  }, [claimError]);
+
   const handleConnectWallet = async () => {
     try {
       await connectWallet();
@@ -59,6 +85,35 @@ export default function ClaimPage() {
       const errorMessage = err.message || String(err);
       if (errorMessage.includes("rejected") || errorMessage.includes("denied") || errorMessage.includes("4001")) {
         setShowWalletErrorPopup(true);
+      }
+    }
+  };
+
+  const handleAddRaylsNetwork = async () => {
+    try {
+      if (!window.ethereum) {
+        alert("Please install MetaMask to add the network");
+        return;
+      }
+
+      await window.ethereum.request({
+        method: 'wallet_addEthereumChain',
+        params: [{
+          chainId: '0x1E0F3', // 123123 in hex
+          chainName: 'Rayls Devnet',
+          nativeCurrency: {
+            name: 'USDgas',
+            symbol: 'USDgas',
+            decimals: 18
+          },
+          rpcUrls: ['https://devnet-rpc.rayls.com'],
+          blockExplorerUrls: ['https://devnet-explorer.rayls.com']
+        }]
+      });
+    } catch (err: any) {
+      console.error("Failed to add network:", err);
+      if (err.code !== 4001) { // Not user rejection
+        alert("Failed to add network. Please add it manually.");
       }
     }
   };
@@ -258,8 +313,15 @@ export default function ClaimPage() {
         setClaimError("Wrong wallet connected. Please switch to the correct wallet.");
       } else if (errorMessage.includes("Wrong Network") || errorMessage.includes("wrong network")) {
         setClaimError("Wrong network. Please switch to the correct network in your wallet.");
-      } else if (errorMessage.includes("user rejected") || errorMessage.includes("User denied")) {
-        setClaimError("Transaction was rejected. Please try again.");
+      } else if (errorMessage.includes("user rejected") || 
+                 errorMessage.includes("User rejected") || 
+                 errorMessage.includes("User denied") ||
+                 errorMessage.includes("ethers-user-denied") ||
+                 errorMessage.includes("4001") ||
+                 errorMessage.includes("sendTransaction")) {
+        // Show popup for user rejection
+        setShowTxRejectedPopup(true);
+        setClaimError(null); // Don't show error message in Alert
       } else {
         // Silent error - don't log technical details, just show generic message
         setClaimError("Failed to claim payment. Please check your wallet and try again.");
@@ -784,6 +846,68 @@ export default function ClaimPage() {
         </DialogContent>
       </Dialog>
 
+      {/* Transaction Rejected Popup */}
+      <Dialog open={showTxRejectedPopup} onOpenChange={setShowTxRejectedPopup}>
+        <DialogContent className="sm:max-w-md border-red-500/20 bg-gradient-to-br from-[#03051A] via-[#03051A] to-red-500/5">
+          <DialogHeader>
+            <div className="flex justify-center mb-4">
+              <div className="relative">
+                <div className="absolute inset-0 bg-red-500/30 blur-3xl rounded-full animate-pulse" />
+                <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center">
+                  <AlertTriangle className="h-10 w-10 text-white" />
+                </div>
+              </div>
+            </div>
+            <DialogTitle className="text-2xl text-center text-white">
+              Unable to Connect Wallet
+            </DialogTitle>
+            <DialogDescription className="text-center text-base text-gray-300">
+              We couldn't connect to your wallet.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="px-6 pb-2">
+            <div className="bg-gradient-to-r from-red-500/10 to-red-500/5 rounded-lg p-4 border border-red-500/20 text-left">
+              <span className="block text-sm text-white font-semibold mb-2">Please try the following:</span>
+              <ul className="text-sm text-gray-300 space-y-2">
+                <li className="flex items-start gap-2">
+                  <span className="text-[#F4FF4A] flex-shrink-0">•</span>
+                  <span>Grant permission to connect your wallet</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#F4FF4A] flex-shrink-0">•</span>
+                  <span>Make sure MetaMask is installed and unlocked</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#F4FF4A] flex-shrink-0">•</span>
+                  <span>Try refreshing the page</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#F4FF4A] flex-shrink-0">•</span>
+                  <span>Try using a different browser (Chrome recommended)</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="flex gap-2 mt-2">
+            <Button 
+              onClick={() => setShowTxRejectedPopup(false)}
+              variant="outline"
+              className="flex-1 border-red-500/30 hover:border-red-500/60 hover:bg-red-500/10"
+            >
+              Close
+            </Button>
+            <Button 
+              onClick={() => {
+                setShowTxRejectedPopup(false);
+              }}
+              className="flex-1 bg-gradient-to-r from-[#F4FF4A] to-[#F4FF4A]/80 hover:from-[#F4FF4A]/90 hover:to-[#F4FF4A]/70 text-[#03051A] font-semibold"
+            >
+              Try Again
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <div className="container mx-auto px-4 py-8 pt-24">
       <div className="max-w-2xl mx-auto space-y-6">
         {/* Payment Details Card - Redesigned */}
@@ -861,8 +985,11 @@ export default function ClaimPage() {
           </Card>
         )}
 
-        {/* Error Display - Don't show if Already Claimed */}
-        {(error || claimError) && !alreadyClaimed && (
+        {/* Error Display - Don't show if Already Claimed or user rejected */}
+        {(error || claimError) && 
+         !alreadyClaimed && 
+         !(error && (error.includes("rejected") || error.includes("denied") || error.includes("4001") || error.includes("ethers-user-denied"))) &&
+         !(claimError && (claimError.includes("rejected") || claimError.includes("denied") || claimError.includes("4001") || claimError.includes("ethers-user-denied") || claimError.includes("sendTransaction"))) && (
           <Alert variant="destructive">
             <AlertDescription>{error || claimError}</AlertDescription>
           </Alert>
@@ -881,15 +1008,33 @@ export default function ClaimPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button 
-                onClick={handleConnectWallet} 
-                disabled={loading} 
-                className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-[#F4FF4A] to-[#F4FF4A]/80 hover:from-[#F4FF4A]/90 hover:to-[#F4FF4A]/70 text-[#03051A] shadow-lg shadow-[#F4FF4A]/25"
-                size="lg"
-              >
-                <Wallet className="h-5 w-5 mr-2" />
-                {loading ? "Connecting..." : "Connect Wallet to Claim"}
-              </Button>
+              <div className="space-y-3">
+                <Button 
+                  onClick={handleConnectWallet} 
+                  disabled={loading} 
+                  className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-[#F4FF4A] to-[#F4FF4A]/80 hover:from-[#F4FF4A]/90 hover:to-[#F4FF4A]/70 text-[#03051A] shadow-lg shadow-[#F4FF4A]/25"
+                  size="lg"
+                >
+                  <Wallet className="h-5 w-5 mr-2" />
+                  {loading ? "Connecting..." : "Connect Wallet to Claim"}
+                </Button>
+                
+                {/* Add Network Button */}
+                <div className="text-center">
+                  <p className="text-xs text-muted-foreground mb-2">
+                    Don&apos;t have Rayls Devnet?
+                  </p>
+                  <Button 
+                    onClick={handleAddRaylsNetwork}
+                    variant="outline"
+                    size="sm"
+                    className="border-[#F4FF4A]/30 text-[#F4FF4A] hover:bg-[#F4FF4A]/10 hover:border-[#F4FF4A]/60"
+                  >
+                    <Zap className="mr-2 h-4 w-4" />
+                    Add Rayls Devnet Automatically
+                  </Button>
+                </div>
+              </div>
             </CardContent>
           </Card>
         ) : !claimSuccess ? (

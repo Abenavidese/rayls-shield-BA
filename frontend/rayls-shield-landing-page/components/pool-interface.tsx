@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRaylsShieldPool } from "@/hooks/useRaylsShieldPool";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -32,6 +32,8 @@ export function PoolInterface() {
   const [paymentLink, setPaymentLink] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [showWalletErrorPopup, setShowWalletErrorPopup] = useState(false);
+  const [showInsufficientFundsPopup, setShowInsufficientFundsPopup] = useState(false);
+  const [showDepositCancelledPopup, setShowDepositCancelledPopup] = useState(false);
   const [addressError, setAddressError] = useState("");
   const [amountError, setAmountError] = useState("");
   const [depositDetails, setDepositDetails] = useState<{
@@ -45,6 +47,18 @@ export function PoolInterface() {
   } | null>(null);
   const [showDetailsPopup, setShowDetailsPopup] = useState(false);
 
+  // Detect wallet rejection errors
+  useEffect(() => {
+    if (error && (
+      error.includes("rejected") || 
+      error.includes("denied") || 
+      error.includes("4001") ||
+      error.includes("ethers-user-denied")
+    )) {
+      setShowWalletErrorPopup(true);
+    }
+  }, [error]);
+
   const handleConnectWallet = async () => {
     try {
       await connectWallet();
@@ -52,6 +66,35 @@ export function PoolInterface() {
       const errorMessage = err.message || String(err);
       if (errorMessage.includes("rejected") || errorMessage.includes("denied") || errorMessage.includes("4001")) {
         setShowWalletErrorPopup(true);
+      }
+    }
+  };
+
+  const handleAddRaylsNetwork = async () => {
+    try {
+      if (!window.ethereum) {
+        alert("Please install MetaMask to add the network");
+        return;
+      }
+
+      await window.ethereum.request({
+        method: 'wallet_addEthereumChain',
+        params: [{
+          chainId: '0x1E0F3', // 123123 in hex
+          chainName: 'Rayls Devnet',
+          nativeCurrency: {
+            name: 'USDgas',
+            symbol: 'USDgas',
+            decimals: 18
+          },
+          rpcUrls: ['https://devnet-rpc.rayls.com'],
+          blockExplorerUrls: ['https://devnet-explorer.rayls.com']
+        }]
+      });
+    } catch (err: any) {
+      console.error("Failed to add network:", err);
+      if (err.code !== 4001) { // Not user rejection
+        alert("Failed to add network. Please add it manually.");
       }
     }
   };
@@ -112,6 +155,22 @@ export function PoolInterface() {
       setRecipientAddress("");
     } catch (err: any) {
       console.error("Deposit error:", err);
+      
+      // Check for insufficient funds error
+      const errorMessage = err.message || String(err);
+      if (errorMessage.includes("missing revert data") || 
+          errorMessage.includes("CALL_EXCEPTION") ||
+          errorMessage.includes("insufficient funds")) {
+        setShowInsufficientFundsPopup(true);
+      } else if (errorMessage.includes("user rejected") || 
+                 errorMessage.includes("User rejected") || 
+                 errorMessage.includes("User denied") ||
+                 errorMessage.includes("ethers-user-denied") ||
+                 errorMessage.includes("4001") ||
+                 errorMessage.includes("ACTION_REJECTED") ||
+                 errorMessage.includes("sendTransaction")) {
+        setShowDepositCancelledPopup(true);
+      }
     }
   };
 
@@ -222,6 +281,122 @@ export function PoolInterface() {
         </DialogContent>
       </Dialog>
 
+      {/* Insufficient Funds Popup */}
+      <Dialog open={showInsufficientFundsPopup} onOpenChange={setShowInsufficientFundsPopup}>
+        <DialogContent className="sm:max-w-md border-[#F4FF4A]/20 bg-gradient-to-br from-[#03051A] via-[#03051A] to-[#F4FF4A]/5">
+          <DialogHeader>
+            <div className="flex justify-center mb-4">
+              <div className="relative">
+                <div className="absolute inset-0 bg-[#F4FF4A]/30 blur-3xl rounded-full animate-pulse" />
+                <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-[#F4FF4A] to-[#C7A9FF] flex items-center justify-center">
+                  <AlertTriangle className="h-10 w-10 text-[#03051A]" />
+                </div>
+              </div>
+            </div>
+            <DialogTitle className="text-2xl text-center text-white">
+              Insufficient Funds
+            </DialogTitle>
+            <DialogDescription className="text-center text-base text-gray-300">
+              You don&apos;t have enough USDgas to complete this transaction.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="px-6 pb-2">
+            <div className="bg-gradient-to-r from-[#F4FF4A]/10 to-[#C7A9FF]/5 rounded-lg p-4 border border-[#F4FF4A]/20 text-left">
+              <span className="block text-sm text-white font-semibold mb-2">Please check:</span>
+              <ul className="text-sm text-gray-300 space-y-2">
+                <li className="flex items-start gap-2">
+                  <span className="text-[#F4FF4A] flex-shrink-0">•</span>
+                  <span>You have enough USDgas in your wallet for the deposit amount</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#F4FF4A] flex-shrink-0">•</span>
+                  <span>You have additional USDgas to cover gas fees</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#F4FF4A] flex-shrink-0">•</span>
+                  <span>You&apos;re connected to the correct network (Rayls Devnet)</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="flex gap-2 mt-2">
+            <Button 
+              onClick={() => setShowInsufficientFundsPopup(false)}
+              variant="outline"
+              className="flex-1 border-[#F4FF4A]/30 hover:border-[#F4FF4A]/60 hover:bg-[#F4FF4A]/10"
+            >
+              Close
+            </Button>
+            <Button 
+              onClick={() => {
+                setShowInsufficientFundsPopup(false);
+              }}
+              className="flex-1 bg-gradient-to-r from-[#F4FF4A] to-[#C7A9FF] hover:from-[#F4FF4A]/90 hover:to-[#C7A9FF]/90 text-[#03051A] font-semibold"
+            >
+              Got It
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Deposit Cancelled Popup */}
+      <Dialog open={showDepositCancelledPopup} onOpenChange={setShowDepositCancelledPopup}>
+        <DialogContent className="sm:max-w-md border-[#C7A9FF]/20 bg-gradient-to-br from-[#03051A] via-[#03051A] to-[#C7A9FF]/5">
+          <DialogHeader>
+            <div className="flex justify-center mb-4">
+              <div className="relative">
+                <div className="absolute inset-0 bg-[#C7A9FF]/30 blur-3xl rounded-full animate-pulse" />
+                <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-[#C7A9FF] to-[#F4FF4A] flex items-center justify-center">
+                  <AlertTriangle className="h-10 w-10 text-[#03051A]" />
+                </div>
+              </div>
+            </div>
+            <DialogTitle className="text-2xl text-center text-white">
+              Transaction Cancelled
+            </DialogTitle>
+            <DialogDescription className="text-center text-base text-gray-300">
+              We can&apos;t create payment links if you cancel the transaction.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="px-6 pb-2">
+            <div className="bg-gradient-to-r from-[#C7A9FF]/10 to-[#F4FF4A]/5 rounded-lg p-4 border border-[#C7A9FF]/20 text-left">
+              <span className="block text-sm text-white font-semibold mb-2">To create a payment link:</span>
+              <ul className="text-sm text-gray-300 space-y-2">
+                <li className="flex items-start gap-2">
+                  <span className="text-[#F4FF4A] flex-shrink-0">•</span>
+                  <span>Confirm the transaction in your wallet</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#F4FF4A] flex-shrink-0">•</span>
+                  <span>Make sure you have enough USDgas for the deposit and gas fees</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#F4FF4A] flex-shrink-0">•</span>
+                  <span>Your payment link will be generated after the transaction completes</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="flex gap-2 mt-2">
+            <Button 
+              onClick={() => setShowDepositCancelledPopup(false)}
+              variant="outline"
+              className="flex-1 border-[#C7A9FF]/30 hover:border-[#C7A9FF]/60 hover:bg-[#C7A9FF]/10"
+            >
+              Close
+            </Button>
+            <Button 
+              onClick={() => {
+                setShowDepositCancelledPopup(false);
+              }}
+              className="flex-1 bg-gradient-to-r from-[#F4FF4A] to-[#C7A9FF] hover:from-[#F4FF4A]/90 hover:to-[#C7A9FF]/90 text-[#03051A] font-semibold"
+            >
+              Got It
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <div className="container mx-auto px-4 py-8 pt-24">
         <div className="max-w-4xl mx-auto space-y-6">
         {/* Hero Section - Not Connected */}
@@ -313,6 +488,23 @@ export function PoolInterface() {
                     <Wallet className="mr-2 h-5 w-5" />
                     {loading ? "Connecting..." : "Connect Wallet to Start"}
                   </Button>
+                  
+                  {/* Add Network Button */}
+                  <div className="text-center">
+                    <p className="text-xs text-muted-foreground mb-2">
+                      Don&apos;t have Rayls Devnet?
+                    </p>
+                    <Button 
+                      onClick={handleAddRaylsNetwork}
+                      variant="outline"
+                      size="sm"
+                      className="border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/60"
+                    >
+                      <Zap className="mr-2 h-4 w-4" />
+                      Add Rayls Devnet Automatically
+                    </Button>
+                  </div>
+
                   <p className="text-xs text-center text-muted-foreground">
                     🔒 Secure connection • No registration required • MetaMask supported
                   </p>
@@ -449,7 +641,14 @@ export function PoolInterface() {
         )}
 
         {/* Error Display */}
-        {error && (
+        {error && 
+         !error.includes("missing revert data") && 
+         !error.includes("CALL_EXCEPTION") && 
+         !error.includes("insufficient funds") &&
+         !error.includes("user rejected") &&
+         !error.includes("User rejected") &&
+         !error.includes("ethers-user-denied") &&
+         !error.includes("4001") && (
           <Alert variant="destructive">
             <AlertDescription>{error}</AlertDescription>
           </Alert>

@@ -114,8 +114,22 @@ export function useRaylsShieldPool() {
       const errorMessage = err.message || err.reason || String(err);
       const cleanError = errorMessage.split('\n')[0].substring(0, 200);
       
-      console.log("⚠️ Deposit error:", cleanError);
-      setError(cleanError);
+      // Don't show error for user rejection or insufficient funds
+      if (errorMessage.includes("user rejected") || 
+          errorMessage.includes("User rejected") || 
+          errorMessage.includes("User denied") ||
+          errorMessage.includes("ethers-user-denied") ||
+          errorMessage.includes("4001") ||
+          errorMessage.includes("missing revert data") ||
+          errorMessage.includes("CALL_EXCEPTION") ||
+          errorMessage.includes("insufficient funds")) {
+        console.log("⚠️ Transaction cancelled or insufficient funds");
+        setError(null);
+      } else {
+        console.log("⚠️ Deposit error:", cleanError);
+        setError(cleanError);
+      }
+      
       throw err;
     } finally {
       setLoading(false);
@@ -149,13 +163,20 @@ export function useRaylsShieldPool() {
       // Only log simplified error, don't show full stack trace
       if (errorMessage.includes("Nullifier already used")) {
         console.log("⚠️ Payment already claimed");
-      } else if (errorMessage.includes("user rejected") || errorMessage.includes("User denied")) {
+        setError(null); // Don't show error for already claimed
+      } else if (errorMessage.includes("user rejected") || 
+                 errorMessage.includes("User rejected") || 
+                 errorMessage.includes("User denied") ||
+                 errorMessage.includes("ethers-user-denied") ||
+                 errorMessage.includes("4001") ||
+                 errorMessage.includes("sendTransaction")) {
         console.log("⚠️ User rejected transaction");
+        setError(null); // Don't show error for user rejection
       } else {
         console.log("⚠️ Withdrawal error:", cleanError);
+        setError(cleanError);
       }
       
-      setError(cleanError);
       throw err; // Re-throw for component to handle
     } finally {
       setLoading(false);
