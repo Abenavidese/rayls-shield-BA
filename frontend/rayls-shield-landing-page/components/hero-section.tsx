@@ -12,7 +12,7 @@ export function HeroSection() {
           <img 
             src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ds-yTJ1Cs24noICK62b6xx9O8Ok19WaXc.png"
             alt="RaylsShield"
-            className="w-48 h-48 object-contain"
+            className="w-64 h-64 md:w-80 md:h-80 object-contain mx-auto mr-27"
           />
         </div>
         

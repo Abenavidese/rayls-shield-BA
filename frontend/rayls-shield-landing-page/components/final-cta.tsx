@@ -16,7 +16,7 @@ export function FinalCTA() {
           Join the institutions that already trust privacy with regulatory compliance
         </p>
         
-      <Link href="/dapp">
+      <Link href="/pool">
         <Button 
           size="lg" 
           className="bg-[#F4FF4A] text-[#03051A] hover:bg-[#F4FF4A]/90 font-bold text-xl px-12 py-7 shadow-[0_0_30px_rgba(244,255,74,0.4)] hover:shadow-[0_0_40px_rgba(244,255,74,0.6)] transition-all"

@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ArrowLeft, Code, Terminal, FileCode, Book, Copy, Check, AlertCircle } from 'lucide-react'
+import { ArrowLeft, Code, Terminal, FileCode, Book, Copy, Check, AlertCircle, ExternalLink } from 'lucide-react'
 
 export function ApiDocsInterface() {
   const searchParams = useSearchParams()
@@ -122,7 +122,23 @@ export function ApiDocsInterface() {
                       <div className="grid md:grid-cols-2 gap-4 text-sm">
                         <div>
                           <span className="text-gray-400">Address:</span>
-                          <div className="font-mono text-[#C7A9FF] mt-1">0x7DF45676cb5Cc92DF8DD71b72745065391c7C6Be</div>
+                          <div className="flex items-center gap-2 mt-1">
+                            <div className="font-mono text-[#C7A9FF] break-all">0x7DF45676cb5Cc92DF8DD71b72745065391c7C6Be</div>
+                            <a 
+                              href="https://devnet-explorer.rayls.com/address/0x7DF45676cb5Cc92DF8DD71b72745065391c7C6Be" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="flex-shrink-0"
+                            >
+                              <Button 
+                                size="sm" 
+                                variant="ghost" 
+                                className="h-6 w-6 p-0 text-[#C7A9FF] hover:text-[#C7A9FF] hover:bg-[#C7A9FF]/10"
+                              >
+                                <ExternalLink className="h-3 w-3" />
+                              </Button>
+                            </a>
+                          </div>
                         </div>
                         <div>
                           <span className="text-gray-400">Solidity Version:</span>
@@ -331,12 +347,65 @@ export function ApiDocsInterface() {
                       <div className="bg-[#05071F] rounded-lg p-4 border border-green-500/20">
                         <h3 className="font-semibold text-white mb-2">PrivacyVerifier</h3>
                         <p className="text-sm text-gray-400 mb-3">Verifies withdrawal proofs</p>
-                        <code className="text-xs text-[#C7A9FF] break-all">0xc853De1e8a8a3Ead0e2A4A39084B792e1e58Dd53</code>
+                        <div className="flex items-center gap-2">
+                          <code className="text-xs text-[#C7A9FF] break-all">0xc853De1e8a8a3Ead0e2A4A39084B792e1e58Dd53</code>
+                          <a 
+                            href="https://devnet-explorer.rayls.com/address/0xc853De1e8a8a3Ead0e2A4A39084B792e1e58Dd53" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="flex-shrink-0"
+                          >
+                            <Button 
+                              size="sm" 
+                              variant="ghost" 
+                              className="h-6 w-6 p-0 text-[#C7A9FF] hover:text-[#C7A9FF] hover:bg-[#C7A9FF]/10"
+                            >
+                              <ExternalLink className="h-3 w-3" />
+                            </Button>
+                          </a>
+                        </div>
                       </div>
                       <div className="bg-[#05071F] rounded-lg p-4 border border-blue-500/20">
                         <h3 className="font-semibold text-white mb-2">ComplianceVerifier</h3>
                         <p className="text-sm text-gray-400 mb-3">Verifies AML compliance proofs</p>
-                        <code className="text-xs text-[#C7A9FF] break-all">0xF1925bE98A8Cb667CD65b5FadD171011E2832bca</code>
+                        <div className="flex items-center gap-2">
+                          <code className="text-xs text-[#C7A9FF] break-all">0xF1925bE98A8Cb667CD65b5FadD171011E2832bca</code>
+                          <a 
+                            href="https://devnet-explorer.rayls.com/address/0xF1925bE98A8Cb667CD65b5FadD171011E2832bca" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="flex-shrink-0"
+                          >
+                            <Button 
+                              size="sm" 
+                              variant="ghost" 
+                              className="h-6 w-6 p-0 text-[#C7A9FF] hover:text-[#C7A9FF] hover:bg-[#C7A9FF]/10"
+                            >
+                              <ExternalLink className="h-3 w-3" />
+                            </Button>
+                          </a>
+                        </div>
+                      </div>
+                      <div className="bg-[#05071F] rounded-lg p-4 border border-purple-500/20">
+                        <h3 className="font-semibold text-white mb-2">PoseidonT2</h3>
+                        <p className="text-sm text-gray-400 mb-3">ZK-friendly hash function</p>
+                        <div className="flex items-center gap-2">
+                          <code className="text-xs text-[#C7A9FF] break-all">0x7A3C527d48390c5690Fe7d81D021d83B278b6Eae</code>
+                          <a 
+                            href="https://devnet-explorer.rayls.com/address/0x7A3C527d48390c5690Fe7d81D021d83B278b6Eae" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="flex-shrink-0"
+                          >
+                            <Button 
+                              size="sm" 
+                              variant="ghost" 
+                              className="h-6 w-6 p-0 text-[#C7A9FF] hover:text-[#C7A9FF] hover:bg-[#C7A9FF]/10"
+                            >
+                              <ExternalLink className="h-3 w-3" />
+                            </Button>
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
