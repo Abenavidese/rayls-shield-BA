@@ -258,10 +258,10 @@ export function DocsInterface() {
                         </p>
                         <div className="font-mono text-xs text-[#C7A9FF] break-all flex items-center gap-2 mb-3">
                           <FileCode className="h-4 w-4 flex-shrink-0" />
-                          0x5715f968aa3F9ED496Ab4de478F3E9BB403BA67A
+                          0x7DF45676cb5Cc92DF8DD71b72745065391c7C6Be
                         </div>
                         <a 
-                          href="https://devnet-explorer.rayls.com/address/0x5715f968aa3F9ED496Ab4de478F3E9BB403BA67A" 
+                          href="https://devnet-explorer.rayls.com/address/0x7DF45676cb5Cc92DF8DD71b72745065391c7C6Be" 
                           target="_blank" 
                           rel="noopener noreferrer"
                         >
@@ -287,10 +287,10 @@ export function DocsInterface() {
                         </p>
                         <div className="font-mono text-xs text-[#C7A9FF] break-all flex items-center gap-2 mb-3">
                           <FileCode className="h-4 w-4 flex-shrink-0" />
-                          0xAA351990fC557C733a1D871B5b973C459f619E1B
+                          0xc853De1e8a8a3Ead0e2A4A39084B792e1e58Dd53
                         </div>
                         <a 
-                          href="https://devnet-explorer.rayls.com/address/0xAA351990fC557C733a1D871B5b973C459f619E1B" 
+                          href="https://devnet-explorer.rayls.com/address/0xc853De1e8a8a3Ead0e2A4A39084B792e1e58Dd53" 
                           target="_blank" 
                           rel="noopener noreferrer"
                         >
@@ -316,10 +316,39 @@ export function DocsInterface() {
                         </p>
                         <div className="font-mono text-xs text-[#C7A9FF] break-all flex items-center gap-2 mb-3">
                           <FileCode className="h-4 w-4 flex-shrink-0" />
-                          0x82F79A62A06f620DD0b7B396D0C19F0b3a5Cf8F5
+                          0xF1925bE98A8Cb667CD65b5FadD171011E2832bca
                         </div>
                         <a 
-                          href="https://devnet-explorer.rayls.com/address/0x82F79A62A06f620DD0b7B396D0C19F0b3a5Cf8F5" 
+                          href="https://devnet-explorer.rayls.com/address/0xF1925bE98A8Cb667CD65b5FadD171011E2832bca" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                        >
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="w-full border-[#C7A9FF]/30 text-[#C7A9FF] hover:bg-[#C7A9FF]/10 hover:border-[#C7A9FF]/60"
+                          >
+                            <LinkIcon className="h-3 w-3 mr-2" />
+                            View on Blockscout
+                          </Button>
+                        </a>
+                      </div>
+
+                      {/* Poseidon T2 */}
+                      <div className="bg-[#05071F] rounded-lg p-4 border border-border/50">
+                        <div className="flex items-start justify-between mb-2">
+                          <h3 className="text-lg font-semibold text-white">PoseidonT2</h3>
+                          <span className="text-xs bg-purple-500/20 text-purple-400 px-2 py-1 rounded">Hash Library</span>
+                        </div>
+                        <p className="text-sm text-gray-400 mb-3">
+                          ZK-friendly Poseidon hash function library
+                        </p>
+                        <div className="font-mono text-xs text-[#C7A9FF] break-all flex items-center gap-2 mb-3">
+                          <FileCode className="h-4 w-4 flex-shrink-0" />
+                          0x7A3C527d48390c5690Fe7d81D021d83B278b6Eae
+                        </div>
+                        <a 
+                          href="https://devnet-explorer.rayls.com/address/0x7A3C527d48390c5690Fe7d81D021d83B278b6Eae" 
                           target="_blank" 
                           rel="noopener noreferrer"
                         >
