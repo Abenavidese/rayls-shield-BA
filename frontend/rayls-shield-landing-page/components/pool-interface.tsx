@@ -625,11 +625,24 @@ export function PoolInterface() {
                       {account.slice(0, 6)}...{account.slice(-4)}
                     </p>
                     <div className="flex items-center gap-2 mt-1">
-                      <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                      <div className={`w-2 h-2 rounded-full animate-pulse ${chainId === 123123 ? 'bg-green-500' : 'bg-red-500'}`} />
                       <p className="text-xs text-gray-400">
                         {chainId === 31337 ? "Localhost" : chainId === 123123 ? "Rayls Devnet" : `Chain ${chainId}`}
                       </p>
                     </div>
+                    {chainId !== 123123 && chainId !== 31337 && (
+                      <div className="mt-2">
+                        <Button 
+                          onClick={handleAddRaylsNetwork}
+                          variant="outline"
+                          size="sm"
+                          className="border-[#F4FF4A]/30 text-[#F4FF4A] hover:bg-[#F4FF4A]/10 hover:border-[#F4FF4A]/60 text-xs h-7"
+                        >
+                          <Zap className="mr-1 h-3 w-3" />
+                          Add Rayls Devnet
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <Button onClick={disconnectWallet} variant="outline" size="sm" className="border-[#C7A9FF]/30 hover:border-[#C7A9FF]/60 hover:bg-[#C7A9FF]/10">

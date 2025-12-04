@@ -80,7 +80,7 @@ export function DocsInterface() {
 
             {/* Table of Contents */}
             <div className="grid md:grid-cols-3 gap-4 mb-12">
-              <a href="#architecture" className="block">
+              <Link href="/api-docs?tab=architecture" className="block">
                 <Card className="border-[#C7A9FF]/20 hover:border-[#C7A9FF]/50 transition-all cursor-pointer h-full">
                   <CardHeader>
                     <Shield className="h-8 w-8 text-[#C7A9FF] mb-2" />
@@ -88,22 +88,22 @@ export function DocsInterface() {
                     <CardDescription>Understand the system design</CardDescription>
                   </CardHeader>
                 </Card>
-              </a>
+              </Link>
+              <Link href="/api-docs?tab=contracts" className="block">
+                <Card className="border-[#C7A9FF]/20 hover:border-[#C7A9FF]/50 transition-all cursor-pointer h-full">
+                  <CardHeader>
+                    <FileCode className="h-8 w-8 text-[#C7A9FF] mb-2" />
+                    <CardTitle className="text-lg">Contracts</CardTitle>
+                    <CardDescription>Smart contract API reference</CardDescription>
+                  </CardHeader>
+                </Card>
+              </Link>
               <a href="#integration" className="block">
                 <Card className="border-[#C7A9FF]/20 hover:border-[#C7A9FF]/50 transition-all cursor-pointer h-full">
                   <CardHeader>
                     <Code className="h-8 w-8 text-[#C7A9FF] mb-2" />
                     <CardTitle className="text-lg">Integration</CardTitle>
                     <CardDescription>Connect to your app</CardDescription>
-                  </CardHeader>
-                </Card>
-              </a>
-              <a href="#examples" className="block">
-                <Card className="border-[#C7A9FF]/20 hover:border-[#C7A9FF]/50 transition-all cursor-pointer h-full">
-                  <CardHeader>
-                    <Terminal className="h-8 w-8 text-[#C7A9FF] mb-2" />
-                    <CardTitle className="text-lg">Examples</CardTitle>
-                    <CardDescription>Code samples & demos</CardDescription>
                   </CardHeader>
                 </Card>
               </a>

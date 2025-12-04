@@ -1,14 +1,24 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ArrowLeft, Code, Terminal, FileCode, Book, Copy, Check, AlertCircle } from 'lucide-react'
 
 export function ApiDocsInterface() {
+  const searchParams = useSearchParams()
+  const tabParam = searchParams.get('tab')
+  const [activeTab, setActiveTab] = useState(tabParam || 'contracts')
   const [copiedCode, setCopiedCode] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (tabParam) {
+      setActiveTab(tabParam)
+    }
+  }, [tabParam])
 
   const copyCode = (code: string, id: string) => {
     navigator.clipboard.writeText(code)
@@ -70,7 +80,7 @@ export function ApiDocsInterface() {
             </div>
 
             {/* Main Content */}
-            <Tabs defaultValue="contracts" className="space-y-8">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
               <TabsList className="bg-[#05071F] border border-[#C7A9FF]/20">
                 <TabsTrigger value="contracts" className="data-[state=active]:bg-[#C7A9FF]/20 data-[state=active]:text-[#C7A9FF]">
                   Smart Contracts
