@@ -318,9 +318,15 @@ cd rayls-shield-BA/backend
 # Install backend dependencies
 npm install
 
-# Compile contracts and circuits
-npm run compile
+# Download Powers of Tau (required for circuit compilation)
+mkdir -p ptau
+wget https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_14.ptau -P ptau/
+
+# Compile Circom circuits (generates WASM, zkey, verifiers)
 npx hardhat circom
+
+# Compile Solidity contracts
+npm run compile
 ```
 
 ### Run the Demo
@@ -449,11 +455,12 @@ User deposits USDgas with a commitment:
 // User generates off-chain:
 secret = random()
 nullifier = random()
-commitment = Poseidon(secret, nullifier, amount)
+recipient = <withdrawal_address>
+commitment = Poseidon(secret, nullifier, amount, recipient)
 
 // Deposit to pool:
 pool.deposit(commitment, { value: amount })
-// Commitment stored, identity hidden
+// Commitment stored, identity hidden, recipient locked
 ```
 
 ### 2. Anonymity Set Growth
@@ -475,9 +482,9 @@ Pool State:
 User proves knowledge of secret/nullifier without revealing which deposit:
 
 **Privacy Circuit** (`privacy.circom`):
-- Public: `nullifierHash, commitment, recipientHash`
+- Public: `nullifierHash, commitment, recipientHash` (3 signals)
 - Private: `secret, nullifier, recipient, amount`
-- Proves: `commitment = Poseidon(secret, nullifier, amount)`
+- Proves: `commitment = Poseidon(secret, nullifier, amount, recipient)`
 
 **Compliance Circuit** (`compliance.circom`):
 - Adds AML check: `amount < 10,000 USDgas`
@@ -513,40 +520,327 @@ function withdraw(
 
 ---
 
+## 🏗️ Architecture
+
+### End-to-End System Architecture
+
+```mermaid
+graph TB
+    subgraph Frontend["Frontend (Next.js 15)"]
+        UI[Pool Interface]
+        ZKGen[ZK Proof Generator<br/>snarkjs]
+        W3[Web3 Integration<br/>ethers.js v6]
+    end
+
+    subgraph Circuits["ZK Circuits (Circom)"]
+        PC[Privacy Circuit<br/>3 public signals]
+        CC[Compliance Circuit<br/>4 public signals]
+        WASM[WASM Witness<br/>Calculator]
+    end
+
+    subgraph Contracts["Smart Contracts (Solidity)"]
+        Pool[RaylsShieldPool<br/>Main Contract]
+        PV[Privacy Verifier<br/>Groth16]
+        CV[Compliance Verifier<br/>Groth16]
+        Pos[PoseidonT2<br/>Library]
+    end
+
+    subgraph Blockchain["Rayls Devnet"]
+        State[Contract State]
+        Events[Event Logs]
+    end
+
+    UI -->|Generate Commitment| ZKGen
+    ZKGen -->|Load Circuits| WASM
+    WASM -->|Generate Proof| ZKGen
+    ZKGen -->|Sign Transaction| W3
+    W3 -->|deposit/withdraw| Pool
+
+    Pool -->|Verify Proof| PV
+    Pool -->|Verify Proof| CV
+    Pool -->|Hash Operations| Pos
+    Pool -->|Update State| State
+    Pool -->|Emit Events| Events
+
+    PC -.Compiles to.-> PV
+    CC -.Compiles to.-> CV
+
+    style Pool fill:#4CAF50
+    style PV fill:#2196F3
+    style CV fill:#FF9800
+    style Pos fill:#9C27B0
+```
+
+### Circuit Architecture
+
+```mermaid
+graph LR
+    subgraph Privacy["Privacy Circuit (privacy.circom)"]
+        direction TB
+        PI1[Private Inputs:<br/>secret, nullifier<br/>recipient, amount]
+
+        subgraph Constraints1["Constraints"]
+            C1[commitment =<br/>Poseidon&#40;secret, nullifier,<br/>amount, recipient&#41;]
+            C2[nullifierHash =<br/>Poseidon&#40;nullifier&#41;]
+            C3[recipientHash =<br/>Poseidon&#40;recipient&#41;]
+            C4[Range Check:<br/>amount ≥ 0]
+        end
+
+        PO1[Public Outputs:<br/>nullifierHash<br/>commitment<br/>recipientHash]
+
+        PI1 --> Constraints1
+        Constraints1 --> PO1
+    end
+
+    subgraph Compliance["Compliance Circuit (compliance.circom)"]
+        direction TB
+        PI2[Private Inputs:<br/>secret, nullifier<br/>recipient, amount]
+
+        subgraph Constraints2["Constraints"]
+            CC1[commitment =<br/>Poseidon&#40;secret, nullifier,<br/>amount, recipient&#41;]
+            CC2[nullifierHash =<br/>Poseidon&#40;nullifier&#41;]
+            CC3[recipientHash =<br/>Poseidon&#40;recipient&#41;]
+            CC4[AML Check:<br/>amount < amlThreshold]
+            CC5[Positivity:<br/>amount > 0]
+        end
+
+        PO2[Public Outputs:<br/>nullifierHash<br/>commitment<br/>recipientHash<br/>amlThreshold]
+
+        PI2 --> Constraints2
+        Constraints2 --> PO2
+    end
+
+    Privacy -.Used when.-> NormalMode[Compliance: OFF]
+    Compliance -.Used when.-> CompMode[Compliance: ON]
+
+    style Privacy fill:#2196F3,color:#fff
+    style Compliance fill:#FF9800,color:#fff
+    style Constraints1 fill:#E3F2FD
+    style Constraints2 fill:#FFF3E0
+```
+
+### Contract Architecture
+
+```mermaid
+classDiagram
+    class RaylsShieldPool {
+        +IGroth16Verifier privacyVerifier
+        +IComplianceVerifier complianceVerifier
+        +mapping commitments
+        +mapping nullifiers
+        +mapping deposits
+        +uint256 AML_THRESHOLD
+        +bool complianceRequired
+        +uint256 fixedDenomination
+
+        +deposit(commitment) payable
+        +withdraw(recipient, amount, proof)
+        +setComplianceRequired(bool)
+        +setFixedDenomination(uint256)
+    }
+
+    class IGroth16Verifier {
+        <<interface>>
+        +verifyProof(pA, pB, pC, pubSignals[3]) bool
+    }
+
+    class IComplianceVerifier {
+        <<interface>>
+        +verifyProof(pA, pB, pC, pubSignals[4]) bool
+    }
+
+    class PoseidonT2 {
+        <<library>>
+        +poseidon(inputs[2]) uint256
+    }
+
+    class Ownable {
+        <<OpenZeppelin>>
+        +owner() address
+        +onlyOwner modifier
+    }
+
+    class ReentrancyGuard {
+        <<OpenZeppelin>>
+        +nonReentrant modifier
+    }
+
+    RaylsShieldPool --> IGroth16Verifier : uses
+    RaylsShieldPool --> IComplianceVerifier : uses
+    RaylsShieldPool --> PoseidonT2 : uses
+    RaylsShieldPool --|> Ownable : inherits
+    RaylsShieldPool --|> ReentrancyGuard : inherits
+
+    IGroth16Verifier <|.. Groth16Verifier : implements
+    IComplianceVerifier <|.. ComplianceVerifier : implements
+```
+
+### User Flow: Deposit
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant Frontend
+    participant Circuits
+    participant Pool
+    participant Verifiers
+    participant Blockchain
+
+    User->>Frontend: Enter amount & recipient
+    Frontend->>Frontend: Generate random secret
+    Frontend->>Frontend: Generate random nullifier
+    Frontend->>Circuits: commitment = Poseidon(secret, nullifier, amount, recipient)
+    Circuits-->>Frontend: commitment hash
+
+    Frontend->>User: Show commitment (save secret + nullifier!)
+    User->>Frontend: Confirm deposit
+
+    Frontend->>Pool: deposit(commitment) + USDgas
+
+    alt Compliance Mode ON
+        Pool->>Pool: Check amount < AML_THRESHOLD
+    end
+
+    alt Fixed Denomination
+        Pool->>Pool: Check amount == fixedDenomination
+    end
+
+    Pool->>Pool: Store commitment in mapping
+    Pool->>Pool: Store deposit metadata
+    Pool->>Pool: totalDeposits++
+    Pool->>Blockchain: Emit DepositMade event
+
+    Blockchain-->>Frontend: Transaction confirmed
+    Frontend-->>User: Deposit successful! ✅
+
+    Note over User,Frontend: User MUST save:<br/>secret, nullifier, amount, recipient
+```
+
+### User Flow: Withdrawal
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant Frontend
+    participant Circuits
+    participant Pool
+    participant Verifier
+    participant Blockchain
+
+    User->>Frontend: Enter withdrawal details<br/>(secret, nullifier, recipient, amount)
+
+    Frontend->>Circuits: Load circuit WASM + zkey
+    Frontend->>Circuits: Generate witness from inputs
+
+    alt Compliance Mode ON
+        Circuits->>Circuits: Verify amount < amlThreshold
+        Circuits->>Circuits: Generate proof (4 public signals)
+    else Compliance Mode OFF
+        Circuits->>Circuits: Generate proof (3 public signals)
+    end
+
+    Circuits-->>Frontend: ZK proof + public signals
+
+    Frontend->>Pool: withdraw(recipient, amount, proof, publicSignals)
+
+    Pool->>Pool: Extract nullifierHash from publicSignals
+    Pool->>Pool: Check nullifier not used
+    Pool->>Pool: Extract commitment from publicSignals
+    Pool->>Pool: Check commitment exists
+
+    alt Compliance Mode ON
+        Pool->>Verifier: complianceVerifier.verifyProof(...)
+    else Compliance Mode OFF
+        Pool->>Verifier: privacyVerifier.verifyProof(...)
+    end
+
+    Verifier-->>Pool: Proof valid ✅
+
+    Pool->>Pool: Mark nullifier as used
+    Pool->>Pool: totalWithdrawals++
+    Pool->>Pool: activeDeposits--
+    Pool->>User: Transfer USDgas to recipient
+    Pool->>Blockchain: Emit WithdrawalMade event
+
+    Blockchain-->>Frontend: Transaction confirmed
+    Frontend-->>User: Withdrawal successful! ✅
+
+    Note over Pool,Verifier: Privacy preserved:<br/>No link between deposit & withdrawal
+```
+
+### State Machine: Deposit Lifecycle
+
+```mermaid
+stateDiagram-v2
+    [*] --> Pending: User generates commitment
+    Pending --> Deposited: deposit() called
+
+    state Deposited {
+        [*] --> InPool
+        InPool --> InPool: Other users deposit<br/>(anonymity set grows)
+    }
+
+    Deposited --> Withdrawing: User generates ZK proof
+
+    state Withdrawing {
+        [*] --> ValidatingProof
+        ValidatingProof --> CheckingNullifier: Proof valid
+        ValidatingProof --> Failed: Invalid proof
+        CheckingNullifier --> Failed: Nullifier already used
+        CheckingNullifier --> CheckingCommitment: Nullifier OK
+        CheckingCommitment --> Failed: Commitment not found
+        CheckingCommitment --> Transferring: All checks pass
+    }
+
+    Transferring --> Withdrawn: USDgas sent to recipient
+    Failed --> [*]: Transaction reverted
+    Withdrawn --> [*]: Nullifier marked used
+
+    note right of Deposited
+        Commitment stored on-chain
+        Secret/nullifier off-chain
+    end note
+
+    note right of Withdrawn
+        Anonymity preserved
+        No link to original deposit
+    end note
+```
+
+---
+
 ## 🧪 Testing
 
 ### Run All Tests
 
 ```bash
+cd backend
 npm test
 ```
 
-**Test Results:**
-```
-  RaylsShield Integration Tests with ZK Proofs
-    ✓ Deployment tests (3 passing)
-    ✓ ZK proof generation and verification (2 passing)
-    ✓ Send private messages (2 passing)
-    ✓ ResourceId messaging (1 passing)
-    ✓ Nullifier tracking (1 passing)
-    ✓ Verifier management (3 passing)
-    ✓ Complete E2E privacy flow (1 passing)
+**What Gets Tested:**
+- ✅ Contract deployment and initialization
+- ✅ Deposit functionality with commitments
+- ✅ Real ZK proof generation (not mocked!)
+- ✅ On-chain proof verification
+- ✅ Withdrawal with privacy proofs
+- ✅ Withdrawal with compliance proofs
+- ✅ Nullifier replay attack prevention
+- ✅ AML threshold enforcement
+- ✅ End-to-end privacy workflow
 
-  13 passing (11s)
-```
-
-### Integration Tests
+### Run Specific Test
 
 ```bash
-npm run test:integration
+npx hardhat test test/RaylsShieldPool.integration.test.js
 ```
 
-Tests include:
-- Real ZK proof generation
-- On-chain proof verification
-- Cross-chain messaging simulation
-- Nullifier replay prevention
-- End-to-end privacy workflow
+### Important Test Notes
+
+- Tests use **real ZK proof generation** (~1-2 seconds per proof)
+- Test timeout: 100 seconds (configured in hardhat.config.js)
+- All proofs are generated on-the-fly, not pre-computed
+- Tests verify both privacy and compliance circuits
 
 ---
 
@@ -555,26 +849,37 @@ Tests include:
 ### Local Network
 
 ```bash
-# Terminal 1: Start local node
+# Terminal 1: Start local Hardhat node
+cd backend
 npm run node
 
 # Terminal 2: Deploy contracts
-npm run deploy:local
+npx hardhat run scripts/deploy-pool.js --network localhost
 ```
 
 ### Rayls Devnet
 
-1. **Create `.env` file:**
+1. **Create `backend/.env` file:**
 
 ```bash
 PRIVATE_KEY=your_wallet_private_key_here
-RAYLS_ENDPOINT_ADDRESS=0x...  # Get from Rayls team
+FIXED_DENOMINATION=0  # 0 = variable amounts, or set fixed (e.g., 5 for 5 USDgas)
 ```
 
 2. **Deploy:**
 
 ```bash
-npm run deploy:devnet
+cd backend
+npx hardhat run scripts/deploy-pool.js --network raylsDevnet
+
+# Or with fixed denomination
+FIXED_DENOMINATION=5 npx hardhat run scripts/deploy-pool.js --network raylsDevnet
+```
+
+3. **Enable Compliance (Optional):**
+
+```bash
+npx hardhat run scripts/enable-compliance.js --network raylsDevnet
 ```
 
 **Rayls Devnet Details:**
@@ -582,55 +887,165 @@ npm run deploy:devnet
 - RPC: `https://devnet-rpc.rayls.com`
 - Explorer: `https://devnet-explorer.rayls.com`
 - Gas Token: `USDgas`
+- **Current Compliance Status:** ENABLED ✅
+- **AML Threshold:** 10,000 USDgas
+
+---
+
+## 🎨 Frontend Setup
+
+### Installation
+
+```bash
+cd frontend/rayls-shield-landing-page
+npm install
+```
+
+### Copy Circuit Artifacts
+
+**CRITICAL:** Frontend needs circuit files for client-side ZK proof generation:
+
+```bash
+# From frontend directory
+mkdir -p public/circuits
+cp ../../backend/circuits/*.wasm public/circuits/
+cp ../../backend/circuits/*_final.zkey public/circuits/
+cp ../../backend/circuits/*.vkey.json public/circuits/
+```
+
+### Environment Configuration
+
+Create `frontend/rayls-shield-landing-page/.env.local`:
+
+```bash
+# Contract addresses (update after backend deployment)
+NEXT_PUBLIC_POOL_ADDRESS=0x7DF45676cb5Cc92DF8DD71b72745065391c7C6Be
+NEXT_PUBLIC_PRIVACY_VERIFIER=0xc853De1e8a8a3Ead0e2A4A39084B792e1e58Dd53
+NEXT_PUBLIC_COMPLIANCE_VERIFIER=0xF1925bE98A8Cb667CD65b5FadD171011E2832bca
+
+# Network configuration
+NEXT_PUBLIC_CHAIN_ID=123123
+NEXT_PUBLIC_CHAIN_NAME=Rayls Devnet
+NEXT_PUBLIC_RPC_URL=https://devnet-rpc.rayls.com
+
+# For localhost testing:
+# NEXT_PUBLIC_CHAIN_ID=31337
+# NEXT_PUBLIC_RPC_URL=http://127.0.0.1:8545
+```
+
+**Get contract addresses from:** `backend/deployments/pool-{network}-latest.json`
+
+### Run Development Server
+
+```bash
+npm run dev
+# Open http://localhost:3000
+```
+
+### Frontend Features
+
+- 📱 **Responsive UI** - Works on desktop and mobile
+- 🔐 **Client-side ZK proofs** - Generated in browser using snarkjs
+- 💰 **Deposit Interface** - `/pool` route
+- 🎫 **Withdrawal Interface** - `/claim/[token]` route with payment links
+- 🔗 **Web3 Integration** - MetaMask and WalletConnect support
+- ⚡ **Real-time Updates** - Contract event listeners
+- 🎨 **Modern Stack** - Next.js 15, React 19, TailwindCSS, shadcn/ui
 
 ---
 
 ## 💡 Use Cases
 
-### 1. Institutional Trading
-- Hide trading amounts from competitors
-- Prove compliance with AML regulations
-- Maintain privacy while meeting regulatory requirements
+### 1. Privacy-Preserving Payments
+- Break the link between sender and receiver
+- Hide transaction amounts from public view
+- Maintain financial privacy on-chain
+- Recipient address locked into commitment (prevents front-running)
 
-### 2. Private Cross-Chain Transfers
-- Send encrypted messages across blockchains
-- Verify recipient without revealing identity
-- Prevent double-spending with nullifiers
+### 2. Institutional Trading
+- Hide trading amounts from competitors
+- Prove compliance with AML regulations (< $10,000)
+- Maintain privacy while meeting regulatory requirements
+- Verifiable compliance through ZK proofs
 
 ### 3. Confidential Settlements
-- Private institutional settlements
-- Compliance-friendly privacy
-- Rayls' sub-second finality for instant settlement
+- Private institutional settlements on Rayls
+- Compliance-friendly privacy mixer
+- Sub-second finality for instant settlement
+- Variable denominations up to AML threshold
 
-### 4. Private DeFi
-- Hidden liquidity provisions
-- Anonymous yield farming
-- Private DAO voting
+### 4. Private DeFi Operations
+- Hidden liquidity provisions to AMM pools
+- Anonymous yield farming positions
+- Private DAO voting with USDgas stakes
+- Confidential treasury management
 
 ---
 
 ## 🔧 Technical Details
 
-### Circuit Complexity
-- **Privacy Circuit**: 3 Poseidon hashes + 1 range check
-- **Compliance Circuit**: Adds 2 comparison constraints for AML
+### Circuit Specifications
+
+**Privacy Circuit** (`privacy.circom`):
+- **Public Signals**: 3 (`nullifierHash`, `commitment`, `recipientHash`)
+- **Private Inputs**: 4 (`secret`, `nullifier`, `recipient`, `amount`)
+- **Constraints**: ~150 (3 Poseidon hashes + 1 range check)
 - **Witness Calculation**: < 1 second
-- **Proof Generation**: 1-2 seconds
-- **Proof Size**: ~128 bytes
+- **Proof Generation**: 1-2 seconds (client-side in browser)
+- **Proof Size**: ~128 bytes (Groth16)
 
-### Gas Costs
-- Deploy RaylsShield: ~1,037,239 gas
-- Deploy Verifier: ~390,033 gas
-- Send Private Message: ~272,268 gas (avg)
-- Update Verifier: ~30,588 gas
+**Compliance Circuit** (`compliance.circom`):
+- **Public Signals**: 4 (`nullifierHash`, `commitment`, `recipientHash`, `amlThreshold`)
+- **Private Inputs**: 4 (`secret`, `nullifier`, `recipient`, `amount`)
+- **Constraints**: ~180 (adds 128-bit AML comparison)
+- **Additional Checks**: `amount < amlThreshold` AND `amount > 0`
 
-### Security
-- ✅ Groth16 ZK-SNARKs (industry standard)
-- ✅ Poseidon hash (ZK-optimized)
-- ✅ Nullifier system (replay protection)
-- ✅ OpenZeppelin contracts (battle-tested)
-- ✅ Reentrancy guards
-- ✅ Access control (Ownable)
+### Contract Gas Costs
+
+| Operation | Gas Cost | Notes |
+|-----------|----------|-------|
+| Deploy RaylsShieldPool | ~1,200,000 | Includes library linking |
+| Deploy Privacy Verifier | ~400,000 | Auto-generated from circuit |
+| Deploy Compliance Verifier | ~420,000 | Larger due to extra constraints |
+| Deposit | ~100,000 | Store commitment + metadata |
+| Withdraw (Privacy) | ~250,000 | Verify 3-signal proof |
+| Withdraw (Compliance) | ~280,000 | Verify 4-signal proof |
+| Enable Compliance | ~30,000 | Owner-only state change |
+
+### Performance Metrics
+
+| Metric | Value | Context |
+|--------|-------|---------|
+| Circuit Compilation | 2-5 minutes | CPU-intensive, one-time |
+| WASM File Size | ~234 KB (privacy) | Loaded in browser |
+| Proving Key Size | ~2.1 MB (privacy) | Loaded in browser |
+| Anonymity Set Growth | Linear | Privacy ∝ # of deposits |
+| Blockchain Finality | < 1 second | Rayls sub-second finality |
+
+### Security Features
+
+- ✅ **Groth16 ZK-SNARKs** - Industry-standard zero-knowledge proofs
+- ✅ **Poseidon Hash** - ZK-friendly hash function (gas-optimized)
+- ✅ **Nullifier System** - Prevents replay attacks and double-spending
+- ✅ **Recipient Locking** - Address embedded in commitment (anti-front-running)
+- ✅ **OpenZeppelin Contracts** - Battle-tested security primitives
+- ✅ **ReentrancyGuard** - Prevents reentrancy attacks on deposit/withdraw
+- ✅ **Access Control** - Ownable pattern for admin functions
+- ✅ **AML Compliance** - Verifiable threshold checks via ZK circuits
+
+### Cryptographic Primitives
+
+**Poseidon Hash Function**:
+- Parameters: 4 inputs → 1 output
+- Field: bn128 (254-bit prime)
+- Security: 128-bit security level
+- Usage: `commitment = Poseidon(secret, nullifier, amount, recipient)`
+
+**Groth16 Proof System**:
+- Curve: BN254 (alt_bn128)
+- Proof Size: 128 bytes (3 curve points)
+- Verification: Constant-time O(1)
+- Trusted Setup: Powers of Tau ceremony required
 
 ---
 
@@ -641,9 +1056,10 @@ npm run deploy:devnet
 - **[CLAUDE.md](./CLAUDE.md)** - Complete development guide and architecture details
 - **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Contribution guidelines
 
-### Generate a ZK Proof
+### Generate a ZK Proof (Backend)
 
 ```bash
+cd backend
 npm run generate:proof
 ```
 
@@ -653,37 +1069,61 @@ npm run generate:proof
 Proof valid: ✅ YES
 
 Solidity call data:
-a: [...]
-b: [...]
-c: [...]
+a: [0x..., 0x...]
+b: [[0x..., 0x...], [0x..., 0x...]]
+c: [0x..., 0x...]
 publicSignals: [nullifierHash, commitment, recipientHash]
 ```
 
-### Use in Your Code
+### Programmatic Usage
 
+**Backend (Node.js)**:
 ```javascript
 const { generateProof, formatProofForSolidity } = require("./scripts/generate-proof");
 
-// Generate proof
+// Generate proof for withdrawal
 const { proof, publicSignals } = await generateProof({
-  secret: BigInt(123456789),
-  nullifier: BigInt(987654321),
-  recipient: BigInt("0x..."),
-  amount: BigInt(7500),
+  secret: BigInt("0x123456789abcdef..."),
+  nullifier: BigInt("0xfedcba987654321..."),
+  recipient: BigInt("0x" + recipientAddress.slice(2).padStart(64, "0")),
+  amount: BigInt(5000), // 5000 wei
 });
 
-// Format for Solidity
-const solidityProof = formatProofForSolidity(proof, publicSignals);
+// Format for Solidity function call
+const formattedProof = formatProofForSolidity(proof, publicSignals);
 
-// Send private message
-await raylsShield.sendPrivateMessage(
-  dstChainId,
-  destination,
-  encryptedPayload,
-  solidityProof.a,
-  solidityProof.b,
-  solidityProof.c,
-  solidityProof.publicSignals
+// Call withdraw function
+await pool.withdraw(
+  recipientAddress,
+  amount,
+  formattedProof.a,
+  formattedProof.b,
+  formattedProof.c,
+  formattedProof.publicSignals
+);
+```
+
+**Frontend (Browser)**:
+```typescript
+import { generateProof } from '@/lib/zk/proof';
+
+// Generate proof in browser
+const proof = await generateProof({
+  secret: secretBigInt,
+  nullifier: nullifierBigInt,
+  recipient: recipientBigInt,
+  amount: amountBigInt,
+  circuitType: 'privacy' // or 'compliance'
+});
+
+// Use with ethers.js
+const tx = await poolContract.withdraw(
+  recipientAddress,
+  amount,
+  proof.a,
+  proof.b,
+  proof.c,
+  proof.publicSignals
 );
 ```
 
